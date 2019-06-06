@@ -56,7 +56,34 @@ namespace bushAddon
                 EnableCalculations(false);
                 Range r = Globals.ThisAddIn.Application.Selection as Range;
                 FolderBrowserDialog dirdialog = new FolderBrowserDialog();
-                DialogResult dres= dirdialog.ShowDialog();
+                DialogResult dres = dirdialog.ShowDialog();
+                DirectoryInfo dir = new DirectoryInfo(dirdialog.SelectedPath);
+                foreach (Range r1 in r.Cells)
+                {
+                    if (dir.Exists)
+                    {
+                        activeWorksheet.Hyperlinks.Add(r1, dir.CreateSubdirectory(r1.Text).FullName);
+                    }
+                }
+            }
+            catch
+            { }
+            finally
+            {
+                EnableCalculations(true);
+            }
+        }
+
+        
+        private void Button_CreateLetter_Click(object sender, RibbonControlEventArgs e)
+        {
+            try
+            {
+                Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Worksheet;
+                EnableCalculations(false);
+                Range r = Globals.ThisAddIn.Application.Selection as Range;
+                FolderBrowserDialog dirdialog = new FolderBrowserDialog();
+                DialogResult dres = dirdialog.ShowDialog();
                 DirectoryInfo dir = new DirectoryInfo(dirdialog.SelectedPath);
                 foreach (Range r1 in r.Cells)
                 {
