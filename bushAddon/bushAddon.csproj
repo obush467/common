@@ -70,6 +70,8 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
     <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <!--
     This section defines properties that are set when the "Release" configuration is selected.
@@ -100,8 +102,16 @@
   -->
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -172,7 +182,9 @@
     <EmbeddedResource Include="Ribbon1.resx">
       <DependentUpon>Ribbon1.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="bushAddon_TemporaryKey.pfx" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -202,6 +214,14 @@
     <ProjectReference Include="..\common3\common.csproj">
       <Project>{d62a55eb-6100-464b-aae4-379e09fa75c6}</Project>
       <Name>common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UNSentityes\UNSentityes.csproj">
+      <Project>{b028da07-a2e2-469d-bf52-1c361d2e81e7}</Project>
+      <Name>UNSentityes</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\Bushmakin\source\repos\UNSDataModel\UNSDataModel\UNSDataModel.csproj">
+      <Project>{c920d378-bdce-417d-9874-725dd38cc66b}</Project>
+      <Name>UNSDataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
