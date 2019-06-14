@@ -6,6 +6,7 @@ using Microsoft.Office.Interop.Excel;
 public interface IAddInUtilities
 {
     void ImportData();
+    void PrintAkts();
 }
 
 [ComVisible(true)]
@@ -22,5 +23,10 @@ public class AddInUtilities : IAddInUtilities
             Range range1 = activeWorksheet.get_Range("A1", System.Type.Missing);
             range1.Value2 = "This is my data";
         }
+    }
+
+    public void PrintAkts()
+    {
+        throw new System.NotImplementedException();
     }
 }

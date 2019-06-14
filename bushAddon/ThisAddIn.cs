@@ -32,7 +32,7 @@ namespace bushAddon
         }
 
         #endregion
-        private AddInUtilities utilities;
+        public AddInUtilities utilities;
 
         protected override object RequestComAddInAutomationService()
         {
