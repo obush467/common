@@ -127,11 +127,17 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -186,6 +192,10 @@
   -->
   <ItemGroup>
     <Compile Include="AddInsUtility.cs" />
+    <Compile Include="Entities\integraDUExcel.cs" />
+    <Compile Include="Entities\integraHouses.cs" />
+    <Compile Include="ExcelLoader.cs" />
+    <Compile Include="NewFolder1\Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -237,13 +247,9 @@
       <Project>{d62a55eb-6100-464b-aae4-379e09fa75c6}</Project>
       <Name>common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UNSentityes\UNSentityes.csproj">
+    <ProjectReference Include="..\UNSentityes\UNSData.csproj">
       <Project>{b028da07-a2e2-469d-bf52-1c361d2e81e7}</Project>
-      <Name>UNSentityes</Name>
-    </ProjectReference>
-    <ProjectReference Include="C:\Users\Bushmakin\source\repos\UNSDataModel\UNSDataModel\UNSDataModel.csproj">
-      <Project>{c920d378-bdce-417d-9874-725dd38cc66b}</Project>
-      <Name>UNSDataModel</Name>
+      <Name>UNSData</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

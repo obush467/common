@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
-using Microsoft.Office.Tools.Ribbon;
+﻿using common;
+using common.Office;
 using Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Core;
-using System.Windows.Forms;
-using System.IO;
-using System.Collections;
-using System.Linq;
-using UNSentityes.Entityes;
+using Microsoft.Office.Tools.Ribbon;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
-using UNSDataModel.Entities;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using UNSData.Entities;
+using UNSData.Models;
 
 namespace bushAddon
 {
@@ -67,7 +69,15 @@ namespace bushAddon
                 {
                     if (dir.Exists)
                     {
-                        activeWorksheet.Hyperlinks.Add(r1, dir.CreateSubdirectory(r1.Text).FullName);
+                        try
+                        {
+                            DirectoryInfo dudir = dir.CreateSubdirectory(r1.Text);
+                            dudir.CreateSubdirectory("Фото_монтажа");
+                            dudir.CreateSubdirectory("Акты_монтажа");
+                            activeWorksheet.Hyperlinks.Add(r1, dudir.FullName);
+                        }
+                        catch
+                        { }
                     }
                 }
             }
@@ -83,7 +93,7 @@ namespace bushAddon
             Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
             EnableCalculations(false);
             Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-            UNSentityes.ExcelLoader _excelLoader = new UNSentityes.ExcelLoader(Globals.ThisAddIn.Application);
+            UNSData.ExcelLoader _excelLoader = new UNSData.ExcelLoader(Globals.ThisAddIn.Application);
             _excelLoader.AttachRows(WSSource);
             return (from row in _excelLoader.Rows
                     where row.UNIU != null &&
@@ -93,12 +103,12 @@ namespace bushAddon
                     orderby row.AddressO, row.AddressH
                     select row).ToList();
         }
-        private List<integraHouses> HouseSheet()
+        private List<IntegraHouses> HouseSheet()
         {
             Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
             EnableCalculations(false);
             Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-            UNSentityes.ExcelLoader _excelLoader = new UNSentityes.ExcelLoader(Globals.ThisAddIn.Application);
+            UNSData.ExcelLoader _excelLoader = new UNSData.ExcelLoader(Globals.ThisAddIn.Application);
             _excelLoader.AttachHouses(WSSource);
             return (from row in _excelLoader.Houses
                     where row.UNOM != null
@@ -106,8 +116,15 @@ namespace bushAddon
                     orderby row.Address
                     select row).ToList();
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_CreateLetter_Click(object sender, RibbonControlEventArgs e)
         {
+            Uri rootletters = new Uri("\\\\NAS-D4\\integra\\Письма\\");
+            var currentBookName = Path.GetFileNameWithoutExtension(Globals.ThisAddIn.Application.ActiveWorkbook.Name);
             try
             {
                 Range firm = Globals.ThisAddIn.Application.Selection as Range;
@@ -130,7 +147,21 @@ namespace bushAddon
                         destRow.Cells[1, 5].Value = selected[n].UNIU;
                         selected[n].LetterOutNumber = "в работу";
                     }
-                    newWB.SaveAs(("Z:\\Письма\\На отправку\\" + firm.Value2 + ".xlsx").Replace(@"\\", ":").Replace(@"""",""));
+                    var newpath = Path.Combine(rootletters.LocalPath, currentBookName, "На отправку", firm.Value2.Replace(@"\\", ":").Replace(@"""", "") + ".xlsx");
+                    newWB.SaveAs(newpath);
+                    newWB.Close();
+                    //var wordOp = new Word_Operator();
+                    var bookmInserter = new Hashtable();
+                    if (selected.FirstOrDefault().DirectorPosition != null)
+                        bookmInserter.Add("ChiefPosition", selected.FirstOrDefault().DirectorPosition.ToString());
+                    if (selected.FirstOrDefault().Director != null)
+                    {
+                        bookmInserter.Add("ChiefFullName", selected.FirstOrDefault().Director.ToString());
+                        bookmInserter.Add("ChiefShortName", selected.FirstOrDefault().Director.ToString());
+                    }
+                    if (selected.FirstOrDefault().HouseOwner != null)
+                        bookmInserter.Add("Organization", selected.FirstOrDefault().HouseOwner.ToString());
+                   //Word_Operator.CreateBookmarkedDocument(new FileInfo(Path.ChangeExtension(newpath, "docx")), (new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Запрос1.dotx")), bookmInserter);
                 }
             }
             catch (Exception innere)
@@ -140,13 +171,15 @@ namespace bushAddon
                 EnableCalculations(true);
             }
 
+
+
         }
 
         private void Button_SetUNOM_Click(object sender, RibbonControlEventArgs e)
         {
             List<IntegraDUExcel> integraDUs = ReestrSheet();
             integraDUs.Remove(integraDUs[0]);
-            List<integraHouses> integraHouses = HouseSheet();
+            List<IntegraHouses> integraHouses = HouseSheet();
             integraHouses.Remove(integraHouses[0]);
             var hasUNOM =
                 from integraHouse in integraHouses
@@ -228,41 +261,39 @@ namespace bushAddon
 
         private void Button_UpdateByDB_Click(object sender, RibbonControlEventArgs e)
         {
-            UNSEntities _context = new UNSEntities();
-            EnableCalculations(false);
-            List<IntegraDUExcel> _integraDUs = ReestrSheet();
-            _integraDUs.Remove(_integraDUs[0]);
-            List<IntegraDUExcel> _hasUNOMs =
-                (from integraDU in _integraDUs
-                 where integraDU.IntoProductionDate == null
-                 && integraDU.CoordinationDate == null
-                 && integraDU.LetterOutNumber ==null
-                 select integraDU).ToList();
-            List<AddressOwner_Result> _AddressOwners = 
-                (from _addressOwner in _context.AddressOwner().ToList()
-                join _hasUNOM in _hasUNOMs on _addressOwner.UNOM.ToString() equals _hasUNOM.UNOM.ToString()
-                 select _addressOwner).ToList();
-            _hasUNOMs =
-                (from _integraDU in _hasUNOMs
-                    join _addressOwner in _AddressOwners
-                    on _integraDU.UNOM.ToString() equals _addressOwner.UNOM.ToString()
-                 select _integraDU).ToList();
-            foreach (IntegraDUExcel destRow in _hasUNOMs)
+            using (UNSModel context = new UNSModel())
             {
-                int _unom = int.Parse(destRow.UNOM.ToString()); 
-                AddressOwner_Result _AddressOwner =
-                    (from ao in _AddressOwners
-                     where ao.UNOM == _unom
-                     select ao).FirstOrDefault<AddressOwner_Result>();
-                if (_AddressOwner != null)
+                EnableCalculations(false);
+                List<IntegraDUExcel> integraDUs = ReestrSheet();
+                integraDUs.Remove(integraDUs[0]);
+                List<IntegraDUExcel> hasUNOMs =
+                    (from integraDU in integraDUs
+                     where integraDU.IntoProductionDate == null
+                     //&& integraDU.CoordinationDate == null
+                     //&& integraDU.LetterOutNumber == null
+                     && integraDU.HouseOwner == null
+                     select integraDU).ToList();
+
+                foreach (IntegraDUExcel destRow in hasUNOMs)
                 {
-                    destRow.HouseOwner = _AddressOwner.ShortName;
-                    destRow.Director = _AddressOwner.ChiefName;
-                    destRow.DirectorPosition = _AddressOwner.ChiefPosition;
-                    destRow.Contacts = _AddressOwner.Contacts;
+                    try
+                    {
+                        int unom = int.Parse(destRow.UNOM.ToString());
+                        List<AddressOwnerFind_Result> AddressOwners;// = context.AddressOwnerFind(unom).ToList();
+                        /*if (AddressOwners.Any())
+                        {
+                            AddressOwnerFind_Result AddressOwner = AddressOwners.First();
+                            destRow.HouseOwner = AddressOwner.ShortName;
+                            destRow.Director = AddressOwner.ChiefName;
+                            destRow.DirectorPosition = AddressOwner.ChiefPosition;
+                            destRow.Contacts = AddressOwner.Contacts;
+                        }*/
+                    }
+                    catch (Exception e1)
+                    { MessageBox.Show(e1.Message); }
                 }
+                EnableCalculations(true);
             }
-            EnableCalculations(true);
         }
 
         private void Button_PrintDislocations_Click(object sender, RibbonControlEventArgs e)
@@ -278,11 +309,11 @@ namespace bushAddon
                     Range selected = Globals.ThisAddIn.Application.Selection as Range;
                     if (selected != null && selected.Count > 0)
                     {
-                       /* foreach (Range range in selected)
-                        {
-                            if (range.Hyperlinks != null && range.Hyperlinks.Count > 0)
-                            { _dislocations.Add(new FileInfo(range.Hyperlinks[1].Address.ToString())); }
-                        }*/
+                        /* foreach (Range range in selected)
+                         {
+                             if (range.Hyperlinks != null && range.Hyperlinks.Count > 0)
+                             { _dislocations.Add(new FileInfo(range.Hyperlinks[1].Address.ToString())); }
+                         }*/
                         foreach (Range range in selected)
                         {
                             if (range.Value2 != null)
@@ -305,9 +336,111 @@ namespace bushAddon
             {
                 EnableCalculations(true);
             }
-        
+
         }
         private void Button1_PrintDislocations_Click(object sender, RibbonControlEventArgs e)
         { Globals.ThisAddIn.utilities.PrintAkts(); }
+
+
+        private void Button_ReplaceOwnerToPrim_Click(object sender, RibbonControlEventArgs e)
+        {
+            using (UNSModel _context = new UNSModel())
+            {
+                EnableCalculations(false);
+                List<IntegraDUExcel> integraDUs = ReestrSheet();
+                integraDUs.Remove(integraDUs[0]);
+                List<IntegraDUExcel> hasUNOMs =
+                    (from integraDU in integraDUs
+                     where integraDU.IntoProductionDate == null
+                     && integraDU.CoordinationDate == null
+                     && integraDU.LetterOutNumber == null
+                     && integraDU.HouseOwner != null
+                     && integraDU.Contacts == null
+                     select integraDU).ToList();
+                foreach (IntegraDUExcel destRow in hasUNOMs)
+                {
+                    int _unom = int.Parse(destRow.UNOM.ToString());
+                    if (destRow.Comment == null)
+                    {
+                        destRow.Comment = destRow.HouseOwner;
+                    }
+                    else
+                    {
+                        destRow.Comment = string.Join("; ", destRow.Comment, destRow.HouseOwner);
+                    }
+                    destRow.HouseOwner = null;
+                }
+                EnableCalculations(true);
+            }
+        }
+
+        private void Button_UpdateBTI_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.utilities.BTIWallType();
+        }
+
+        private void Button7_Click(object sender, RibbonControlEventArgs e)
+        {
+            using (var context = new UNSModel("data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            {
+                var integraDUExcelLayouts = context.IntegraDUExcelLayouts.OrderBy(o => o.Number).ToList();
+                foreach (var integraDUExcelLayout in integraDUExcelLayouts)
+                {
+                    Hashtable hashtable = new Hashtable();
+                    if (integraDUExcelLayout.ContentObjectFullPath != null && integraDUExcelLayout.ContentHouseFullPath != null)
+                    {
+                        hashtable.Add("obj1", new InsertedObject()
+                        {
+                            FromFile = new FileInfo(integraDUExcelLayout.ContentObjectFullPath),
+                            Height = 80,
+                            Wight = 150
+                        });
+                        hashtable.Add("obj2", new InsertedObject()
+                        {
+                            FromFile = new FileInfo(integraDUExcelLayout.ContentHouseFullPath),
+                            Height = 80,
+                            Wight = 150
+                        });
+                    }
+                    else
+                        if (integraDUExcelLayout.ContentObjectFullPath != null && integraDUExcelLayout.ContentHouseFullPath == null)
+                    {
+                        hashtable.Add("obj1", new InsertedObject()
+                        {
+                            FromFile = new FileInfo(integraDUExcelLayout.ContentObjectFullPath),
+                            Height = 80,
+                            Wight = 150
+                        });
+                    }
+                    else
+                        if (integraDUExcelLayout.ContentObjectFullPath == null && integraDUExcelLayout.ContentHouseFullPath != null)
+
+                        hashtable.Add("obj1", new InsertedObject()
+                        {
+                            FromFile = new FileInfo(integraDUExcelLayout.ContentHouseFullPath),
+                            Height = 80,
+                            Wight = 150
+                        });
+
+                    hashtable.Add("UNIU", integraDUExcelLayout.UNIU);
+                    hashtable.Add("Okrug", integraDUExcelLayout.Okrug);
+                    hashtable.Add("District", integraDUExcelLayout.District);
+                    hashtable.Add("Address", string.Join(", ", integraDUExcelLayout.AddressObject, integraDUExcelLayout.AddressHouse));
+                    hashtable.Add("DUType", integraDUExcelLayout.DUType);
+                    hashtable.Add("date_of_manufacture", DateTime.Now.ToLongDateString());
+                    string rootdir = "\\\\bushmakin\\mssqlserver\\UNS\\DU_Files\\";
+                    DirectoryInfo saveDir = new DirectoryInfo(new Uri(new Uri(rootdir), integraDUExcelLayout.UNIU).LocalPath);
+                    if (!saveDir.Exists) saveDir.Create();
+                    var newWordFileName = new FileInfo(Path.Combine(
+                                                saveDir.FullName,
+                                                Path.ChangeExtension(string.Join("_", integraDUExcelLayout.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")),
+                                            "docx")));
+                    //Word_Operator.CreateBookmarkedDocument(newWordFileName,
+                      //  new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Приложение5_Технический_паспорт.dotx"), hashtable);
+                    //Word_Operator.ExportToPDF(newWordFileName);
+                }
+            }
+
+        }
     }
-}
+    }

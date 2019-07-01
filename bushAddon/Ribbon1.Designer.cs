@@ -50,10 +50,13 @@
             this.group4 = this.Factory.CreateRibbonGroup();
             this.button4 = this.Factory.CreateRibbonButton();
             this.button_CreateFolders = this.Factory.CreateRibbonButton();
-            this.button_PrintDislocations = this.Factory.CreateRibbonButton();
+            this.button6 = this.Factory.CreateRibbonButton();
             this.group5 = this.Factory.CreateRibbonGroup();
             this.buttonGroup2 = this.Factory.CreateRibbonButtonGroup();
+            this.button_PrintDislocations = this.Factory.CreateRibbonButton();
             this.button5 = this.Factory.CreateRibbonButton();
+            this.button_UpdateBTI = this.Factory.CreateRibbonButton();
+            this.button7 = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
@@ -141,6 +144,7 @@
             // 
             this.group4.Items.Add(this.button4);
             this.group4.Items.Add(this.button_CreateFolders);
+            this.group4.Items.Add(this.button6);
             this.group4.Label = "БД";
             this.group4.Name = "group4";
             // 
@@ -156,15 +160,19 @@
             this.button_CreateFolders.Name = "button_CreateFolders";
             this.button_CreateFolders.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_CreateFolders_Click);
             // 
-            // button_PrintDislocations
+            // button6
             // 
-            this.button_PrintDislocations.Label = "Печать дислокаций";
-            this.button_PrintDislocations.Name = "button_PrintDislocations";
-            this.button_PrintDislocations.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PrintDislocations_Click);
+            this.button6.Label = "Перенести Владельца";
+            this.button6.Name = "button6";
+            this.button6.SuperTip = "Перенести сведения из графы Принадлежность в графу Примечания для неотправленных " +
+    "писем";
+            this.button6.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_ReplaceOwnerToPrim_Click);
             // 
             // group5
             // 
             this.group5.Items.Add(this.buttonGroup2);
+            this.group5.Items.Add(this.button_UpdateBTI);
+            this.group5.Items.Add(this.button7);
             this.group5.Label = "group5";
             this.group5.Name = "group5";
             // 
@@ -174,10 +182,28 @@
             this.buttonGroup2.Items.Add(this.button5);
             this.buttonGroup2.Name = "buttonGroup2";
             // 
+            // button_PrintDislocations
+            // 
+            this.button_PrintDislocations.Label = "Печать дислокаций";
+            this.button_PrintDislocations.Name = "button_PrintDislocations";
+            this.button_PrintDislocations.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PrintDislocations_Click);
+            // 
             // button5
             // 
             this.button5.Label = "Копировать";
             this.button5.Name = "button5";
+            // 
+            // button_UpdateBTI
+            // 
+            this.button_UpdateBTI.Label = "Проставить БТИ";
+            this.button_UpdateBTI.Name = "button_UpdateBTI";
+            this.button_UpdateBTI.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_UpdateBTI_Click);
+            // 
+            // button7
+            // 
+            this.button7.Label = "button7";
+            this.button7.Name = "button7";
+            this.button7.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button7_Click);
             // 
             // Ribbon1
             // 
@@ -225,6 +251,9 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group5;
         internal Microsoft.Office.Tools.Ribbon.RibbonButtonGroup buttonGroup2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button5;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button6;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_UpdateBTI;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button7;
     }
 
     partial class ThisRibbonCollection

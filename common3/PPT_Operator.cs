@@ -2,27 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using PowerPoint=Microsoft.Office.Interop.PowerPoint;
+using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace common
 {
-    public class PPT_Operator
+    public class PPT_Operator:IOutDocument<FileInfo>
     {
-        static string pdfPath = "Z:\\Выборки_по_районам\\1";
-        static DirectoryInfo originalPptDir = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
-        public static void PrintPPT(DirectoryInfo dir)
-        { PrintPPT(dir.GetFiles("*.pptx")); }
-
-        public static void PrintPPT(IEnumerable<FileInfo> files)
+        protected DirectoryInfo pdfPath = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
+        protected DirectoryInfo originalPptDir = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
+        public void Print(IEnumerable<FileInfo> files)
         {
             foreach (FileInfo f in files)
-            { PrintPPT(f); }
+            { Print(f); }
         }
-        public static void PrintPPT(FileInfo file)
+        public void Print(FileInfo file)
         {
             // Create COM Objects
             PowerPoint.Application pptApplication = null;
@@ -58,7 +51,7 @@ namespace common
             }
         }
 
-        public static void ExportPPT(FileInfo file)
+        public void ExportToPDF(FileInfo file)
         {
             // Create COM Objects
             PowerPoint.Application pptApplication = null;
@@ -96,6 +89,16 @@ namespace common
                     pptApplication.Quit();
                 }
             }
+        }
+
+        public void Create(FileInfo document)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Create(IEnumerable<FileInfo> document)
+        {
+            throw new NotImplementedException();
         }
     }
 }

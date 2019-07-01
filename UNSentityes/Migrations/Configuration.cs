@@ -1,18 +1,17 @@
-namespace UNSentityes.Migrations
+namespace UNSData.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
+    using UNSData.Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<UNSentityes.Entityes.UNSModel>
+    internal sealed class Configuration : DbMigrationsConfiguration<UNSModel>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+
         }
 
-        protected override void Seed(UNSentityes.Entityes.UNSModel context)
+        protected override void Seed(UNSModel context)
         {
             //  This method will be called after migrating to the latest version.
 

@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Linq;
+﻿using Microsoft.SqlServer.Server;
+using System;
 using System.Collections;
-using Microsoft.SqlServer.Server;
-using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace common.Strings
 {
     public class Shifter
     {
-        public static string Words_shift(string input,List<string> Words,bool toEnd=true)
+        public static string Words_shift(string input, List<string> Words, bool toEnd = true)
 
         {
-            List<string> w = Regex.Split(input," ").OfType<string>().ToList<string>();
-            List<string> inter= w.Intersect(Words).ToList();
+            List<string> w = Regex.Split(input, " ").OfType<string>().ToList<string>();
+            List<string> inter = w.Intersect(Words).ToList();
             if (toEnd)
-            { List<string> res = w.Except(inter).ToList();
+            {
+                List<string> res = w.Except(inter).ToList();
                 res.AddRange(inter);
                 return String.Join(" ", res);
             }
