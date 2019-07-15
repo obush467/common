@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using UNSData.Entities;
 using UNSData.Models;
+using Utility;
 
 [ComVisible(true)]
 public interface IAddInUtilities
@@ -27,9 +28,12 @@ public class AddInUtilities : IAddInUtilities
 {
     DirectoryInfo rootletters = new DirectoryInfo("\\\\NAS-D4\\integra\\Письма\\");
     DirectoryInfo templatesDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
-    private string _lettersTemplate= "Адреса в письмо2.xltx";
-    FileInfo lettersTemplate { get { return new FileInfo(Path.Combine(templatesDir.FullName, _lettersTemplate)); }
-    set { _lettersTemplate = value.Name; }}
+    private string _lettersTemplate = "Адреса в письмо2.xltx";
+    FileInfo lettersTemplate
+    {
+        get { return new FileInfo(Path.Combine(templatesDir.FullName, _lettersTemplate)); }
+        set { _lettersTemplate = value.Name; }
+    }
     public DirectoryInfo _DUFilesDir { get; set; } =
         (new DirectoryInfo("C:\\DU_Files\\")).Exists ?
             new DirectoryInfo("C:\\DU_Files\\") :
@@ -44,6 +48,19 @@ public class AddInUtilities : IAddInUtilities
             Range range1 = activeWorksheet.get_Range("A1", System.Type.Missing);
             range1.Value2 = "This is my data";
         }
+    }
+
+    public void PrintDislocations(PrinterSettings printerSettings)
+    {
+        Print(new List<PrintPattern>()
+        {
+            new PrintPattern()
+            {
+                Pattern = "*дислокация*",
+                Copies = 1
+            }
+        }, printerSettings);
+
     }
 
     public void PrintAkts(PrinterSettings printerSettings)
@@ -99,7 +116,7 @@ public class AddInUtilities : IAddInUtilities
                 }
             }
         }
-        catch
+        catch (Exception)
         { }
         finally
         {
@@ -107,54 +124,50 @@ public class AddInUtilities : IAddInUtilities
         }
     }
 
-        public void Print(IEnumerable<PrintPattern> printpatterns, PrinterSettings printerSettings)
-    { 
+    public void Print(IEnumerable<PrintPattern> printpatterns, PrinterSettings printerSettings)
+    {
         try
         {
             EnableCalculations(false);
-            List<FileInfo> dislocations = new List<FileInfo>();
-            Range selected = Globals.ThisAddIn.Application.Selection as Range;
-            if (selected != null && selected.Count > 0)
+            List<FileItem> dislocations = new List<FileItem>();
+            var findNuimbers = SelectByPattern();
+            if (findNuimbers != null && findNuimbers.Any())
             {
-                foreach (Range range in selected)
-                    if (range.Value2 != null)
+                foreach (string findNumber in findNuimbers)
+                {
+                    DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, findNumber));
+                    if (dir.Exists)
                     {
-                        var matchNumber = Regex.Match(((string)range.Value2).Trim(), "\\d{5}ДУ\\d{6}");
-                        if (matchNumber != null && matchNumber.Captures.Count > 0)
+                        foreach (var pattern in printpatterns)
                         {
-                            DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, matchNumber.Groups[0].Value));
-                            if (dir.Exists)
-                            {
-                                foreach (var pattern in printpatterns)
+                            var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault();
+                            if (file != null && file.Exists)
+                                switch (file.Extension)
                                 {
-                                    var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).First();
-                                    switch (file.Extension)
-                                    {
-                                        case ".pdf":
-                                            printerSettings.Copies = pattern.Copies;
-                                            (new PDF_Operator()).Print(file, printerSettings);
-                                            break;
-                                        case ".ppt":
-                                            printerSettings.Copies = pattern.Copies;
-                                            (new PPT_Operator()).Print(file, printerSettings);
-                                            break;
-                                        case ".pptx":
-                                            printerSettings.Copies = pattern.Copies;
-                                            (new PPT_Operator()).Print(file, printerSettings);
-                                            break;
-                                        case ".doc":
-                                            printerSettings.Copies = pattern.Copies;
-                                            (new Word_Operator()).Print(file, printerSettings);
-                                            break;
-                                        case ".docx":
-                                            printerSettings.Copies = pattern.Copies;
-                                            (new Word_Operator()).Print(file, printerSettings);
-                                            break;
-                                    }
+                                    case ".pdf":
+                                        printerSettings.Copies = pattern.Copies;
+                                        (new PDF_Operator()).Print(file, printerSettings);
+                                        break;
+                                    case ".ppt":
+                                        printerSettings.Copies = pattern.Copies;
+                                        (new PPT_Operator()).Print(file, printerSettings);
+                                        break;
+                                    case ".pptx":
+                                        printerSettings.Copies = pattern.Copies;
+                                        (new PPT_Operator()).Print(file, printerSettings);
+                                        break;
+                                    case ".doc":
+                                        printerSettings.Copies = pattern.Copies;
+                                        (new Word_Operator()).Print(file, printerSettings);
+                                        break;
+                                    case ".docx":
+                                        printerSettings.Copies = pattern.Copies;
+                                        (new Word_Operator()).Print(file, printerSettings);
+                                        break;
                                 }
-                            }
                         }
                     }
+                }
             }
         }
         catch (Exception innere)
@@ -190,7 +203,7 @@ public class AddInUtilities : IAddInUtilities
                     destRow.Cells[1, 3].Value = selected[n].AddressH;
                     destRow.Cells[1, 4].Value = selected[n].UNOM;
                     destRow.Cells[1, 5].Value = selected[n].UNIU;
-                    if(selected[n].LetterOutNumber==null) selected[n].LetterOutNumber = "в работу";
+                    if (selected[n].LetterOutNumber == null) selected[n].LetterOutNumber = "в работу";
                 }
                 var newpath = Path.Combine(rootletters.FullName, currentBookName, "На отправку", firm.Value2.Replace(@"\\", ":").Replace(@"""", "") + ".xlsx");
                 newWB.SaveAs(newpath);
@@ -210,7 +223,7 @@ public class AddInUtilities : IAddInUtilities
             }
         }
         catch (Exception innere)
-        {  }
+        { }
         finally
         {
             EnableCalculations(true);
@@ -256,8 +269,8 @@ public class AddInUtilities : IAddInUtilities
         return (from row in _excelLoader.Rows
                 where row.UNIU != null &&
                       row.UNOM != null
-                      && row.UNOM !=null
-                      && row.UNIU !=null
+                      && row.UNOM != null
+                      && row.UNIU != null
                 orderby row.AddressO, row.AddressH
                 select row).ToList();
     }
@@ -282,39 +295,40 @@ public class AddInUtilities : IAddInUtilities
             sh.EnableCalculation = Enable;
         }
     }
-
-    public void PrintDislocations(PrinterSettings printerSettings)
+    internal class FileItem
     {
+        public string Pattern { get; set; }
+        public FileInfo FileInfo { get; set; }
+        public string Status { get; set; }
+    }
+    /// <summary>
+    /// Создаёт список номеров ДУ из выделенно
+    /// </summary>
+    /// <returns></returns>
+    public List<string> SelectByPattern()
+    {
+        Range selected = Globals.ThisAddIn.Application.Selection as Range;
+        var result = new List<string>();
         try
         {
-            EnableCalculations(false);
-            List<FileInfo> dislocations = new List<FileInfo>();
-            Range selected = Globals.ThisAddIn.Application.Selection as Range;
-            if (selected != null && selected.Count > 0)
+            foreach (Range range in selected)
             {
-                foreach (Range range in selected)
-
-                    if (range.Value2 != null)
-                    {
-                        var matchNumber = Regex.Match(((string)range.Value2).Trim(), "\\d{5}ДУ\\d{6}");
-                        if (matchNumber != null && matchNumber.Captures.Count > 0)
-                        {
-                            DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, matchNumber.Groups[0].Value));
-                            if (dir.Exists)
-                            {
-                                dislocations.Add(dir.GetFiles("*дислокация*.ppt*").OrderByDescending(o => o.CreationTime).First());
-                            }
-                        }
-                    }
-                (new PPT_Operator()).Print(dislocations, printerSettings);
+                var matchNumber = Regex.Match(((string)range.Value2).Trim(), "\\d{5}ДУ\\d{6}");
+                if (matchNumber != null && matchNumber.Captures.Count > 0 && !range.EntireRow.Hidden)
+                {
+                    result.Add(matchNumber.Groups[0].Value);
+                }
             }
         }
-        catch (Exception innere)
-        { }
-        finally
+        catch (Exception error)
         {
-            EnableCalculations(true);
+#if DEBUG
+            Logger.Log.Debug(error.Message);
+#else
+            Logger.Log.Error(error.Message);
+#endif
         }
-
+        return result;
     }
+
 }

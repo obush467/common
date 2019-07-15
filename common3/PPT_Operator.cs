@@ -56,7 +56,7 @@ namespace common
 #if DEBUG
                 Logger.Log.Debug(error.Message);
 #else
-                Logger.Log.Error(printerror.Message);
+                Logger.Log.Error(error.Message);
 #endif
             }
             finally
