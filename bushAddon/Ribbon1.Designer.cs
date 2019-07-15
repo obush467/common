@@ -36,15 +36,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tab1 = this.Factory.CreateRibbonTab();
+            this.tabSogl = this.Factory.CreateRibbonTab();
             this.group1 = this.Factory.CreateRibbonGroup();
             this.buttonGroup1 = this.Factory.CreateRibbonButtonGroup();
             this.button2 = this.Factory.CreateRibbonButton();
-            this.group2 = this.Factory.CreateRibbonGroup();
             this.button1 = this.Factory.CreateRibbonButton();
             this.group3 = this.Factory.CreateRibbonGroup();
             this.button_toPrinting = this.Factory.CreateRibbonButton();
-            this.button_SetUNOM = this.Factory.CreateRibbonButton();
             this.button_CreateLetter = this.Factory.CreateRibbonButton();
             this.button3 = this.Factory.CreateRibbonButton();
             this.group4 = this.Factory.CreateRibbonGroup();
@@ -52,36 +50,40 @@
             this.button_CreateFolders = this.Factory.CreateRibbonButton();
             this.button6 = this.Factory.CreateRibbonButton();
             this.group5 = this.Factory.CreateRibbonGroup();
-            this.buttonGroup2 = this.Factory.CreateRibbonButtonGroup();
-            this.button_PrintDislocations = this.Factory.CreateRibbonButton();
-            this.button5 = this.Factory.CreateRibbonButton();
             this.button_UpdateBTI = this.Factory.CreateRibbonButton();
             this.button7 = this.Factory.CreateRibbonButton();
-            this.tab1.SuspendLayout();
+            this.tabProdaction = this.Factory.CreateRibbonTab();
+            this.groupPrint = this.Factory.CreateRibbonGroup();
+            this.bPrintDislocations = this.Factory.CreateRibbonButton();
+            this.button8 = this.Factory.CreateRibbonButton();
+            this.button_PrintProdactionComplects = this.Factory.CreateRibbonButton();
+            this.printDialogDUAddon = new System.Windows.Forms.PrintDialog();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabSogl.SuspendLayout();
             this.group1.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
-            this.group2.SuspendLayout();
             this.group3.SuspendLayout();
             this.group4.SuspendLayout();
             this.group5.SuspendLayout();
-            this.buttonGroup2.SuspendLayout();
+            this.tabProdaction.SuspendLayout();
+            this.groupPrint.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tab1
+            // tabSogl
             // 
-            this.tab1.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
-            this.tab1.Groups.Add(this.group1);
-            this.tab1.Groups.Add(this.group2);
-            this.tab1.Groups.Add(this.group3);
-            this.tab1.Groups.Add(this.group4);
-            this.tab1.Groups.Add(this.group5);
-            this.tab1.Label = "ДУ";
-            this.tab1.Name = "tab1";
+            this.tabSogl.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
+            this.tabSogl.Groups.Add(this.group1);
+            this.tabSogl.Groups.Add(this.group3);
+            this.tabSogl.Groups.Add(this.group4);
+            this.tabSogl.Groups.Add(this.group5);
+            this.tabSogl.Label = "ДУ согласование";
+            this.tabSogl.Name = "tabSogl";
             // 
             // group1
             // 
             this.group1.Items.Add(this.buttonGroup1);
-            this.group1.Label = "Дом";
+            this.group1.Items.Add(this.button1);
+            this.group1.Label = "Адрес";
             this.group1.Name = "group1";
             // 
             // buttonGroup1
@@ -93,23 +95,16 @@
             // 
             this.button2.Label = "КЛАДР развернуть";
             this.button2.Name = "button2";
-            // 
-            // group2
-            // 
-            this.group2.Items.Add(this.button1);
-            this.group2.Label = "Улица";
-            this.group2.Name = "group2";
+            this.button2.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button2_Click);
             // 
             // button1
             // 
             this.button1.Label = "Улица в конец";
             this.button1.Name = "button1";
-            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button1_Click);
             // 
             // group3
             // 
             this.group3.Items.Add(this.button_toPrinting);
-            this.group3.Items.Add(this.button_SetUNOM);
             this.group3.Items.Add(this.button_CreateLetter);
             this.group3.Items.Add(this.button3);
             this.group3.Label = "group3";
@@ -120,12 +115,6 @@
             this.button_toPrinting.Label = "В печать";
             this.button_toPrinting.Name = "button_toPrinting";
             this.button_toPrinting.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_toPrinting_Click);
-            // 
-            // button_SetUNOM
-            // 
-            this.button_SetUNOM.Label = "Установить UNOM";
-            this.button_SetUNOM.Name = "button_SetUNOM";
-            this.button_SetUNOM.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_SetUNOM_Click);
             // 
             // button_CreateLetter
             // 
@@ -170,28 +159,10 @@
             // 
             // group5
             // 
-            this.group5.Items.Add(this.buttonGroup2);
             this.group5.Items.Add(this.button_UpdateBTI);
             this.group5.Items.Add(this.button7);
             this.group5.Label = "group5";
             this.group5.Name = "group5";
-            // 
-            // buttonGroup2
-            // 
-            this.buttonGroup2.Items.Add(this.button_PrintDislocations);
-            this.buttonGroup2.Items.Add(this.button5);
-            this.buttonGroup2.Name = "buttonGroup2";
-            // 
-            // button_PrintDislocations
-            // 
-            this.button_PrintDislocations.Label = "Печать дислокаций";
-            this.button_PrintDislocations.Name = "button_PrintDislocations";
-            this.button_PrintDislocations.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PrintDislocations_Click);
-            // 
-            // button5
-            // 
-            this.button5.Label = "Копировать";
-            this.button5.Name = "button5";
             // 
             // button_UpdateBTI
             // 
@@ -205,55 +176,99 @@
             this.button7.Name = "button7";
             this.button7.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button7_Click);
             // 
+            // tabProdaction
+            // 
+            this.tabProdaction.Groups.Add(this.groupPrint);
+            this.tabProdaction.Label = "ДУ размещение";
+            this.tabProdaction.Name = "tabProdaction";
+            // 
+            // groupPrint
+            // 
+            this.groupPrint.Items.Add(this.bPrintDislocations);
+            this.groupPrint.Items.Add(this.button8);
+            this.groupPrint.Items.Add(this.button_PrintProdactionComplects);
+            this.groupPrint.Label = "Печать";
+            this.groupPrint.Name = "groupPrint";
+            // 
+            // bPrintDislocations
+            // 
+            this.bPrintDislocations.Label = "Дислокации";
+            this.bPrintDislocations.Name = "bPrintDislocations";
+            this.bPrintDislocations.SuperTip = "Для печати дислокация выделите ячейки с уникальными номерами ДУ и нажмите эту кно" +
+    "пку.";
+            this.bPrintDislocations.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PrintDislocations_Click);
+            // 
+            // button8
+            // 
+            this.button8.Label = "Акты монтажа";
+            this.button8.Name = "button8";
+            this.button8.SuperTip = "Для печати актов монтажа выделите ячейки с уникальными номерами ДУ и нажмите эту " +
+    "кнопку.";
+            this.button8.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PrintAkts_Click);
+            // 
+            // button_PrintProdactionComplects
+            // 
+            this.button_PrintProdactionComplects.Label = "Комплект";
+            this.button_PrintProdactionComplects.Name = "button_PrintProdactionComplects";
+            this.button_PrintProdactionComplects.SuperTip = "Для печати комплекта документов для монтажной бригады выделите ячейки с уникальны" +
+    "ми номерами ДУ и нажмите эту кнопку.";
+            this.button_PrintProdactionComplects.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PrintProdactionComplects_Click);
+            // 
+            // printDialogDUAddon
+            // 
+            this.printDialogDUAddon.UseEXDialog = true;
+            // 
             // Ribbon1
             // 
             this.Name = "Ribbon1";
             this.RibbonType = "Microsoft.Excel.Workbook";
-            this.Tabs.Add(this.tab1);
+            this.Tabs.Add(this.tabSogl);
+            this.Tabs.Add(this.tabProdaction);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.Ribbon1_Load);
-            this.tab1.ResumeLayout(false);
-            this.tab1.PerformLayout();
+            this.tabSogl.ResumeLayout(false);
+            this.tabSogl.PerformLayout();
             this.group1.ResumeLayout(false);
             this.group1.PerformLayout();
             this.buttonGroup1.ResumeLayout(false);
             this.buttonGroup1.PerformLayout();
-            this.group2.ResumeLayout(false);
-            this.group2.PerformLayout();
             this.group3.ResumeLayout(false);
             this.group3.PerformLayout();
             this.group4.ResumeLayout(false);
             this.group4.PerformLayout();
             this.group5.ResumeLayout(false);
             this.group5.PerformLayout();
-            this.buttonGroup2.ResumeLayout(false);
-            this.buttonGroup2.PerformLayout();
+            this.tabProdaction.ResumeLayout(false);
+            this.tabProdaction.PerformLayout();
+            this.groupPrint.ResumeLayout(false);
+            this.groupPrint.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        internal Microsoft.Office.Tools.Ribbon.RibbonTab tab1;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButtonGroup buttonGroup1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button2;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group3;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_CreateFolders;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_CreateLetter;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button3;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_SetUNOM;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group4;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_toPrinting;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button4;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_PrintDislocations;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group5;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButtonGroup buttonGroup2;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button5;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button6;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_UpdateBTI;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button7;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupPrint;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton bPrintDislocations;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button8;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_PrintProdactionComplects;
+        public Microsoft.Office.Tools.Ribbon.RibbonTab tabSogl;
+        public Microsoft.Office.Tools.Ribbon.RibbonTab tabProdaction;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
+        private System.Windows.Forms.PrintDialog printDialogDUAddon;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
     }
 
     partial class ThisRibbonCollection

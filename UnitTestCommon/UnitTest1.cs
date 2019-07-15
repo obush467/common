@@ -5,6 +5,10 @@ using System;
 using System.Collections;
 using System.IO;
 using Microsoft.Office.Interop.Word;
+using UNSData.Entities;
+using System.Collections.Generic;
+using UNSData.Models;
+using System.Linq;
 
 namespace UnitTestCommon
 {
@@ -42,12 +46,22 @@ namespace UnitTestCommon
         [TestMethod]
         public void CreateTable()
         {
-            var doc = new Document();
+            var doc = new Microsoft.Office.Interop.Word.Document();
             doc.Application.Visible = true;
-           
-            DUTypesTable_Creator.Create( doc.Range(),"ДУ-М-УД");
+
+            DUTypesTable_Creator.Create(doc.Range(), "ДУ-М-УД");
         }
 
+        [TestMethod]
+        public void CreateAkts()
+        {
 
+            using (var context = new UNSModel("data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            {
+                context.Database.CommandTimeout = 180;
+                var integraDUExcelLayouts = context.IntegraDUExcelLayouts.ToList();
+                (new Akt_Word_Operator()).Create(integraDUExcelLayouts);
+            }
+        }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Word;
+﻿using Microsoft.Office.Interop.Word;
 using UNSData.Entities;
 
 namespace common
@@ -12,8 +7,8 @@ namespace common
     {
 
         public Table Create(Range range, IntegraDUExcelLayout integraDUExcelLayout)
-        { return Create(range, integraDUExcelLayout.DUType);}
-        public static Table Create(Range range, string duType=null)
+        { return Create(range, integraDUExcelLayout.DUType); }
+        public static Table Create(Range range, string duType = null)
         {
             Table result = range.Tables.Add(range, 3, 7);
             result.Borders[WdBorderType.wdBorderLeft].LineStyle = WdLineStyle.wdLineStyleSingle;
@@ -45,7 +40,6 @@ namespace common
             result.Columns[6].Width = result.Application.CentimetersToPoints(1);
             result.Columns[7].Width = result.Application.CentimetersToPoints(1);
 
-
             result.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
             result.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
             result.Range.Cells.VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
@@ -53,47 +47,43 @@ namespace common
             result.Range.Font.Size = 8;
             result.Range.Font.Bold = 0;
 
-
             result.Rows[1].Cells[1].Range.Text = "Характеристики";
             result.Rows[2].Cells[1].Range.Text = "Типоисполнение";
-            result.Rows[1].Cells[2].Range.Text = "Назначение";          
-            result.Rows[1].Cells[3].Range.Text = "Количество светодиодов";          
-            result.Rows[1].Cells[4].Range.Text = "Мощность, Вт";            
-            
+            result.Rows[1].Cells[2].Range.Text = "Назначение";
+            result.Rows[1].Cells[3].Range.Text = "Количество светодиодов";
+            result.Rows[1].Cells[4].Range.Text = "Мощность, Вт";
             result.Rows[2].Cells[5].Range.Text = "L";
             result.Rows[2].Cells[6].Range.Text = "B";
             result.Rows[2].Cells[7].Range.Text = "H";
-            
-
 
             switch (duType)
             {
                 case "ДУ-М-Д":
-                    result.Cell(3,1).Range.Text = "ДУ-магистральный; ДУ-К-Д";
-                    result.Cell(3,2).Range.Text = "Номер дома";
-                    result.Cell(3,2).Range.Text = "20";
-                    result.Cell(3,2).Range.Text = "6,5";
-                    result.Cell(3,2).Range.Text = "475";
-                    result.Cell(3,2).Range.Text = "475";
-                    result.Cell(3,2).Range.Text = "85";
+                    result.Cell(3, 1).Range.Text = "ДУ-магистральный; ДУ-К-Д";
+                    result.Cell(3, 2).Range.Text = "Номер дома";
+                    result.Cell(3, 2).Range.Text = "20";
+                    result.Cell(3, 2).Range.Text = "6,5";
+                    result.Cell(3, 2).Range.Text = "475";
+                    result.Cell(3, 2).Range.Text = "475";
+                    result.Cell(3, 2).Range.Text = "75";
                     break;
                 case "ДУ-М-УД":
                     result.Rows.Add(result.Rows[3]);
-                    result.Cell(3,1).Range.Text = "ДУ-магистральный; ДУ-М-У";
-                    result.Cell(3,2).Range.Text = "Название улицы";
-                    result.Cell(3,3).Range.Text = "100";
-                    result.Cell(3,4).Range.Text = "48";
-                    result.Cell(3,5).Range.Text = "1900";
-                    result.Cell(3,6).Range.Text = "475";
-                    result.Cell(3,7).Range.Text = "85";
-                    result.Cell(4,1).Range.Text = "ДУ-магистральный; ДУ-М-Д";
-                    
-                    result.Cell(4,2).Range.Text = "Номер дома";
-                    result.Cell(4,3).Range.Text = "20";
-                    result.Cell(4,4).Range.Text = "6,5";
-                    result.Cell(4,5).Range.Text = "475";
-                    result.Cell(4,6).Range.Text = "475";
-                    result.Cell(4,7).Range.Text = "85";
+                    result.Cell(3, 1).Range.Text = "ДУ-магистральный; ДУ-М-У";
+                    result.Cell(3, 2).Range.Text = "Название улицы";
+                    result.Cell(3, 3).Range.Text = "100";
+                    result.Cell(3, 4).Range.Text = "48";
+                    result.Cell(3, 5).Range.Text = "1900";
+                    result.Cell(3, 6).Range.Text = "475";
+                    result.Cell(3, 7).Range.Text = "75";
+                    result.Cell(4, 1).Range.Text = "ДУ-магистральный; ДУ-М-Д";
+
+                    result.Cell(4, 2).Range.Text = "Номер дома";
+                    result.Cell(4, 3).Range.Text = "20";
+                    result.Cell(4, 4).Range.Text = "6,5";
+                    result.Cell(4, 5).Range.Text = "475";
+                    result.Cell(4, 6).Range.Text = "475";
+                    result.Cell(4, 7).Range.Text = "75";
                     break;
                 case "ДУ-К-УД":
                     result.Rows.Add(result.Rows[3]);
@@ -103,7 +93,7 @@ namespace common
                     result.Cell(3, 4).Range.Text = "21";
                     result.Cell(3, 5).Range.Text = "1300";
                     result.Cell(3, 6).Range.Text = "325";
-                    result.Cell(3, 7).Range.Text = "85";
+                    result.Cell(3, 7).Range.Text = "75";
 
                     result.Cell(4, 1).Range.Text = "ДУ-квартальный; ДУ-К-Д";
                     result.Cell(4, 2).Range.Text = "Номер дома";
@@ -111,7 +101,7 @@ namespace common
                     result.Cell(4, 4).Range.Text = "4,5";
                     result.Cell(4, 5).Range.Text = "325";
                     result.Cell(4, 6).Range.Text = "325";
-                    result.Cell(4, 7).Range.Text = "85";
+                    result.Cell(4, 7).Range.Text = "75";
                     break;
                 case "ДУ-К-Д":
                     result.Cell(4, 1).Range.Text = "ДУ-квартальный; ДУ-К-Д";
@@ -120,7 +110,7 @@ namespace common
                     result.Cell(4, 4).Range.Text = "4,5";
                     result.Cell(4, 5).Range.Text = "325";
                     result.Cell(4, 6).Range.Text = "325";
-                    result.Cell(4, 7).Range.Text = "85";
+                    result.Cell(4, 7).Range.Text = "75";
                     break;
                 case "ДУ-К-С":
                     result.Rows.Add(result.Rows[3]);
@@ -130,10 +120,10 @@ namespace common
                     result.Cell(3, 4).Range.Text = "21";
                     result.Cell(3, 5).Range.Text = "1300";
                     result.Cell(3, 6).Range.Text = "325";
-                    result.Cell(3, 7).Range.Text = "85";
+                    result.Cell(3, 7).Range.Text = "75";
                     break;
             }
-            result.Cell(1,2).Merge(result.Cell(2,2));
+            result.Cell(1, 2).Merge(result.Cell(2, 2));
             result.Cell(1, 3).Merge(result.Cell(2, 3));
             result.Cell(1, 4).Merge(result.Cell(2, 4));
             result.Cell(1, 5).Merge(result.Cell(1, 6));

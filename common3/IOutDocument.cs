@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UNSData.Entities;
 
 namespace common
 {
-  interface IOutDocument<T>
+    interface IOutDocument<T>
     {
         void Create(T document);
-        void Print(T document);
+        void Print(T document, short copies = 1);
+
+        void Print(T document, PrinterSettings printerSettings);
         void Create(IEnumerable<T> document);
-        void Print(IEnumerable<T> document);
+        void Print(IEnumerable<T> document, short copies = 1);
+        void Print(IEnumerable<T> document, PrinterSettings printerSettings);
         void ExportToPDF(FileInfo fileInfo);
     }
 }

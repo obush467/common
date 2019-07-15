@@ -72,9 +72,9 @@ namespace UnitTestCommon
                                                 saveDir.FullName,
                                                 Path.ChangeExtension(string.Join("_", integraDUExcelLayout.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")),
                                             "docx")));
-                   Word_Operator.CreateBookmarkedDocument(newWordFileName,
+                   (new Word_Operator()).CreateBookmarkedDocument(newWordFileName,
                         new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Приложение5_Технический_паспорт.dotx"), hashtable);
-                    Word_Operator.ExportToPDF(newWordFileName);
+                    (new Word_Operator()).ExportToPDF(newWordFileName);
                 }
             }
 

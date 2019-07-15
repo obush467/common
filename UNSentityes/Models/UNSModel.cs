@@ -1,10 +1,11 @@
 using CodeFirstStoreFunctions;
 using System.Data.Entity;
-//using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using UNSData.Entities;
 using UNSData.Entities.Address;
+
 namespace UNSData.Models
 {
     public class UNSModel : DbContext
@@ -47,7 +48,7 @@ namespace UNSData.Models
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<IntegraDUExcelLayout> IntegraDUExcelLayouts { get; set; }
         //public virtual DbSet<integraDUExcel> IntegraDUExcels { get; set; }
-
+        public virtual DbSet<Organization_House> Organization_Houses { get; set; }
 
         /*[DbFunction("UNSData.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
@@ -59,13 +60,21 @@ namespace UNSData.Models
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<BTI2018_UNOM_Result>("[dbo].[BTI2018_UNOM](@UNOM)", uNOMParameter);
         }*/
 
+        [DbFunction("UNSModel", "AddressOwnerFind")]
+        public virtual IQueryable<AddressOwnerFind_Result> AddressOwnerFind(int? uNOM)
+        {
+            var uNOMParameter = uNOM.HasValue ?
+                new ObjectParameter("UNOM", uNOM) :
+                new ObjectParameter("UNOM", typeof(int));
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<AddressOwnerFind_Result>("UNSModel.[AddressOwnerFind](@UNOM)", uNOMParameter);
+        }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
             modelBuilder.ComplexType<AddressOwnerFind_Result>();
-              //  modelBuilder.Ignore<IntegraDUExcelLayout>();
+            //  modelBuilder.Ignore<IntegraDUExcelLayout>();
             modelBuilder.Entity<AddressObjectType>()
                 .Property(e => e.KOD_T_ST)
                 .IsUnicode(false);
@@ -385,9 +394,9 @@ namespace UNSData.Models
             modelBuilder.Entity<integraDUStages>()
                 .HasKey(t => t.ID);
             //modelBuilder.Entity<integraDUExcel>()
-              //  .HasRequired(t=> t.IntegraDUStages)
-                //.ma
-                //;
+            //  .HasRequired(t=> t.IntegraDUStages)
+            //.ma
+            //;
         }
     }
 }

@@ -8,8 +8,16 @@ namespace UNSData
         public List<Entities.IntegraDUExcel> Rows { get; set; } = new List<Entities.IntegraDUExcel>();
         public List<Entities.IntegraHouses> Houses { get; set; } = new List<Entities.IntegraHouses>();
         protected Excel.Application _application { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="application"></param>
         public ExcelLoader(Excel.Application application)
         { _application = application; }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="worksheet"></param>
         public void AttachRows(Excel.Worksheet worksheet)
         {
             Excel.Range wr = worksheet.Range["A1"].CurrentRegion;
@@ -21,7 +29,10 @@ namespace UNSData
             }
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="worksheet"></param>
         public void AttachHouses(Excel.Worksheet worksheet)
         {
             Excel.Range wr = worksheet.Range["A1"].CurrentRegion;

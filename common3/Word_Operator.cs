@@ -4,24 +4,27 @@ using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using UNSData.Entities;
+using Utility;
 
 namespace common
 {
-    public class Word_Operator
+    public class Word_Operator : IOutDocument<FileInfo>
     {
-        //public Application wordApp = new Application();
+        public Application wordApp = new Application();
 
         public delegate Table CreateFunc(Range range, string duType = null);
 
-        public void CreateBookmarkedDocument(FileInfo filename, FileInfo template, Hashtable hbookmarks)
+        public void CreateBookmarkedDocument(FileInfo filename, FileInfo template, Hashtable hbookmarks, IEnumerable<WdSaveFormat> wdSaveFormats = null)
         {
-            Application wordApp = new Application();
-            Microsoft.Office.Interop.Word.Document document = wordApp.Documents.Add(template.ToString());
+            if (wdSaveFormats == null)
+            {
+                wdSaveFormats = new List<WdSaveFormat>();
+                ((List<WdSaveFormat>)wdSaveFormats).Add(WdSaveFormat.wdFormatDocument);
+            }
+            //Application wordApp = new Application();
+            Microsoft.Office.Interop.Word.Document document = wordApp.Documents.Add(template.FullName);
             //wordApp.Visible = true;
             try
             {
@@ -36,7 +39,7 @@ namespace common
                                 InlineShape shape = document.Bookmarks[bookmark].Range.InlineShapes.AddPicture(FileName: insertedObject.FromFile.FullName);
                                 var proportion = shape.Width / shape.Height;
 
-                                shape.LockAspectRatio = Microsoft.Office.Core.MsoTriState.msoTrue;
+                                shape.LockAspectRatio = MsoTriState.msoTrue;
                                 shape.Height = insertedObject.Height;
                                 shape.Width = shape.Height * proportion;
                             })
@@ -47,13 +50,12 @@ namespace common
                         ts.Switch(hbookmarks[bookmark]);
                     }
                 }
+                foreach (var format in wdSaveFormats)
+                    document.SaveAs2(Path.ChangeExtension(filename.FullName, null), format);
+                document.PrintOut();
 
-            document.SaveAs2(filename.ToString());
-                
-            
-            document.Close(WdSaveOptions.wdSaveChanges);
-            wordApp.Quit(WdSaveOptions.wdSaveChanges);
-            ExportToPDF(filename);
+                document.Close(WdSaveOptions.wdDoNotSaveChanges);
+                //ExportToPDF(filename);
             }
             catch (Exception ex)
 
@@ -61,38 +63,74 @@ namespace common
                 ex.Message.ToString();
             }
             finally
-            { }
-           
+            {
+                //wordApp.Quit(WdSaveOptions.wdSaveChanges);
+            }
+
         }
 
         public void ExportToPDF(FileInfo fileinfo)
         {
-            Application wordApp = new Application();
+            //Application wordApp = new Application();
+            Microsoft.Office.Interop.Word.Document tempDocument = null;
             try
             {
-                
-            FileInfo newname = new FileInfo(Path.ChangeExtension(fileinfo.FullName, ".pdf"));
-            Microsoft.Office.Interop.Word.Document tempDocument = null;
-            tempDocument = wordApp.Documents.Open(fileinfo.FullName,
-            MsoTriState.msoTrue, MsoTriState.msoTrue,
-            MsoTriState.msoFalse);
+
+                FileInfo newname = new FileInfo(Path.ChangeExtension(fileinfo.FullName, ".pdf"));
+
+                tempDocument = wordApp.Documents.Open(fileinfo.FullName,
+                MsoTriState.msoTrue, MsoTriState.msoTrue,
+                MsoTriState.msoFalse);
 
                 tempDocument.ExportAsFixedFormat(
                     newname.FullName,
                     WdExportFormat.wdExportFormatPDF, false, WdExportOptimizeFor.wdExportOptimizeForPrint, WdExportRange.wdExportAllDocument);
-                tempDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
+                //tempDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
             }
             catch (Exception er)
             {
+#if DEBUG
+                Logger.Log.Debug(er.Message);
+#else
+                Logger.Log.Error(er.Message);
+#endif
             }
             finally
             {
-                //document.Close(WdSaveOptions.wdDoNotSaveChanges);
-                wordApp.Quit(WdSaveOptions.wdDoNotSaveChanges);
+                if (tempDocument != null)
+                    tempDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
+                //wordApp.Quit(WdSaveOptions.wdDoNotSaveChanges);
             }
         }
 
+        public void Create(FileInfo document)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void Print(FileInfo document, short copies = 1)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void Create(IEnumerable<FileInfo> document)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Print(IEnumerable<FileInfo> document, short copies = 1)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Print(FileInfo document, PrinterSettings printerSettings)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Print(IEnumerable<FileInfo> document, PrinterSettings printerSettings)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

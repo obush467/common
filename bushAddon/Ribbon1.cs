@@ -9,16 +9,30 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using UNSData.Entities;
 using UNSData.Models;
-
+using Utility;
 namespace bushAddon
 {
     public partial class Ribbon1
     {
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         {
+            /*Globals.ThisAddIn.Application.SheetActivate += 
+                new AppEvents_SheetActivateEventHandler(ev=> {if (((Worksheet)ev).Name == "Реестр")
+                    {
+                        tabSogl.Visible = true;
+                        tabProdaction.Visible = true;
+                    }
+                else
+                    {
+                        tabSogl.Visible = false;
+                        tabProdaction.Visible = false;
+                    }
+
+                });*/
 
         }
         protected void EnableCalculations(bool Enable)
@@ -32,21 +46,9 @@ namespace bushAddon
         {
             try
             {
-                Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Worksheet;
                 EnableCalculations(false);
-                Range r = Globals.ThisAddIn.Application.Selection as Range;
-                List<string> words = new List<string>();
-                words.Add("улица");
-                words.Add("аллея");
-                words.Add("бульвар");
-                words.Add("проезд");
-                words.Add("переулок");
-                words.Add("проспект");
-                words.Add("площадь");
-                words.Add("шоссе");
-                words.Add("тупик");
-                foreach (Range r1 in r.Cells)
-                { r1.Value2 = common.Strings.Shifter.Words_shift(r1.Value, words); }
+                foreach (Range r in Globals.ThisAddIn.Application.Selection as Range)
+                { r.Value2 = Utility.AddressOperator.To_fias(r.Value); }
             }
             catch
             { }
@@ -57,36 +59,13 @@ namespace bushAddon
         }
         private void Button_CreateFolders_Click(object sender, RibbonControlEventArgs e)
         {
-            try
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Worksheet;
-                EnableCalculations(false);
-                Range r = Globals.ThisAddIn.Application.Selection as Range;
-                FolderBrowserDialog dirdialog = new FolderBrowserDialog();
-                DialogResult dres = dirdialog.ShowDialog();
-                DirectoryInfo dir = new DirectoryInfo(dirdialog.SelectedPath);
-                foreach (Range r1 in r.Cells)
-                {
-                    if (dir.Exists)
-                    {
-                        try
-                        {
-                            DirectoryInfo dudir = dir.CreateSubdirectory(r1.Text);
-                            dudir.CreateSubdirectory("Фото_монтажа");
-                            dudir.CreateSubdirectory("Акты_монтажа");
-                            activeWorksheet.Hyperlinks.Add(r1, dudir.FullName);
-                        }
-                        catch
-                        { }
-                    }
-                }
+                ((RibbonButton)e.Control).Enabled = false;
+                Globals.ThisAddIn.utilities.CreateDuFolders(folderBrowserDialog.SelectedPath);
+                ((RibbonButton)e.Control).Enabled = true;
             }
-            catch
-            { }
-            finally
-            {
-                EnableCalculations(true);
-            }
+
         }
         private List<IntegraDUExcel> ReestrSheet()
         {
@@ -103,19 +82,6 @@ namespace bushAddon
                     orderby row.AddressO, row.AddressH
                     select row).ToList();
         }
-        private List<IntegraHouses> HouseSheet()
-        {
-            Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
-            EnableCalculations(false);
-            Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-            UNSData.ExcelLoader _excelLoader = new UNSData.ExcelLoader(Globals.ThisAddIn.Application);
-            _excelLoader.AttachHouses(WSSource);
-            return (from row in _excelLoader.Houses
-                    where row.UNOM != null
-                          && !string.IsNullOrEmpty(row.UNOM.ToString())
-                    orderby row.Address
-                    select row).ToList();
-        }
         /// <summary>
         /// 
         /// </summary>
@@ -123,93 +89,11 @@ namespace bushAddon
         /// <param name="e"></param>
         private void Button_CreateLetter_Click(object sender, RibbonControlEventArgs e)
         {
-            Uri rootletters = new Uri("\\\\NAS-D4\\integra\\Письма\\");
-            var currentBookName = Path.GetFileNameWithoutExtension(Globals.ThisAddIn.Application.ActiveWorkbook.Name);
-            try
-            {
-                Range firm = Globals.ThisAddIn.Application.Selection as Range;
-                List<IntegraDUExcel> selected = (from row in ReestrSheet()
-                                                 where row.HouseOwner != null &&
-                                                       row.HouseOwner.ToString() == firm.Value2
-                                                 orderby row.AddressO, row.AddressH
-                                                 select row).ToList();
-                if (selected != null && selected.Count > 0)
-                {
-                    Workbook newWB = Globals.ThisAddIn.Application.Workbooks
-                            .Add("C:\\Users\\Bushmakin\\Documents\\Настраиваемые шаблоны Office\\Адреса в письмо2.xltx");
-                    for (int n = 0; n <= selected.Count - 1; n++)
-                    {
-                        Range destRow = newWB.Sheets[1].Cells.Rows[n + 2];
-                        destRow.Cells[1, 1].Value = n + 1;
-                        destRow.Cells[1, 2].Value = selected[n].AddressO;
-                        destRow.Cells[1, 3].Value = selected[n].AddressH;
-                        destRow.Cells[1, 4].Value = selected[n].UNOM;
-                        destRow.Cells[1, 5].Value = selected[n].UNIU;
-                        selected[n].LetterOutNumber = "в работу";
-                    }
-                    var newpath = Path.Combine(rootletters.LocalPath, currentBookName, "На отправку", firm.Value2.Replace(@"\\", ":").Replace(@"""", "") + ".xlsx");
-                    newWB.SaveAs(newpath);
-                    newWB.Close();
-                    //var wordOp = new Word_Operator();
-                    var bookmInserter = new Hashtable();
-                    if (selected.FirstOrDefault().DirectorPosition != null)
-                        bookmInserter.Add("ChiefPosition", selected.FirstOrDefault().DirectorPosition.ToString());
-                    if (selected.FirstOrDefault().Director != null)
-                    {
-                        bookmInserter.Add("ChiefFullName", selected.FirstOrDefault().Director.ToString());
-                        bookmInserter.Add("ChiefShortName", selected.FirstOrDefault().Director.ToString());
-                    }
-                    if (selected.FirstOrDefault().HouseOwner != null)
-                        bookmInserter.Add("Organization", selected.FirstOrDefault().HouseOwner.ToString());
-                   //Word_Operator.CreateBookmarkedDocument(new FileInfo(Path.ChangeExtension(newpath, "docx")), (new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Запрос1.dotx")), bookmInserter);
-                }
-            }
-            catch (Exception innere)
-            { MessageBox.Show(innere.Message); }
-            finally
-            {
-                EnableCalculations(true);
-            }
-
-
-
+            ((RibbonButton)sender).Enabled = false;
+            Globals.ThisAddIn.utilities.CreateLetters();
+            ((RibbonButton)sender).Enabled = true;
         }
 
-        private void Button_SetUNOM_Click(object sender, RibbonControlEventArgs e)
-        {
-            List<IntegraDUExcel> integraDUs = ReestrSheet();
-            integraDUs.Remove(integraDUs[0]);
-            List<IntegraHouses> integraHouses = HouseSheet();
-            integraHouses.Remove(integraHouses[0]);
-            var hasUNOM =
-                from integraHouse in integraHouses
-                join integraDU in integraDUs
-                on integraHouse.UNOM.ToString() equals integraDU.UNOM.ToString()
-                where integraHouse.UNOM != null
-                && integraHouse.UNOM.ToString() != "#Н/Д"
-                && integraDU.Director == null
-                && integraDU.HouseOwner != integraHouse.Organisation
-                //&& integraDU.Director==null
-                && integraDU.DirectorPosition == null
-                select new
-                {
-                    integraHouse.UNOM,
-                    integraHouse.Organisation,
-                    integraHouse.Person,
-                    integraHouse.PersonPosition,
-                    integraHouse.Telephone,
-                    integraHouse.Email,
-                    integraDU
-                };
-            foreach (var h in hasUNOM.ToList())
-            {
-                h.integraDU.Director = h.Person;
-                h.integraDU.DirectorPosition = h.PersonPosition;
-                h.integraDU.HouseOwner = h.Organisation;
-                h.integraDU.Contacts = string.Join(";", h.Telephone, h.Email);
-
-            }
-        }
 
         private void Button_toPrinting_Click(object sender, RibbonControlEventArgs e)
         {
@@ -279,18 +163,22 @@ namespace bushAddon
                     try
                     {
                         int unom = int.Parse(destRow.UNOM.ToString());
-                        List<AddressOwnerFind_Result> AddressOwners;// = context.AddressOwnerFind(unom).ToList();
-                        /*if (AddressOwners.Any())
+                        List<AddressOwnerFind_Result> AddressOwners = context.AddressOwnerFind(unom).ToList();
+                        if (AddressOwners.Any())
                         {
-                            AddressOwnerFind_Result AddressOwner = AddressOwners.First();
+                            AddressOwnerFind_Result AddressOwner = AddressOwners.Single();
                             destRow.HouseOwner = AddressOwner.ShortName;
                             destRow.Director = AddressOwner.ChiefName;
                             destRow.DirectorPosition = AddressOwner.ChiefPosition;
                             destRow.Contacts = AddressOwner.Contacts;
-                        }*/
+                        }
                     }
+                    catch (FormatException)
+                    { }
+                    catch (InvalidOperationException ie)
+                    { }
                     catch (Exception e1)
-                    { MessageBox.Show(e1.Message); }
+                    { }
                 }
                 EnableCalculations(true);
             }
@@ -298,50 +186,35 @@ namespace bushAddon
 
         private void Button_PrintDislocations_Click(object sender, RibbonControlEventArgs e)
         {
-            try
+            if (printDialogDUAddon.ShowDialog() == DialogResult.OK)
             {
-                FolderBrowserDialog dirdialog = new FolderBrowserDialog();
-                DialogResult dres = dirdialog.ShowDialog();
-                DirectoryInfo rootdir = new DirectoryInfo(dirdialog.SelectedPath);
-                if (dres == DialogResult.OK && rootdir.Exists)
-                {
-                    List<FileInfo> _dislocations = new List<FileInfo>();
-                    Range selected = Globals.ThisAddIn.Application.Selection as Range;
-                    if (selected != null && selected.Count > 0)
-                    {
-                        /* foreach (Range range in selected)
-                         {
-                             if (range.Hyperlinks != null && range.Hyperlinks.Count > 0)
-                             { _dislocations.Add(new FileInfo(range.Hyperlinks[1].Address.ToString())); }
-                         }*/
-                        foreach (Range range in selected)
-                        {
-                            if (range.Value2 != null)
-                            {
-                                DirectoryInfo dir = new DirectoryInfo(Path.Combine(rootdir.FullName, range.Value2));
-                                if (dir.Exists)
-                                {
-                                    FileInfo[] files = dir.GetFiles("*.ppt*");
-                                    _dislocations.AddRange(files);
-                                }
-                            }
-                        }
-                        common.PPT_Operator.PrintPPT(_dislocations);
-                    }
-                }
+                ((RibbonControl)sender).Enabled = false;
+                var t1 = Task.Run(() => Globals.ThisAddIn.utilities.PrintDislocations(printDialogDUAddon.PrinterSettings));
+                t1.Wait();
+                ((RibbonControl)sender).Enabled = true;
             }
-            catch (Exception innere)
-            { MessageBox.Show(innere.Message); }
-            finally
-            {
-                EnableCalculations(true);
-            }
-
         }
-        private void Button1_PrintDislocations_Click(object sender, RibbonControlEventArgs e)
-        { Globals.ThisAddIn.utilities.PrintAkts(); }
+        private void Button_PrintAkts_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (printDialogDUAddon.ShowDialog() == DialogResult.OK)
+            {
+                ((RibbonControl)sender).Enabled = false;
+                var t1 = Task.Run(() => Globals.ThisAddIn.utilities.PrintAkts(printDialogDUAddon.PrinterSettings));
+                t1.Wait();
+                ((RibbonControl)sender).Enabled = true;
+            }
+        }
 
-
+        private void Button_PrintProdactionComplects_Click(object sender, RibbonControlEventArgs e)
+        {
+            if (printDialogDUAddon.ShowDialog() == DialogResult.OK)
+            {
+                ((RibbonControl)sender).Enabled = false;
+                var t1 = Task.Run(() => Globals.ThisAddIn.utilities.PrintProdactionComplects(printDialogDUAddon.PrinterSettings));
+                t1.Wait();
+                ((RibbonControl)sender).Enabled = true;
+            }
+        }
         private void Button_ReplaceOwnerToPrim_Click(object sender, RibbonControlEventArgs e)
         {
             using (UNSModel _context = new UNSModel())
@@ -435,12 +308,17 @@ namespace bushAddon
                                                 saveDir.FullName,
                                                 Path.ChangeExtension(string.Join("_", integraDUExcelLayout.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")),
                                             "docx")));
-                    //Word_Operator.CreateBookmarkedDocument(newWordFileName,
-                      //  new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Приложение5_Технический_паспорт.dotx"), hashtable);
+                    // Passport_Word_Operator.CreateBookmarkedDocument(newWordFileName,
+                    //    new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Приложение5_Технический_паспорт8.dotx"), hashtable);
                     //Word_Operator.ExportToPDF(newWordFileName);
                 }
             }
 
         }
+
+        private void Button2_Click(object sender, RibbonControlEventArgs e)
+        {
+
+        }
     }
-    }
+}

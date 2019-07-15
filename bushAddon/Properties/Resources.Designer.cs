@@ -59,25 +59,5 @@ namespace bushAddon.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] Адреса_в_письмо2 {
-            get {
-                object obj = ResourceManager.GetObject("Адреса_в_письмо2", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Поиск локализованного ресурса типа System.Byte[].
-        /// </summary>
-        internal static byte[] прил_4_ЭЛЕКТРИКА {
-            get {
-                object obj = ResourceManager.GetObject("прил_4_ЭЛЕКТРИКА", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
