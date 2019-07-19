@@ -3,21 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.452
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UNS.Common", "common3\UNS.Common.csproj", "{D62A55EB-6100-464B-AAE4-379E09FA75C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "common", "common3\common.csproj", "{D62A55EB-6100-464B-AAE4-379E09FA75C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bushAddon", "bushAddon\bushAddon.csproj", "{71D393F3-014C-4733-900E-70429C244B28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UNS.Models", "UNSentityes\UNS.Models.csproj", "{B028DA07-A2E2-469D-BF52-1C361D2E81E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UNSData", "UNSentityes\UNSData.csproj", "{B028DA07-A2E2-469D-BF52-1C361D2E81E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestCommon", "UnitTestCommon\UnitTestCommon.csproj", "{6B3FA7C2-E418-4D03-B2AD-0F509C280050}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test1", "Test1\Test1.csproj", "{A20F3BC4-54FC-40BB-93B8-97F61745346F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "..\Utility\Utility\Utility.csproj", "{4B9DBD55-4027-49C7-8CCA-118B452CFC25}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UNS.ViewModels", "UNS.ViewModels\UNS.ViewModels.csproj", "{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UNS.Views.Dialogs", "UNS.Views.Dialogs\UNS.Views.Dialogs.csproj", "{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,30 +97,6 @@ Global
 		{4B9DBD55-4027-49C7-8CCA-118B452CFC25}.Release|x64.Build.0 = Release|Any CPU
 		{4B9DBD55-4027-49C7-8CCA-118B452CFC25}.Release|x86.ActiveCfg = Release|Any CPU
 		{4B9DBD55-4027-49C7-8CCA-118B452CFC25}.Release|x86.Build.0 = Release|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Debug|x64.Build.0 = Debug|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Debug|x86.Build.0 = Debug|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Release|x64.ActiveCfg = Release|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Release|x64.Build.0 = Release|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Release|x86.ActiveCfg = Release|Any CPU
-		{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}.Release|x86.Build.0 = Release|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Debug|x64.Build.0 = Debug|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Debug|x86.Build.0 = Debug|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Release|x64.ActiveCfg = Release|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Release|x64.Build.0 = Release|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Release|x86.ActiveCfg = Release|Any CPU
-		{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
