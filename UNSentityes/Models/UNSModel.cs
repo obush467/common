@@ -400,12 +400,10 @@ namespace UNS.Models
             modelBuilder.Entity<Del_House>()
                 .Property(e => e.CADNUM)
                 .IsUnicode(false);
-            modelBuilder.Entity<integraDUStages>()
+            modelBuilder.Entity<IntegraDUStages>()
                 .HasKey(t => t.ID);
-            //modelBuilder.Entity<integraDUExcel>()
-            //  .HasRequired(t=> t.IntegraDUStages)
-            //.ma
-            //;
+            modelBuilder.Entity<IntegraDU>()
+                .HasRequired(t => t.IntegraDUStages);
         }
     }
 }
