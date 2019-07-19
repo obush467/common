@@ -1,4 +1,4 @@
-﻿namespace UNSData.Entities
+﻿namespace UNS.Models.Entities
 {
     public partial class AddressOwnerFind_Result
     {

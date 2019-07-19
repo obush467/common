@@ -1,4 +1,6 @@
-﻿using Microsoft.Office.Core;
+﻿using common.Interfaces;
+using common.Operators;
+using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -8,17 +10,17 @@ using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 
 namespace common
 {
-    public class PPT_Operator : IOutDocument<FileInfo>
+    public class PPT_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
     {
-        protected DirectoryInfo pdfPath = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
-        protected DirectoryInfo originalPptDir = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
+        //protected DirectoryInfo pdfPath = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
+        //protected DirectoryInfo originalPptDir = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
         protected PowerPoint.Application pptApplication = new PowerPoint.Application();
-        public void Print(IEnumerable<FileInfo> files, short copies = 1)
+        public override void Print(IEnumerable<FileInfo> files, short copies = 1)
         {
             foreach (FileInfo f in files)
             { Print(f, copies); }
         }
-        public void Print(FileInfo file, short copies = 1)
+        public override void Print(FileInfo file, short copies = 1)
         {
             PrinterSettings printerSettings = new PrinterSettings
             {
@@ -26,8 +28,7 @@ namespace common
             };
             Print(file,printerSettings);
         }
-
-        public void ExportToPDF(FileInfo file)
+        public override void ExportToPDF(FileInfo file)
         {
             // Create COM Objects
             PowerPoint.Application pptApplication = null;
@@ -75,17 +76,17 @@ namespace common
             }
         }
 
-        public void Create(FileInfo document)
+        public override void Create(FileInfo document)
         {
             throw new NotImplementedException();
         }
 
-        public void Create(IEnumerable<FileInfo> document)
+        public override void Create(IEnumerable<FileInfo> document)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(FileInfo document, PrinterSettings printerSettings)
+        public override void Print(FileInfo document, PrinterSettings printerSettings)
         {
             PowerPoint.Presentation pptPresentation = null;
             try
@@ -115,10 +116,11 @@ namespace common
             }
         }
 
-        public void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
+        public override void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
         {
             foreach (var document in documents)
                 Print(document, printerSettings);
         }
+
     }
 }

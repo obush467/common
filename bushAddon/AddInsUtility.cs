@@ -9,9 +9,18 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using UNSData.Entities;
-using UNSData.Models;
+using UNS.Models.Entities;
+using UNS.Models.Models;
 using Utility;
+using common.Interfaces;
+using System.Windows.Forms;
+using System.Threading.Tasks;
+using UNS.Views.Dialogs;
+using UNS.ViewModels;
+using System.Collections.ObjectModel;
+using UNS.ViewsModels;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 [ComVisible(true)]
 public interface IAddInUtilities
@@ -50,17 +59,33 @@ public class AddInUtilities : IAddInUtilities
         }
     }
 
+
     public void PrintDislocations(PrinterSettings printerSettings)
     {
-        Print(new List<PrintPattern>()
-        {
-            new PrintPattern()
+        if (printerSettings == null) printerSettings = new PrinterSettings() { Copies = 1 };
+        var printDialog = new PrePrintDialog();
+        var printFiles = SelectFilesByNumbers<Dislocation>(
+            SelectByPattern(),
+            new List<PrintPattern>()
             {
-                Pattern = "*дислокация*",
-                Copies = 1
-            }
-        }, printerSettings);
+                new PrintPattern()
+                {
+                    Pattern = "*дислокация*",
+                    Copies = 1
+                }
+            });
+        var printFilesPreview = printFiles.Select(s => new Dislocation()
+        {
+            UNIU = s.Pattern
+        });
 
+        printDialog.DataContext = new PrePrintDialogViewModel<Dislocation>(printFilesPreview) { Title = "Печать дислокаций" };
+
+        if ((bool)printDialog.ShowDialog() && (bool)printDialog.DialogResult)
+        {
+
+            Print(printFiles);
+        }
     }
 
     public void PrintAkts(PrinterSettings printerSettings)
@@ -70,9 +95,9 @@ public class AddInUtilities : IAddInUtilities
             new PrintPattern()
             {
                 Pattern = "*Акт_монтажа_заготовка*.pdf",
-                Copies = 3
+                Copies = 1
             }
-        }, printerSettings);
+        });
     }
 
     public void PrintProdactionComplects(PrinterSettings printerSettings)
@@ -87,9 +112,9 @@ public class AddInUtilities : IAddInUtilities
                         new PrintPattern()
             {
                 Pattern = "*Акт_монтажа_заготовка*",
-                Copies = 3
+                Copies = 1
             }
-        }, printerSettings);
+        });
     }
 
     internal void CreateDuFolders(string directoryPath)
@@ -124,16 +149,78 @@ public class AddInUtilities : IAddInUtilities
         }
     }
 
-    public void Print(IEnumerable<PrintPattern> printpatterns, PrinterSettings printerSettings)
+    protected List<T> SelectFilesByNumbers<T>(IEnumerable<string> numbers, IEnumerable<PrintPattern> printPatterns)
+    {
+        var numberFiles = new List<T>();
+        foreach (var number in numbers)
+        {
+            DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, number));
+
+            if (dir.Exists)
+            {
+                foreach (var pattern in printPatterns)
+                {
+                    var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault();
+                    if (file != null && file.Exists)
+                    { numberFiles.Add(new FileItem() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
+                    else
+                    { numberFiles.Add(new FileItem() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
+                }
+            }
+            else
+            {
+                foreach (var pattern in printPatterns)
+                    numberFiles.Add(new FileItem() { FileInfo = null, Pattern = number, PrinterSettings = pattern.PrinterSettings });
+            }
+        }
+        return numberFiles;
+    }
+
+    public void Print(FileInfo file, PrinterSettings printerSettings)
+    {
+        if (file != null && file.Exists)
+            switch (file.Extension)
+            {
+                case ".pdf":
+                    (new PDF_Operator()).Print(file, printerSettings);
+                    break;
+                case ".ppt":
+                    (new PPT_Operator()).Print(file, printerSettings);
+                    break;
+                case ".pptx":
+                    (new PPT_Operator()).Print(file, printerSettings);
+                    break;
+                case ".doc":
+                    (new Word_Operator()).Print(file, printerSettings);
+                    break;
+                case ".docx":
+                    (new Word_Operator()).Print(file, printerSettings);
+                    break;
+            }
+    }
+
+    public void Print(List<FileItem> printFiles)
+    {
+        foreach (var printfile in printFiles)
+        { Print(printfile.FileInfo, printfile.PrinterSettings); }
+    }
+
+    public void Print(IEnumerable<PrintPattern> printpatterns)
     {
         try
         {
             EnableCalculations(false);
-            List<FileItem> dislocations = new List<FileItem>();
             var findNuimbers = SelectByPattern();
             if (findNuimbers != null && findNuimbers.Any())
             {
-                foreach (string findNumber in findNuimbers)
+                PrePrintDialog view = new PrePrintDialog()
+                {
+                    DataContext = new PrePrintDialogViewModel<FileItem>(
+        new ObservableCollection<FileItem>()
+                )
+                };
+                view.ShowDialog();
+                foreach (var findNumber in findNuimbers)
                 {
                     DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, findNumber));
                     if (dir.Exists)
@@ -141,30 +228,7 @@ public class AddInUtilities : IAddInUtilities
                         foreach (var pattern in printpatterns)
                         {
                             var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault();
-                            if (file != null && file.Exists)
-                                switch (file.Extension)
-                                {
-                                    case ".pdf":
-                                        printerSettings.Copies = pattern.Copies;
-                                        (new PDF_Operator()).Print(file, printerSettings);
-                                        break;
-                                    case ".ppt":
-                                        printerSettings.Copies = pattern.Copies;
-                                        (new PPT_Operator()).Print(file, printerSettings);
-                                        break;
-                                    case ".pptx":
-                                        printerSettings.Copies = pattern.Copies;
-                                        (new PPT_Operator()).Print(file, printerSettings);
-                                        break;
-                                    case ".doc":
-                                        printerSettings.Copies = pattern.Copies;
-                                        (new Word_Operator()).Print(file, printerSettings);
-                                        break;
-                                    case ".docx":
-                                        printerSettings.Copies = pattern.Copies;
-                                        (new Word_Operator()).Print(file, printerSettings);
-                                        break;
-                                }
+                            Print(file, pattern.PrinterSettings);
                         }
                     }
                 }
@@ -264,7 +328,7 @@ public class AddInUtilities : IAddInUtilities
         Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
         EnableCalculations(false);
         Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-        UNSData.ExcelLoader _excelLoader = new UNSData.ExcelLoader(Globals.ThisAddIn.Application);
+        UNS.Models.ExcelLoader _excelLoader = new UNS.Models.ExcelLoader(Globals.ThisAddIn.Application);
         _excelLoader.AttachRows(WSSource);
         return (from row in _excelLoader.Rows
                 where row.UNIU != null &&
@@ -279,7 +343,7 @@ public class AddInUtilities : IAddInUtilities
         Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
         EnableCalculations(false);
         Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-        UNSData.ExcelLoader _excelLoader = new UNSData.ExcelLoader(Globals.ThisAddIn.Application);
+        UNS.Models.ExcelLoader _excelLoader = new UNS.Models.ExcelLoader(Globals.ThisAddIn.Application);
         _excelLoader.AttachHouses(WSSource);
         return (from row in _excelLoader.Houses
                 where row.UNOM != null
@@ -295,12 +359,7 @@ public class AddInUtilities : IAddInUtilities
             sh.EnableCalculation = Enable;
         }
     }
-    internal class FileItem
-    {
-        public string Pattern { get; set; }
-        public FileInfo FileInfo { get; set; }
-        public string Status { get; set; }
-    }
+
     /// <summary>
     /// Создаёт список номеров ДУ из выделенно
     /// </summary>

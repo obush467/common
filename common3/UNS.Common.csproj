@@ -121,14 +121,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ANTLR\Lexer.cs" />
     <Compile Include="DUTypesTable Creator.cs" />
-    <Compile Include="IOut.cs" />
-    <Compile Include="IOutDocument.cs" />
+    <Compile Include="Interfaces\IOut.cs" />
+    <Compile Include="Interfaces\IOutDocument.cs" />
     <Compile Include="Office\InsertedObject.cs" />
-    <Compile Include="Akt_Word_Operator.cs" />
-    <Compile Include="PDF_Operator.cs" />
-    <Compile Include="PPT_Operator.cs" />
+    <Compile Include="Operators\Akt_Word_Operator.cs" />
+    <Compile Include="Operators\Operator.cs" />
+    <Compile Include="Operators\PDF_Operator.cs" />
+    <Compile Include="Operators\PPT_Operator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -141,8 +141,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="TypeSwitch.cs" />
-    <Compile Include="Passport_Word_Operator.cs" />
-    <Compile Include="Word_Operator.cs" />
+    <Compile Include="Operators\Passport_Word_Operator.cs" />
+    <Compile Include="Operators\Word_Operator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="1.pfx" />
@@ -168,13 +168,11 @@
       <Project>{4b9dbd55-4027-49c7-8cca-118b452cfc25}</Project>
       <Name>Utility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UNSentityes\UNSData.csproj">
+    <ProjectReference Include="..\UNSentityes\UNS.Models.csproj">
       <Project>{b028da07-a2e2-469d-bf52-1c361d2e81e7}</Project>
-      <Name>UNSData</Name>
+      <Name>UNS.Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Strings\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

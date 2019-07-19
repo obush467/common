@@ -131,6 +131,7 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -144,6 +145,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsBase.4.6.1055.0\lib\WindowsBase.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -195,7 +199,6 @@
     <Compile Include="Entities\integraDUExcel.cs" />
     <Compile Include="Entities\integraHouses.cs" />
     <Compile Include="ExcelLoader.cs" />
-    <Compile Include="PrintPattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -250,13 +253,21 @@
       <Project>{4b9dbd55-4027-49c7-8cca-118b452cfc25}</Project>
       <Name>Utility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\common3\common.csproj">
+    <ProjectReference Include="..\common3\UNS.Common.csproj">
       <Project>{d62a55eb-6100-464b-aae4-379e09fa75c6}</Project>
-      <Name>common</Name>
+      <Name>UNS.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UNSentityes\UNSData.csproj">
+    <ProjectReference Include="..\UNS.ViewModels\UNS.ViewModels.csproj">
+      <Project>{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}</Project>
+      <Name>UNS.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UNS.Views.Dialogs\UNS.Views.Dialogs.csproj">
+      <Project>{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}</Project>
+      <Name>UNS.Views.Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UNSentityes\UNS.Models.csproj">
       <Project>{b028da07-a2e2-469d-bf52-1c361d2e81e7}</Project>
-      <Name>UNSData</Name>
+      <Name>UNS.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

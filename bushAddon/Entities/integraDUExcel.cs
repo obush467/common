@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UNSData.Entities
+namespace UNS.Models.Entities
 {
     public class IntegraDUExcel
     {

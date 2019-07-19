@@ -1,4 +1,6 @@
-﻿using common.Office;
+﻿using common.Interfaces;
+using common.Office;
+using common.Operators;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Word;
 using System;
@@ -10,7 +12,7 @@ using Utility;
 
 namespace common
 {
-    public class Word_Operator : IOutDocument<FileInfo>
+    public class Word_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
     {
         public Application wordApp = new Application();
 
@@ -24,7 +26,7 @@ namespace common
                 ((List<WdSaveFormat>)wdSaveFormats).Add(WdSaveFormat.wdFormatDocument);
             }
             //Application wordApp = new Application();
-            Microsoft.Office.Interop.Word.Document document = wordApp.Documents.Add(template.FullName);
+            Document document = wordApp.Documents.Add(template.FullName);
             //wordApp.Visible = true;
             try
             {
@@ -69,10 +71,10 @@ namespace common
 
         }
 
-        public void ExportToPDF(FileInfo fileinfo)
+        public override void ExportToPDF(FileInfo fileinfo)
         {
             //Application wordApp = new Application();
-            Microsoft.Office.Interop.Word.Document tempDocument = null;
+            Document tempDocument = null;
             try
             {
 
@@ -103,32 +105,32 @@ namespace common
             }
         }
 
-        public void Create(FileInfo document)
+        public override void Create(FileInfo document)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(FileInfo document, short copies = 1)
+        public override void Print(FileInfo document, short copies = 1)
         {
             throw new NotImplementedException();
         }
 
-        public void Create(IEnumerable<FileInfo> document)
+        public override void Create(IEnumerable<FileInfo> document)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<FileInfo> document, short copies = 1)
+        public override void Print(IEnumerable<FileInfo> document, short copies = 1)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(FileInfo document, PrinterSettings printerSettings)
+        public override void Print(FileInfo document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<FileInfo> document, PrinterSettings printerSettings)
+        public override void Print(IEnumerable<FileInfo> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

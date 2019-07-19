@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UNSData.Entities;
-using UNSData.Models;
+using UNS.Models.Entities;
+using UNS.Models.Models;
 
 namespace Test1
 {

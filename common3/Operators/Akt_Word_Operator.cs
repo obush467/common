@@ -1,11 +1,12 @@
-﻿using Microsoft.Office.Interop.Word;
+﻿using common.Interfaces;
+using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using UNSData.Entities;
+using UNS.Models.Entities;
 
 namespace common
 {

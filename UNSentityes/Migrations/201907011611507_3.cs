@@ -1,4 +1,4 @@
-namespace UNSData.Migrations
+namespace UNS.Models.Migrations
 {
     using System.Data.Entity.Migrations;
 

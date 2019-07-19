@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UNSData.Entities
+namespace UNS.Models.Entities
 {
     [Table("Persons")]
     public class Person

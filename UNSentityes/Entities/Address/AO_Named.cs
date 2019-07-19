@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UNSData.Entities.Address
+namespace UNS.Models.Entities.Address
 {
     [Table("AO_Named", Schema = "address")]
     public class AO_Named : AddressObject

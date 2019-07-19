@@ -1,5 +1,5 @@
 ﻿using Microsoft.Office.Interop.Word;
-using UNSData.Entities;
+using UNS.Models.Entities;
 
 namespace common
 {

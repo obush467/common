@@ -1,4 +1,4 @@
-namespace UNSData.Entities
+namespace UNS.Models.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
@@ -54,6 +54,6 @@ namespace UNSData.Entities
         [StringLength(13)]
         public string UNIU { get; set; }
 
-        public virtual integraDUExcel integraDUExcel { get; set; }
+        public virtual IntegraDUExcel integraDUExcel { get; set; }
     }
 }

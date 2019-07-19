@@ -5,9 +5,9 @@ using System;
 using System.Collections;
 using System.IO;
 using Microsoft.Office.Interop.Word;
-using UNSData.Entities;
+using UNS.Models.Entities;
 using System.Collections.Generic;
-using UNSData.Models;
+using UNS.Models.Models;
 using System.Linq;
 
 namespace UnitTestCommon

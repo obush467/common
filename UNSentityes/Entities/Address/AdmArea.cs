@@ -1,4 +1,4 @@
-﻿namespace UNSData.Entities.Address
+﻿namespace UNS.Models.Entities.Address
 {
     using System;
     using System.ComponentModel.DataAnnotations;

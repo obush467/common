@@ -1,4 +1,6 @@
-﻿using Spire.Pdf;
+﻿using common.Interfaces;
+using common.Operators;
+using Spire.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
@@ -7,24 +9,24 @@ using Utility;
 
 namespace common
 {
-    public class PDF_Operator : IOutDocument<FileInfo>
+    public class PDF_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
     {
-        public void Create(FileInfo document)
+        public override void Create(FileInfo document)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void Create(IEnumerable<FileInfo> document)
+        public override void Create(IEnumerable<FileInfo> document)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void ExportToPDF(FileInfo fileInfo)
+        public override void ExportToPDF(FileInfo fileInfo)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public void Print(FileInfo fileInfo, short copies = 1)
+        public override void Print(FileInfo fileInfo, short copies = 1)
         {
             PrinterSettings printerSettings = new PrinterSettings
             {
@@ -32,13 +34,13 @@ namespace common
             };
             Print(fileInfo, printerSettings);
         }
-        public void Print(IEnumerable<FileInfo> fileInfos, short copies = 1)
+        public override void Print(IEnumerable<FileInfo> fileInfos, short copies = 1)
         {
             foreach (FileInfo fileInfo in fileInfos)
             { Print(fileInfo, copies); }
         }
 
-        public void Print(FileInfo document, PrinterSettings printerSettings)
+        public override void Print(FileInfo document, PrinterSettings printerSettings)
         {
             try
             {
@@ -62,7 +64,7 @@ namespace common
             }
         }
 
-        public void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
+        public override void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
         {
             foreach (FileInfo fileInfo in documents)
             { Print(fileInfo, printerSettings); }

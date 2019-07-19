@@ -2,9 +2,9 @@
 using System.Drawing.Printing;
 using System.IO;
 
-namespace common
+namespace common.Interfaces
 {
-    interface IOutDocument<T>
+    public interface IOutDocument<T>
     {
         void Create(T document);
         void Print(T document, short copies = 1);

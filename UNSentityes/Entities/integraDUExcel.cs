@@ -1,11 +1,11 @@
-namespace UNSData.Entities
+namespace UNS.Models.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("integraDUExcel")]
-    public partial class integraDUExcel : integraDUStages
+    public partial class IntegraDUExcel : integraDUStages
     {
         [Key]
         public integraDUStages IntegraDUStages { get; set; }
@@ -53,7 +53,7 @@ namespace UNSData.Entities
 
         [Column("номер исх письма")]
         [StringLength(255)]
-        public string номер_исх_письма { get; set; }
+        public string Номер_исх_письма { get; set; }
 
         [Column("Дата исх письма")]
         public DateTime? Дата_исх_письма { get; set; }
@@ -91,13 +91,5 @@ namespace UNSData.Entities
 
         [StringLength(255)]
         public string F34 { get; set; }
-
-        [Column(TypeName = "datetime2")]
-        public DateTime SysStartTime { get; set; }
-
-        [Column(TypeName = "datetime2")]
-        public DateTime SysEndTime { get; set; }
-
-        public virtual integraDUStages integraDUStages { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UNSData.Entities
+namespace UNS.Models.Entities
 {
     [Table("DirectorPositions")]
     public class DirectorPosition : PersonPosition

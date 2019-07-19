@@ -1,40 +1,49 @@
 using CodeFirstStoreFunctions;
 using System.Data.Entity;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using UNSData.Entities;
-using UNSData.Entities.Address;
+using UNS.Models.Entities;
+using UNS.Models.Entities.Address;
 
-namespace UNSData.Models
+namespace UNS.Models
 {
     public class UNSModel : DbContext
     {
+        private EntityConnection connection;
+
         public UNSModel()
             : base(@"data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")
         { }
 
         public UNSModel(string connection) : base(connection)
         { }
-        public virtual DbSet<ActualStatus> ActualStatus { get; set; }
-        public virtual DbSet<AddressObjectType> AddressObjectType { get; set; }
-        public virtual DbSet<CenterStatus> CenterStatus { get; set; }
-        public virtual DbSet<CurrentStatus> CurrentStatus { get; set; }
+
+        public UNSModel(EntityConnection connection)
+        {
+            this.connection = connection;
+        }
+
+        public virtual DbSet<ActualStatus> ActualStatuses { get; set; }
+        public virtual DbSet<AddressObjectType> AddressObjectTypes { get; set; }
+        public virtual DbSet<CenterStatus> CenterStatuses { get; set; }
+        public virtual DbSet<CurrentStatus> CurrentStatuses { get; set; }
         public virtual DbSet<Del_NormativeDocument> Del_NormativeDocument { get; set; }
         public virtual DbSet<Del_Object> Del_Object { get; set; }
-        public virtual DbSet<EstateStatus> EstateStatus { get; set; }
-        public virtual DbSet<FlatType> FlatType { get; set; }
-        public virtual DbSet<House> House { get; set; }
+        public virtual DbSet<EstateStatus> EstateStatuses { get; set; }
+        public virtual DbSet<FlatType> FlatTypes { get; set; }
+        public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseInterval> HouseInterval { get; set; }
         public virtual DbSet<HouseStateStatus> HouseStateStatus { get; set; }
-        public virtual DbSet<IntervalStatus> IntervalStatus { get; set; }
+        public virtual DbSet<IntervalStatus> IntervalStatuses { get; set; }
         public virtual DbSet<Landmark> Landmark { get; set; }
         public virtual DbSet<NormativeDocument> NormativeDocument { get; set; }
         public virtual DbSet<NormativeDocumentType> NormativeDocumentType { get; set; }
         public virtual DbSet<OperationStatus> OperationStatus { get; set; }
         public virtual DbSet<Room> Room { get; set; }
         public virtual DbSet<Stead> Stead { get; set; }
-        public virtual DbSet<StructureStatus> StructureStatus { get; set; }
+        public virtual DbSet<StructureStatus> StructureStatuses { get; set; }
         public virtual DbSet<Del_House> Del_House { get; set; }
         public virtual DbSet<BTIAdress> BTIAdress { get; set; }
         public virtual DbSet<AllAdress> AllAdress { get; set; }
@@ -50,7 +59,7 @@ namespace UNSData.Models
         //public virtual DbSet<integraDUExcel> IntegraDUExcels { get; set; }
         public virtual DbSet<Organization_House> Organization_Houses { get; set; }
 
-        /*[DbFunction("UNSData.Entities", "BTI2018_UNOM")]
+        /*[DbFunction("UNS.Models.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
         {
             var uNOMParameter = uNOM.HasValue ?

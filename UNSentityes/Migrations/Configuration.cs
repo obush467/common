@@ -1,7 +1,7 @@
-namespace UNSData.Migrations
+namespace UNS.Models.Migrations
 {
     using System.Data.Entity.Migrations;
-    using UNSData.Models;
+    using UNS.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<UNSModel>
     {

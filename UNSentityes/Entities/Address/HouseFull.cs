@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
 
-namespace UNSData.Entities.Address
+namespace UNS.Models.Entities.Address
 {
     [Table("address.HouseFull")]
     public class HouseFull : House

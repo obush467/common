@@ -95,15 +95,21 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.4.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="WindowsBase, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsBase.4.6.1055.0\lib\WindowsBase.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PDF_Operator_test.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UNS.ViewsDialogTest.cs" />
     <Compile Include="UNSDataTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,13 +117,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common3\common.csproj">
+    <ProjectReference Include="..\common3\UNS.Common.csproj">
       <Project>{D62A55EB-6100-464B-AAE4-379E09FA75C6}</Project>
-      <Name>common</Name>
+      <Name>UNS.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UNSentityes\UNSData.csproj">
+    <ProjectReference Include="..\UNS.ViewModels\UNS.ViewModels.csproj">
+      <Project>{90e2f967-51fe-42ec-8126-ec0fbc79b7b6}</Project>
+      <Name>UNS.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UNS.Views.Dialogs\UNS.Views.Dialogs.csproj">
+      <Project>{ddeeaf76-91b9-4ec8-8dba-40f35bfb0e22}</Project>
+      <Name>UNS.Views.Dialogs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UNSentityes\UNS.Models.csproj">
       <Project>{b028da07-a2e2-469d-bf52-1c361d2e81e7}</Project>
-      <Name>UNSData</Name>
+      <Name>UNS.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

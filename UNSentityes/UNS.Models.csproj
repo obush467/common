@@ -131,7 +131,7 @@
     <Compile Include="Migrations\201907041637106_Org_houses1.Designer.cs">
       <DependentUpon>201907041637106_Org_houses1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Class1.cs" />
+    <Compile Include="Entities\DUTechnicalCertificate.cs" />
     <Compile Include="Entities\AccountantGeneralPosition.cs" />
     <Compile Include="Entities\DirectorPosition.cs" />
     <Compile Include="Entities\Document.cs" />

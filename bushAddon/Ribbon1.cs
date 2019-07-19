@@ -11,30 +11,15 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using UNSData.Entities;
-using UNSData.Models;
+using UNS.Models.Entities;
+using UNS.Models.Models;
 using Utility;
 namespace bushAddon
 {
     public partial class Ribbon1
     {
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
-        {
-            /*Globals.ThisAddIn.Application.SheetActivate += 
-                new AppEvents_SheetActivateEventHandler(ev=> {if (((Worksheet)ev).Name == "Реестр")
-                    {
-                        tabSogl.Visible = true;
-                        tabProdaction.Visible = true;
-                    }
-                else
-                    {
-                        tabSogl.Visible = false;
-                        tabProdaction.Visible = false;
-                    }
-
-                });*/
-
-        }
+        { }
         protected void EnableCalculations(bool Enable)
         {
             foreach (Worksheet sh in Globals.ThisAddIn.Application.Sheets)
@@ -72,7 +57,7 @@ namespace bushAddon
             Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
             EnableCalculations(false);
             Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-            UNSData.ExcelLoader _excelLoader = new UNSData.ExcelLoader(Globals.ThisAddIn.Application);
+            UNS.Models.ExcelLoader _excelLoader = new UNS.Models.ExcelLoader(Globals.ThisAddIn.Application);
             _excelLoader.AttachRows(WSSource);
             return (from row in _excelLoader.Rows
                     where row.UNIU != null &&
@@ -186,34 +171,16 @@ namespace bushAddon
 
         private void Button_PrintDislocations_Click(object sender, RibbonControlEventArgs e)
         {
-            if (printDialogDUAddon.ShowDialog() == DialogResult.OK)
-            {
-                ((RibbonControl)sender).Enabled = false;
-                var t1 = Task.Run(() => Globals.ThisAddIn.utilities.PrintDislocations(printDialogDUAddon.PrinterSettings));
-                t1.Wait();
-                ((RibbonControl)sender).Enabled = true;
-            }
+            Globals.ThisAddIn.utilities.PrintDislocations(printDialogDUAddon.PrinterSettings);
         }
         private void Button_PrintAkts_Click(object sender, RibbonControlEventArgs e)
         {
-            if (printDialogDUAddon.ShowDialog() == DialogResult.OK)
-            {
-                ((RibbonControl)sender).Enabled = false;
-                var t1 = Task.Run(() => Globals.ThisAddIn.utilities.PrintAkts(printDialogDUAddon.PrinterSettings));
-                t1.Wait();
-                ((RibbonControl)sender).Enabled = true;
-            }
+            Globals.ThisAddIn.utilities.PrintAkts(printDialogDUAddon.PrinterSettings);
         }
 
         private void Button_PrintProdactionComplects_Click(object sender, RibbonControlEventArgs e)
         {
-            if (printDialogDUAddon.ShowDialog() == DialogResult.OK)
-            {
-                ((RibbonControl)sender).Enabled = false;
-                var t1 = Task.Run(() => Globals.ThisAddIn.utilities.PrintProdactionComplects(printDialogDUAddon.PrinterSettings));
-                t1.Wait();
-                ((RibbonControl)sender).Enabled = true;
-            }
+            Globals.ThisAddIn.utilities.PrintProdactionComplects(printDialogDUAddon.PrinterSettings);
         }
         private void Button_ReplaceOwnerToPrim_Click(object sender, RibbonControlEventArgs e)
         {
