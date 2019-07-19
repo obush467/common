@@ -1,5 +1,5 @@
-﻿using common;
-using common.Office;
+﻿using UNS.Common;
+using UNS.Common.Office;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -7,7 +7,7 @@ using System.IO;
 using Microsoft.Office.Interop.Word;
 using UNS.Models.Entities;
 using System.Collections.Generic;
-using UNS.Models.Models;
+using UNS.Models;
 using System.Linq;
 
 namespace UnitTestCommon

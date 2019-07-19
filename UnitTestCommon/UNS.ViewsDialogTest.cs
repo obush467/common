@@ -1,5 +1,5 @@
-﻿using common;
-using common.Office;
+﻿using UNS.Common;
+using UNS.Common.Office;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;
@@ -10,10 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using UNS.Models.Models;
+using UNS.Models;
 using UNS.ViewModels;
 using UNS.Views.Dialogs;
-using UNS.ViewsModels;
+
 
 namespace UnitTestCommon
 {

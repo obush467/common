@@ -1,4 +1,4 @@
-﻿using common.Interfaces;
+﻿using UNS.Common.Interfaces;
 using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
@@ -7,8 +7,9 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using UNS.Models.Entities;
+using UNS.Common;
 
-namespace common
+namespace UNS.Common
 {
     public class Akt_Word_Operator : Word_Operator, IOutDocument<IntegraDUExcelLayout>
     {

@@ -249,25 +249,29 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Logger\Logger.csproj">
+      <Project>{77264ca7-62e1-4cc7-b2f1-5c9196519e8d}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Utility\Utility\Utility.csproj">
       <Project>{4b9dbd55-4027-49c7-8cca-118b452cfc25}</Project>
       <Name>Utility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\common3\UNS.Common.csproj">
+    <ProjectReference Include="..\UNS.Common\UNS.Common.csproj">
       <Project>{d62a55eb-6100-464b-aae4-379e09fa75c6}</Project>
       <Name>UNS.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UNS.Models\UNS.Models.csproj">
+      <Project>{2e089c36-761c-41f8-8507-6b61705eb7d2}</Project>
+      <Name>UNS.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UNS.ViewModels\UNS.ViewModels.csproj">
-      <Project>{90E2F967-51FE-42EC-8126-EC0FBC79B7B6}</Project>
+      <Project>{90e2f967-51fe-42ec-8126-ec0fbc79b7b6}</Project>
       <Name>UNS.ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\UNS.Views.Dialogs\UNS.Views.Dialogs.csproj">
       <Project>{DDEEAF76-91B9-4EC8-8DBA-40F35BFB0E22}</Project>
       <Name>UNS.Views.Dialogs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UNSentityes\UNS.Models.csproj">
-      <Project>{b028da07-a2e2-469d-bf52-1c361d2e81e7}</Project>
-      <Name>UNS.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -1,14 +1,13 @@
-﻿using common.Interfaces;
+﻿using UNS.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using common.Interfaces;
 using System.Drawing.Printing;
 using System.IO;
 
-namespace common.Operators
+namespace UNS.Common.Operators
 {
     public abstract class Operator<T> : IOutDocument<T>
     {

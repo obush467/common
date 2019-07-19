@@ -2,7 +2,7 @@
 using System.Drawing.Printing;
 using System.IO;
 
-namespace common.Interfaces
+namespace UNS.Common.Interfaces
 {
     public interface IOutDocument<T>
     {

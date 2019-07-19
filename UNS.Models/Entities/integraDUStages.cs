@@ -4,7 +4,7 @@ namespace UNS.Models.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public partial class integraDUStages
+    public partial class IntegraDUStages
     {
         public int? Number { get; set; }
 
@@ -44,16 +44,10 @@ namespace UNS.Models.Entities
         [StringLength(50)]
         public string Stage { get; set; }
 
-        [Column(TypeName = "datetime2")]
-        public DateTime SysStartTime { get; set; }
-
-        [Column(TypeName = "datetime2")]
-        public DateTime SysEndTime { get; set; }
-
         [Required]
         [StringLength(13)]
         public string UNIU { get; set; }
 
-        public virtual IntegraDUExcel integraDUExcel { get; set; }
+        public virtual IntegraDU IntegraDU { get; set; }
     }
 }

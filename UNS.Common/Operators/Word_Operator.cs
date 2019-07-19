@@ -1,6 +1,6 @@
-﻿using common.Interfaces;
-using common.Office;
-using common.Operators;
+﻿using UNS.Common.Interfaces;
+using UNS.Common.Office;
+using UNS.Common.Operators;
 using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Word;
 using System;
@@ -9,8 +9,9 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using Utility;
+using Logger;
 
-namespace common
+namespace UNS.Common
 {
     public class Word_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
     {
@@ -92,9 +93,9 @@ namespace common
             catch (Exception er)
             {
 #if DEBUG
-                Logger.Log.Debug(er.Message);
+                Logger.Logger.Debug(er.Message);
 #else
-                Logger.Log.Error(er.Message);
+                Logger.Logger.Error(er.Message);
 #endif
             }
             finally

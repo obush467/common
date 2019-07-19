@@ -1,5 +1,5 @@
-﻿using common.Interfaces;
-using common.Office;
+﻿using UNS.Common.Interfaces;
+using UNS.Common.Office;
 using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
@@ -8,8 +8,9 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using UNS.Models.Entities;
+using UNS.Common;
 
-namespace common
+namespace UNS.Common
 {
     public class Passport_Word_Operator : Word_Operator, IOutDocument<IntegraDUExcelLayout>
     {

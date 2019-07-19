@@ -6,14 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing.Printing;
 using System.ComponentModel.DataAnnotations;
-using common;
-using common.Interfaces;
+using UNS.Common;
+using UNS.Common.Interfaces;
 
-namespace UNS.ViewsModels
-{
+namespace UNS.Common
+{ 
     public class FileItem : PrintPattern, IOut
     {
-        public string Pattern { get; set; }
         public FileInfo FileInfo { get; set; }
         public string Status { get { return FileInfo != null && FileInfo.Exists ? "есть" : "нет"; } }
         public PrintPattern PrintPattern { get; internal set; }

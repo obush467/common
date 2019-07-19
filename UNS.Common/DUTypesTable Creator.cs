@@ -1,7 +1,7 @@
 ﻿using Microsoft.Office.Interop.Word;
 using UNS.Models.Entities;
 
-namespace common
+namespace UNS.Common
 {
     public sealed class DUTypesTable_Creator
     {

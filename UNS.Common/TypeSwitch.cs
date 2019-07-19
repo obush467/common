@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace common
+namespace UNS.Common
 {
     public class TypeSwitch
     {

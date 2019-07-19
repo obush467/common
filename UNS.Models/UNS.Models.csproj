@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B028DA07-A2E2-469D-BF52-1C361D2E81E7}</ProjectGuid>
+    <ProjectGuid>{2E089C36-761C-41F8-8507-6B61705EB7D2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UNSData</RootNamespace>
@@ -111,7 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\integraDUExcel.cs" />
+    <Compile Include="Entities\integraDU.cs" />
     <Compile Include="Entities\IntegraDUExcelLayout.cs" />
     <Compile Include="Entities\integraDUStages.cs" />
     <Compile Include="Entities\Organization_House.cs" />
@@ -163,6 +163,14 @@
     <Compile Include="Entities\Fias\Room.cs" />
     <Compile Include="Entities\Fias\Stead.cs" />
     <Compile Include="Entities\Fias\StructureStatus.cs" />
+    <Compile Include="Migrations\201907191325366_111.cs" />
+    <Compile Include="Migrations\201907191325366_111.Designer.cs">
+      <DependentUpon>201907191325366_111.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907191330129_112.cs" />
+    <Compile Include="Migrations\201907191330129_112.Designer.cs">
+      <DependentUpon>201907191330129_112.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\UNSModel.cs" />
     <Compile Include="Entities\Organization.cs" />
     <Compile Include="Entities\OrganizationType.cs" />
@@ -198,6 +206,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907041637106_Org_houses1.resx">
       <DependentUpon>201907041637106_Org_houses1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907191325366_111.resx">
+      <DependentUpon>201907191325366_111.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907191330129_112.resx">
+      <DependentUpon>201907191330129_112.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

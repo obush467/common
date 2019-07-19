@@ -102,12 +102,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\common3\UNS.Common.csproj">
-      <Project>{D62A55EB-6100-464B-AAE4-379E09FA75C6}</Project>
+    <ProjectReference Include="..\..\Logger\Logger.csproj">
+      <Project>{77264ca7-62e1-4cc7-b2f1-5c9196519e8d}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UNS.Common\UNS.Common.csproj">
+      <Project>{d62a55eb-6100-464b-aae4-379e09fa75c6}</Project>
       <Name>UNS.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UNSentityes\UNS.Models.csproj">
-      <Project>{B028DA07-A2E2-469D-BF52-1C361D2E81E7}</Project>
+    <ProjectReference Include="..\UNS.Models\UNS.Models.csproj">
+      <Project>{2e089c36-761c-41f8-8507-6b61705eb7d2}</Project>
       <Name>UNS.Models</Name>
     </ProjectReference>
   </ItemGroup>

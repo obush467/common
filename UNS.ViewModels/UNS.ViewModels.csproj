@@ -58,9 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileItem.cs" />
     <Compile Include="PrePreintDialogViewModel.cs" />
-    <Compile Include="PrintPattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,13 +1,14 @@
-﻿using common.Interfaces;
-using common.Operators;
+﻿using UNS.Common.Interfaces;
+using UNS.Common.Operators;
 using Spire.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using Utility;
+using Logger;
 
-namespace common
+namespace UNS.Common
 {
     public class PDF_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
     {
@@ -57,9 +58,9 @@ namespace common
             catch (Exception printerror)
             {
 #if DEBUG
-                Logger.Log.Debug(printerror.Message);
+                Logger.Logger.Debug(printerror.Message);
 #else
-                Logger.Log.Error(printerror.Message);
+                Logger.Logger.Error(printerror.Message);
 #endif
             }
         }

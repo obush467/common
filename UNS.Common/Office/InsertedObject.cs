@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace common.Office
+namespace UNS.Common.Office
 {
     public class InsertedObject
     {

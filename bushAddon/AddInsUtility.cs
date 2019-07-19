@@ -1,5 +1,5 @@
 ﻿using bushAddon;
-using common;
+using UNS.Common;
 using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections;
@@ -10,15 +10,14 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using UNS.Models.Entities;
-using UNS.Models.Models;
+using UNS.Models;
 using Utility;
-using common.Interfaces;
+using UNS.Common.Interfaces;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using UNS.Views.Dialogs;
 using UNS.ViewModels;
 using System.Collections.ObjectModel;
-using UNS.ViewsModels;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -38,12 +37,12 @@ public class AddInUtilities : IAddInUtilities
     DirectoryInfo rootletters = new DirectoryInfo("\\\\NAS-D4\\integra\\Письма\\");
     DirectoryInfo templatesDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
     private string _lettersTemplate = "Адреса в письмо2.xltx";
-    FileInfo lettersTemplate
+    FileInfo LettersTemplate
     {
         get { return new FileInfo(Path.Combine(templatesDir.FullName, _lettersTemplate)); }
         set { _lettersTemplate = value.Name; }
     }
-    public DirectoryInfo _DUFilesDir { get; set; } =
+    public DirectoryInfo DUFilesDir { get; set; } =
         (new DirectoryInfo("C:\\DU_Files\\")).Exists ?
             new DirectoryInfo("C:\\DU_Files\\") :
             new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
@@ -83,8 +82,8 @@ public class AddInUtilities : IAddInUtilities
 
         if ((bool)printDialog.ShowDialog() && (bool)printDialog.DialogResult)
         {
-
-            Print(printFiles);
+            foreach (var printFile in printFiles)
+            { printFile.Print();};
         }
     }
 
@@ -149,12 +148,12 @@ public class AddInUtilities : IAddInUtilities
         }
     }
 
-    protected List<T> SelectFilesByNumbers<T>(IEnumerable<string> numbers, IEnumerable<PrintPattern> printPatterns)
+    protected List<T> SelectFilesByNumbers<T>(IEnumerable<string> numbers, IEnumerable<PrintPattern> printPatterns) where T:FileItem,new()
     {
         var numberFiles = new List<T>();
         foreach (var number in numbers)
         {
-            DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, number));
+            DirectoryInfo dir = new DirectoryInfo(Path.Combine(DUFilesDir.FullName, number));
 
             if (dir.Exists)
             {
@@ -162,48 +161,21 @@ public class AddInUtilities : IAddInUtilities
                 {
                     var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault();
                     if (file != null && file.Exists)
-                    { numberFiles.Add(new FileItem() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
+                    { numberFiles.Add(new T() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
                     else
-                    { numberFiles.Add(new FileItem() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
+                    { numberFiles.Add(new T() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
                 }
             }
             else
             {
                 foreach (var pattern in printPatterns)
-                    numberFiles.Add(new FileItem() { FileInfo = null, Pattern = number, PrinterSettings = pattern.PrinterSettings });
+                    numberFiles.Add(new T() { FileInfo = null, Pattern = number, PrinterSettings = pattern.PrinterSettings });
             }
         }
         return numberFiles;
     }
 
-    public void Print(FileInfo file, PrinterSettings printerSettings)
-    {
-        if (file != null && file.Exists)
-            switch (file.Extension)
-            {
-                case ".pdf":
-                    (new PDF_Operator()).Print(file, printerSettings);
-                    break;
-                case ".ppt":
-                    (new PPT_Operator()).Print(file, printerSettings);
-                    break;
-                case ".pptx":
-                    (new PPT_Operator()).Print(file, printerSettings);
-                    break;
-                case ".doc":
-                    (new Word_Operator()).Print(file, printerSettings);
-                    break;
-                case ".docx":
-                    (new Word_Operator()).Print(file, printerSettings);
-                    break;
-            }
-    }
 
-    public void Print(List<FileItem> printFiles)
-    {
-        foreach (var printfile in printFiles)
-        { Print(printfile.FileInfo, printfile.PrinterSettings); }
-    }
 
     public void Print(IEnumerable<PrintPattern> printpatterns)
     {
@@ -215,20 +187,18 @@ public class AddInUtilities : IAddInUtilities
             {
                 PrePrintDialog view = new PrePrintDialog()
                 {
-                    DataContext = new PrePrintDialogViewModel<FileItem>(
-        new ObservableCollection<FileItem>()
-                )
+                    DataContext = new PrePrintDialogViewModel<FileItem>(new ObservableCollection<FileItem>())
                 };
                 view.ShowDialog();
                 foreach (var findNumber in findNuimbers)
                 {
-                    DirectoryInfo dir = new DirectoryInfo(Path.Combine(_DUFilesDir.FullName, findNumber));
+                    DirectoryInfo dir = new DirectoryInfo(Path.Combine(DUFilesDir.FullName, findNumber));
                     if (dir.Exists)
                     {
                         foreach (var pattern in printpatterns)
                         {
-                            var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault();
-                            Print(file, pattern.PrinterSettings);
+                            var file = new FileItem() { FileInfo = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault(),PrinterSettings=pattern.PrinterSettings };
+                            file.Print();
                         }
                     }
                 }
@@ -258,7 +228,7 @@ public class AddInUtilities : IAddInUtilities
             if (selected != null && selected.Count > 0)
             {
                 Workbook newWB = Globals.ThisAddIn.Application.Workbooks
-                        .Add(lettersTemplate.FullName);
+                        .Add(LettersTemplate.FullName);
                 for (int n = 0; n <= selected.Count - 1; n++)
                 {
                     Range destRow = newWB.Sheets[1].Cells.Rows[n + 2];
@@ -382,9 +352,9 @@ public class AddInUtilities : IAddInUtilities
         catch (Exception error)
         {
 #if DEBUG
-            Logger.Log.Debug(error.Message);
+            Logger.Logger.Debug(error.Message);
 #else
-            Logger.Log.Error(error.Message);
+            Logger.Logger.Error(error.Message);
 #endif
         }
         return result;

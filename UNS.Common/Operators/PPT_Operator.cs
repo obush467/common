@@ -1,5 +1,5 @@
-﻿using common.Interfaces;
-using common.Operators;
+﻿using UNS.Common.Interfaces;
+using UNS.Common.Operators;
 using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
@@ -7,8 +7,9 @@ using System.Drawing.Printing;
 using System.IO;
 using Utility;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
+using Logger;
 
-namespace common
+namespace UNS.Common
 {
     public class PPT_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
     {
@@ -55,7 +56,7 @@ namespace common
             catch (Exception error)
             {
 #if DEBUG
-                Logger.Log.Debug(error.Message);
+                Logger.Logger.Debug(error.Message);
 #else
                 Logger.Log.Error(error.Message);
 #endif
@@ -99,15 +100,15 @@ namespace common
                 //if(printerSettings.CanDuplex) pptPresentation.PrintOptions.can
                 pptPresentation.PrintOut();
 #if DEBUG
-                Logger.Log.Debug("Отпечатано "+document.FullName);
+                Logger.Logger.Debug("Отпечатано "+document.FullName);
 #endif
             }
             catch (Exception printerror)
             {
 #if DEBUG
-                Logger.Log.Debug(printerror.Message);
+                Logger.Logger.Debug(printerror.Message);
 #else
-                Logger.Log.Error(printerror.Message);
+                Logger.Logger.Log.Error(printerror.Message);
 #endif
             }
             finally

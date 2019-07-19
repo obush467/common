@@ -1,6 +1,6 @@
 ﻿using System.Drawing.Printing;
 
-namespace common.Interfaces
+namespace UNS.Common.Interfaces
 {
     internal interface IOut
     {
