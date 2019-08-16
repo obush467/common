@@ -2,7 +2,6 @@ namespace UNS.Models.Entities
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class IntegraDUStages
     {
@@ -48,6 +47,5 @@ namespace UNS.Models.Entities
         [StringLength(13)]
         public string UNIU { get; set; }
 
-        public virtual IntegraDU IntegraDU { get; set; }
     }
 }

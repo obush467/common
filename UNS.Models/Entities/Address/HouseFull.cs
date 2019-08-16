@@ -9,12 +9,15 @@ namespace UNS.Models.Entities.Address
     public class HouseFull : House
     {
         public DbGeography GeoData { get; set; }
+        [MaxLength(1000)]
         public string Address { get; set; }
-        public int? UNOM { get; set; }
-        [Required]
+        //public int? UNOM { get; set; }
+        //[Required]
         [ForeignKey("AdmArea")]
         public Guid AdmAreaId { get; set; }
         public AdmArea AdmArea { get; set; }
+        [MaxLength(50)]
+        public string KLADR { get; set; }
     }
 }
 

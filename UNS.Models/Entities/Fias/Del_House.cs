@@ -34,9 +34,6 @@ namespace UNS.Models.Entities
         [StringLength(20)]
         public string HOUSENUM { get; set; }
 
-        [Key]
-        [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ESTSTATUS { get; set; }
 
         [StringLength(10)]
@@ -48,21 +45,13 @@ namespace UNS.Models.Entities
         public int? STRSTATUS { get; set; }
 
         [Key]
-        [Column(Order = 1)]
         public Guid HOUSEID { get; set; }
-
-        [Key]
-        [Column(Order = 2)]
         public Guid HOUSEGUID { get; set; }
 
         public Guid? AOGUID { get; set; }
 
-        [Key]
-        [Column(Order = 3, TypeName = "smalldatetime")]
         public DateTime STARTDATE { get; set; }
 
-        [Key]
-        [Column(Order = 4, TypeName = "smalldatetime")]
         public DateTime ENDDATE { get; set; }
 
         public int? STATSTATUS { get; set; }

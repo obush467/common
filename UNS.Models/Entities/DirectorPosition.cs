@@ -2,7 +2,6 @@
 
 namespace UNS.Models.Entities
 {
-    [Table("DirectorPositions")]
     public class DirectorPosition : PersonPosition
     {
         public bool Director { get; set; }

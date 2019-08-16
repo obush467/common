@@ -15,8 +15,10 @@ namespace UNS.Models.Entities.Address
         [StringLength(20)]
         public string OFFNAME_NUMBER { get; set; }
 
-        [StringLength(20)]
-        public string OFFNAME_PREFIX { get; set; }
+        [StringLength(50)]
+        public string OFFNAME_PREFIX_FULL { get; set; }
+        [StringLength(50)]
+        public string OFFNAME_PREFIX_SHORT { get; set; }
 
         [StringLength(80)]
         public string OFFNAME_NAME { get; set; }

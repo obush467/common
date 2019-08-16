@@ -2,7 +2,7 @@
 
 namespace UNS.Models.Entities
 {
-    [Table("AccountantGeneralPositions")]
+    //[Table("AccountantGeneralPositions")]
     public class AccountantGeneralPosition : PersonPosition
     {
         public bool AccountantGeneral { get; set; }

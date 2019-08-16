@@ -10,6 +10,18 @@ namespace UNS.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [MaxLength(200)]
-        public string PositionType { get; set; }
+        public string PositionType_Nominative { get; set; }
+        [NotMapped]
+        public string PositionType { get { return PositionType_Nominative; } set { PositionType_Nominative = value; } }
+        [MaxLength(200)]
+        public string PositionType_Genitive { get; set; }
+        [MaxLength(200)]
+        public string PositionType_Dative { get; set; }
+        [MaxLength(200)]
+        public string PositionType_Accusative { get; set; }
+        [MaxLength(200)]
+        public string PositionType_Ablative { get; set; }
+        [MaxLength(200)]
+        public string PositionType_Prepositional { get; set; }
     }
 }

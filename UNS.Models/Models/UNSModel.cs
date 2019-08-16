@@ -1,8 +1,9 @@
 using CodeFirstStoreFunctions;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using UNS.Models.Entities;
 using UNS.Models.Entities.Address;
@@ -11,18 +12,17 @@ namespace UNS.Models
 {
     public class UNSModel : DbContext
     {
-        private EntityConnection connection;
+        private SqlConnection sqlConnection;
 
         public UNSModel()
             : base(@"data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")
         { }
-
         public UNSModel(string connection) : base(connection)
         { }
 
-        public UNSModel(EntityConnection connection)
+        public UNSModel(SqlConnection sqlConnection) : base(sqlConnection, false)
         {
-            this.connection = connection;
+            this.sqlConnection = sqlConnection;
         }
 
         public virtual DbSet<ActualStatus> ActualStatuses { get; set; }
@@ -32,12 +32,9 @@ namespace UNS.Models
         public virtual DbSet<Del_NormativeDocument> Del_NormativeDocument { get; set; }
         public virtual DbSet<Del_Object> Del_Object { get; set; }
         public virtual DbSet<EstateStatus> EstateStatuses { get; set; }
-        public virtual DbSet<FlatType> FlatTypes { get; set; }
         public virtual DbSet<House> Houses { get; set; }
         public virtual DbSet<HouseInterval> HouseInterval { get; set; }
         public virtual DbSet<HouseStateStatus> HouseStateStatus { get; set; }
-        public virtual DbSet<IntervalStatus> IntervalStatuses { get; set; }
-        public virtual DbSet<Landmark> Landmark { get; set; }
         public virtual DbSet<NormativeDocument> NormativeDocument { get; set; }
         public virtual DbSet<NormativeDocumentType> NormativeDocumentType { get; set; }
         public virtual DbSet<OperationStatus> OperationStatus { get; set; }
@@ -54,10 +51,17 @@ namespace UNS.Models
         public virtual DbSet<PersonPositionType> PersonPositionTypes { get; set; }
         public virtual DbSet<PersonPosition> PersonPositions { get; set; }
         public virtual DbSet<AccountantGeneralPosition> AccountantGeneralPositions { get; set; }
+        public virtual DbSet<DirectorPosition> DirectorPositions { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<IntegraDUExcelLayout> IntegraDUExcelLayouts { get; set; }
-        //public virtual DbSet<integraDUExcel> IntegraDUExcels { get; set; }
+        public virtual DbSet<IntegraDU> IntegraDU { get; set; }
         public virtual DbSet<Organization_House> Organization_Houses { get; set; }
+        public virtual DbSet<FaxItem> FaxItems { get; set; }
+        public virtual DbSet<EmailItem> EmailItems { get; set; }
+        public virtual DbSet<OwnerRawAddress> ownerRawAddresses { get; set; }
+        public virtual DbSet<RawAddress> RawAddresses { get; set; }
+        public virtual DbSet<HouseFullBTI> HouseFullBTIs { get; set; }
+        //public virtual DbSet<PersonPosition1> PersonPosition1 { get; set; }
 
         /*[DbFunction("UNS.Models.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
@@ -81,9 +85,76 @@ namespace UNS.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            
+            modelBuilder.Entity<Organization>().HasKey(p => p.Id)
+                .HasMany<PhoneItem>(m => m.PhoneItems).WithMany()
+                .Map(m =>
+                        {
+                            m.ToTable("Organizations_Phones");
+                            m.MapLeftKey("Organization_ID");
+                            m.MapRightKey("PhoneItem_ID");
+                        });
+            modelBuilder.Entity<Organization>().Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<Organization>().HasMany<FaxItem>(m => m.FaxItems).WithMany()
+                    .Map(m =>
+                    {
+                        m.ToTable("Organizations_Faxes");
+                        m.MapLeftKey("Organization_ID");
+                        m.MapRightKey("FaxItem_ID");
+                    });
+            modelBuilder.Entity<Organization>().HasMany<EmailItem>(m => m.EmailItems).WithMany()
+                    .Map(m =>
+                        {
+                            m.ToTable("Organizations_Emails");
+                            m.MapLeftKey("Organization_ID");
+                            m.MapRightKey("EmailItem_ID");                           
+                        });
+
+            //PersonPosition
+            modelBuilder.Entity<PersonPosition>().ToTable("PersonPositions").HasKey(h => h.Id).Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<PersonPosition>().HasRequired(h => h.Organization).WithRequiredDependent();
+            modelBuilder.Entity<PersonPosition>().HasMany<PhoneItem>(m => m.Phones).WithMany()
+                .Map(m =>
+                        {
+                            m.ToTable("PersonPositions_Phones");
+                            m.MapLeftKey("PersonPosition_ID");
+                            m.MapRightKey("PhoneItem_ID");
+                        });
+            modelBuilder.Entity<PersonPosition>().HasMany<FaxItem>(m => m.Faxes).WithMany()
+                .Map(m =>
+                        {
+                            m.ToTable("PersonPositions_Faxes");
+                            m.MapLeftKey("PersonPosition_ID");
+                            m.MapRightKey("FaxItem_ID");
+                        });
+            modelBuilder.Entity<PersonPosition>().HasMany<EmailItem>(m => m.Emails).WithMany()
+                .Map(m =>
+                        {
+                            m.ToTable("PersonPositions_EmailItems");
+                            m.MapLeftKey("PersonPosition_ID");
+                            m.MapRightKey("EmailItem_ID");
+                        });
+
+            //.Map<DirectorPosition>(m => { m.MapInheritedProperties();m.ToTable("DirectorPositions"); });
+            //modelBuilder.Entity<PersonPosition1>().ToTable("PersonPositions1").HasRequired(h => h.Organization).WithMany();
+            //.HasRequired(h => h.Organization).WithMany();//.HasForeignKey(r => r.Organization_Id);
+            modelBuilder.Entity<DirectorPosition>().ToTable("DirectorPositions");
+            //    m.MapInheritedProperties();
+            modelBuilder.Entity<AccountantGeneralPosition>().ToTable("AccountantGeneralPositions");
+            modelBuilder.Entity<RawAddress>()
+                .ToTable("RawAddress")
+                .HasKey(p => p.ID)
+                .Property(p=>p.ID)
+                .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<OwnerRawAddress>()
+                .ToTable("OwnerRawAddress")
+                //.HasKey(p=>p.ID)
+                .HasKey(p=>p.ID)
+                .HasRequired(t=>t.Organization);
             modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
             modelBuilder.ComplexType<AddressOwnerFind_Result>();
-            //  modelBuilder.Ignore<IntegraDUExcelLayout>();
+            //modelBuilder.Ignore<IntegraDUExcelLayout>();
+            //modelBuilder.Ignore<EmailItem>();
             modelBuilder.Entity<AddressObjectType>()
                 .Property(e => e.KOD_T_ST)
                 .IsUnicode(false);
@@ -154,93 +225,12 @@ namespace UNS.Models
                 .Property(e => e.CADNUM)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.POSTALCODE)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.IFNSFL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.TERRIFNSFL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.IFNSUL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.TERRIFNSUL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.OKATO)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<HouseInterval>()
-                .Property(e => e.OKTMO)
-                .IsUnicode(false);
-
             modelBuilder.Entity<HouseStateStatus>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
 
-            modelBuilder.Entity<IntervalStatus>()
-                .Property(e => e.NAME)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<IntervalStatus>()
-                .HasMany(e => e.HouseInterval)
-                .WithOptional(e => e.IntervalStatus)
-                .HasForeignKey(e => e.INTSTATUS);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.LOCATION)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.REGIONCODE)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.POSTALCODE)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.IFNSFL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.TERRIFNSFL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.IFNSUL)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.TERRIFNSUL)
-                .IsUnicode(false);
-
             modelBuilder.Entity<Landmark>()
                 .Property(e => e.OKATO)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.OKTMO)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.LANDID)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.LANDGUID)
-                .IsUnicode(false);
-
-            modelBuilder.Entity<Landmark>()
-                .Property(e => e.CADNUM)
                 .IsUnicode(false);
 
             modelBuilder.Entity<NormativeDocument>()

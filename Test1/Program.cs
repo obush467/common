@@ -17,7 +17,7 @@ namespace Test1
             {
                 context.Database.CommandTimeout = 180;
                 var integraDUExcelLayouts = new List<IntegraDUExcelLayout>();
-                var integraDUExcelLayoutsLocal = context.IntegraDUExcelLayouts.OrderBy(o => o.Number).ToList();
+                var integraDUExcelLayoutsLocal = context.IntegraDUExcelLayouts.Where(w=>w.Stage=="Этап 3").OrderBy(o => o.Number).ToList();
                 //integraDUExcelLayouts.Add(integraDUExcelLayoutsLocal.Where(w => w.DUType == "ДУ-К-Д").Take(10).OrderByDescending(o => o.Number).FirstOrDefault());
                 //integraDUExcelLayouts.Add(integraDUExcelLayoutsLocal.Where(w => w.DUType == "ДУ-К-УД").Take(10).OrderByDescending(o => o.Number).FirstOrDefault());
                 // integraDUExcelLayouts.Add(integraDUExcelLayoutsLocal.Where(w => w.DUType == "ДУ-К-С").Take(10).OrderByDescending(o => o.Number).FirstOrDefault());
@@ -31,13 +31,13 @@ namespace Test1
                 }
                 //(new Akt_Word_Operator()).Create(integraDUExcelLayouts);
                 var days = new List<DateTime>();
-                days.Add(DateTime.Parse("2019-06-19"));
-                days.Add(DateTime.Parse("2019-06-20"));
-                days.Add(DateTime.Parse("2019-06-21"));
-                days.Add(DateTime.Parse("2019-06-22"));
-                days.Add(DateTime.Parse("2019-06-23"));
-                days.Add(DateTime.Parse("2019-06-24"));
-                days.Add(DateTime.Parse("2019-06-25"));
+                days.Add(DateTime.Parse("2019-08-01"));
+                days.Add(DateTime.Parse("2019-08-02"));
+                days.Add(DateTime.Parse("2019-08-05"));
+                days.Add(DateTime.Parse("2019-08-06"));
+                days.Add(DateTime.Parse("2019-08-07"));
+                days.Add(DateTime.Parse("2019-08-08"));
+                days.Add(DateTime.Parse("2019-08-09"));
                 new Passport_Word_Operator().Create(integraDUExcelLayoutsLocal, days);
             }
         }

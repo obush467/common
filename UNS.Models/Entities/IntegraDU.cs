@@ -16,11 +16,11 @@ namespace UNS.Models.Entities
 
         [Column("БТИ - Тип стен")]
         [StringLength(255)]
-        public string БТИ___Тип_стен { get; set; }
+        public string BTIWallType { get; set; }
 
         [Column("БТИ - Назначение")]
         [StringLength(255)]
-        public string БТИ___Назначение { get; set; }
+        public string BTITarget { get; set; }
 
         [StringLength(255)]
         public string Заключение { get; set; }
@@ -89,7 +89,12 @@ namespace UNS.Models.Entities
         [StringLength(255)]
         public string Дата_подключения { get; set; }
 
-        [StringLength(255)]
-        public string F34 { get; set; }
+        [StringLength(50)]
+        public string WGS84 { get; set; }
+        [StringLength(50)]
+        public string EGKO_X { get; set; }
+        [StringLength(50)]
+        public string EGKO_Y { get; set; }
+        public Organization Organization { get; set; }
     }
 }

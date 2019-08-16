@@ -13,5 +13,8 @@ namespace UNS.Models.Entities
         public Guid HouseGUID { get; set; }
         public string Source { get; set; }
         public string Contacts { get; set; }
+        [MaxLength(50)]
+        public string TypeRelation { get; set; }
+        public string Comments { get; set; }
     }
 }
