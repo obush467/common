@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _28 : DbMigration
     {
         public override void Up()
@@ -14,18 +13,18 @@ namespace UNS.Models.Migrations
             AddForeignKey("dbo.OwnerRawAddress", "Organization_ID", "dbo.Organizations", "Id", cascadeDelete: false);
             DropTable("dbo.OwnerRawAddress55");
         }
-        
+
         public override void Down()
         {
             CreateTable(
                 "dbo.OwnerRawAddress55",
                 c => new
-                    {
-                        ID = c.Guid(nullable: false),
-                        Organization_Id = c.Guid(),
-                    })
+                {
+                    ID = c.Guid(nullable: false),
+                    Organization_Id = c.Guid(),
+                })
                 .PrimaryKey(t => t.ID);
-            
+
             DropForeignKey("dbo.OwnerRawAddress", "Organization_ID", "dbo.Organizations");
             CreateIndex("dbo.OwnerRawAddress55", "Organization_Id");
             CreateIndex("dbo.OwnerRawAddress55", "ID");

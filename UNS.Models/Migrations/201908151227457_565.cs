@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _565 : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace UNS.Models.Migrations
             //RenameIndex(table: "dbo.PersonPositions", name: "IX_Organization_Id2", newName: "IX_Organization_Id3");
             //CreateIndex("dbo.DirectorPositions", "Organization_Id");
         }
-        
+
         public override void Down()
         {
             DropIndex("dbo.DirectorPositions", new[] { "Organization_Id" });

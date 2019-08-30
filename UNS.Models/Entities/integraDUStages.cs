@@ -36,7 +36,7 @@ namespace UNS.Models.Entities
         [StringLength(255)]
         public string InstallationStatus { get; set; }
 
-        public int UNOM { get; set; }
+        public int? UNOM { get; set; }
 
         public Guid ID { get; set; }
 

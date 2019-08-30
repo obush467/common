@@ -106,7 +106,7 @@ namespace UNS.Models.Entities
         public object IntoProductionDate { get { return _IntoProductionDate.Value2; } set { _IntoProductionDate.Value2 = value; } }	//
         public void Attach(Range range)
         {
-            if (range.Rows.Count == 1 && range.Columns.Count >= 26)
+            if (range.Rows.Count == 1 /*&& range.Columns.Count >= 26*/)
             {
                 _DUtype = range.Cells[1, 2]; // Тип информационного указателя
                 _AdmArea = range.Cells[1, 3]; // Округ
@@ -118,22 +118,22 @@ namespace UNS.Models.Entities
                 _InstallStatus = range.Cells[1, 9]; // Статус установки
                 _UNOM = range.Cells[1, 10]; // UNOM
                 _UNIU = range.Cells[1, 11]; // Уникальный номер
-                _Person = range.Cells[1, 12]; // Хто
-                _BTIwallType = range.Cells[1, 13]; // БТИ - Тип стен
-                _BTIdestination = range.Cells[1, 14]; // БТИ - Назначение
-                _Resume = range.Cells[1, 15]; // Заключение
-                _Comment = range.Cells[1, 16]; // Примечания
-                _WallType = range.Cells[1, 17]; // Тип стен
-                _HouseOwner = range.Cells[1, 18]; // Принадлежность
-                _Foto = range.Cells[1, 19]; // Тип съёмки
-                _Contacts = range.Cells[1, 20]; // Контактные данные
-                _Director = range.Cells[1, 21]; // Руководитель
-                _DirectorPosition = range.Cells[1, 22]; // Должность руководителя
-                _LetterOutNumber = range.Cells[1, 23]; // номер исх письма
-                _LetterOutData = range.Cells[1, 24]; // Дата исх письма
-                _LetterIn = range.Cells[1, 25]; // Наличие ответа вход
-                _CoordinationDate = range.Cells[1, 26]; // Дата согласования
-                _IntoProductionDate = range.Cells[1, 27]; // Дата передачи в производство
+                //_Person = range.Cells[1, 12]; // Хто
+                _BTIwallType = range.Cells[1, 12]; // БТИ - Тип стен
+                _BTIdestination = range.Cells[1, 13]; // БТИ - Назначение
+                _Resume = range.Cells[1, 14]; // Заключение
+                _Comment = range.Cells[1, 15]; // Примечания
+                //_WallType = range.Cells[1, 17]; // Тип стен
+                _HouseOwner = range.Cells[1, 16]; // Принадлежность
+                //_Foto = range.Cells[1, 19]; // Тип съёмки
+                _Contacts = range.Cells[1, 17]; // Контактные данные
+                _Director = range.Cells[1, 18]; // Руководитель
+                _DirectorPosition = range.Cells[1, 19]; // Должность руководителя
+                _LetterOutNumber = range.Cells[1, 20]; // номер исх письма
+                _LetterOutData = range.Cells[1, 21]; // Дата исх письма
+                _LetterIn = range.Cells[1, 22]; // Наличие ответа вход
+                _CoordinationDate = range.Cells[1, 23]; // Дата согласования
+                _IntoProductionDate = range.Cells[1, 24]; // Дата передачи в производство
             }
         }
 

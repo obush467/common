@@ -14,10 +14,14 @@ using System.Windows.Forms;
 using UNS.Models.Entities;
 using UNS.Models;
 using Utility;
+using AutoMapper;
+
 namespace bushAddon
 {
     public partial class Ribbon1
     {
+
+
         private void Ribbon1_Load(object sender, RibbonUIEventArgs e)
         { }
         protected void EnableCalculations(bool Enable)
@@ -48,9 +52,9 @@ namespace bushAddon
         {
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                ((RibbonButton)e.Control).Enabled = false;
+                //((RibbonButton)e.Control).Enabled = false;
                 Globals.ThisAddIn.utilities.CreateDuFolders(folderBrowserDialog.SelectedPath);
-                ((RibbonButton)e.Control).Enabled = true;
+                //((RibbonButton)e.Control).Enabled = true;
             }
 
         }
@@ -69,6 +73,17 @@ namespace bushAddon
                     orderby row.AddressO, row.AddressH
                     select row).ToList();
         }
+
+        private List<IntegraDU> ReestrSheet1()
+        {
+            Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
+            EnableCalculations(false);
+            Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
+            UNS.Models.ExcelLoader _excelLoader = new UNS.Models.ExcelLoader(Globals.ThisAddIn.Application);            
+            return _excelLoader.MapRows(WSSource);
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -154,10 +169,10 @@ namespace bushAddon
                         if (AddressOwners.Any())
                         {
                             AddressOwnerFind_Result AddressOwner = AddressOwners.Single();
-                            destRow.HouseOwner = AddressOwner.ShortName;
-                            destRow.Director = AddressOwner.ChiefName;
-                            destRow.DirectorPosition = AddressOwner.ChiefPosition;
-                            destRow.Contacts = AddressOwner.Contacts;
+                            if(AddressOwner.ShortName!=null) destRow.HouseOwner = AddressOwner.ShortName;
+                            if(AddressOwner.ChiefName!=null) destRow.Director = AddressOwner.ChiefName;
+                            if(AddressOwner.ChiefPosition!=null) destRow.DirectorPosition = AddressOwner.ChiefPosition;
+                            if(AddressOwner.Contacts!=null) destRow.Contacts = AddressOwner.Contacts;
                         }
                     }
                     catch (FormatException)
@@ -288,6 +303,11 @@ namespace bushAddon
         private void Button2_Click(object sender, RibbonControlEventArgs e)
         {
 
+        }
+
+        private void Button5_Click(object sender, RibbonControlEventArgs e)
+        {
+            var yy = ReestrSheet1();
         }
     }
 }

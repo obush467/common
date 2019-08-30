@@ -14,7 +14,7 @@ namespace UNS.Models.Entities.Address
         //public int? UNOM { get; set; }
         //[Required]
         [ForeignKey("AdmArea")]
-        public Guid AdmAreaId { get; set; }
+        public Guid? AdmAreaId { get; set; }
         public AdmArea AdmArea { get; set; }
         [MaxLength(50)]
         public string KLADR { get; set; }

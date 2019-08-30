@@ -23,50 +23,49 @@ namespace UNS.Models.Entities
         public string BTITarget { get; set; }
 
         [StringLength(255)]
-        public string Заключение { get; set; }
+        public string  Resume { get; set; } //Заключение
 
         [StringLength(255)]
-        public string Примечания { get; set; }
+        public string  Comment { get; set; } //Примечания
 
         [Column("Тип стен")]
         [StringLength(255)]
-        public string Тип_стен { get; set; }
+        public string WallType { get; set; } // Тип_стен
 
         [StringLength(255)]
-        public string Принадлежность { get; set; }
-
+        public string HouseOwner{ get; set; } //Принадлежность 
         [Column("Тип съёмки")]
         [StringLength(255)]
-        public string Тип_съёмки { get; set; }
+        public string Foto {get; set; } //Тип_съёмки {
 
         [Column("Контактные данные")]
         [StringLength(255)]
-        public string Контактные_данные { get; set; }
+        public string Contacts { get; set; } // Контактные_данные 
 
         [Column("Руководитель ФИО")]
         [StringLength(255)]
-        public string Руководитель_ФИО { get; set; }
+        public string Director { get; set; } //Руководитель_ФИО 
 
         [Column("Должность руководителя")]
         [StringLength(255)]
-        public string Должность_руководителя { get; set; }
+        public string DirectorPosition{ get; set; } //Должность_руководителя 
 
         [Column("номер исх письма")]
         [StringLength(255)]
-        public string Номер_исх_письма { get; set; }
+        public string LetterOutNumber{ get; set; } //Номер_исх_письма 
 
         [Column("Дата исх письма")]
-        public DateTime? Дата_исх_письма { get; set; }
+        public DateTime? LetterOutData{ get; set; } //Дата_исх_письма 
 
         [Column("Наличие ответа вход")]
         [StringLength(255)]
-        public string Наличие_ответа_вход { get; set; }
+        public string LetterIn{ get; set; } //Наличие_ответа_вход 
 
         [Column("Дата согласования")]
-        public DateTime? Дата_согласования { get; set; }
+        public DateTime? CoordinationDate { get; set; }//Дата_согласования 
 
         [Column("Дата передачи в производство")]
-        public DateTime? Дата_передачи_в_производство { get; set; }
+        public DateTime? IntoProductionDate{ get; set; } //Дата_передачи_в_производство 
 
         public DateTime? ОТКАЗ { get; set; }
 

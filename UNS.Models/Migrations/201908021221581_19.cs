@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _19 : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@ namespace UNS.Models.Migrations
             AddColumn("dbo.PersonPositionTypes", "PositionType_Ablative", c => c.String(maxLength: 200));
             AddColumn("dbo.PersonPositionTypes", "PositionType_Prepositional", c => c.String(maxLength: 200));
         }
-        
+
         public override void Down()
         {
             DropColumn("dbo.PersonPositionTypes", "PositionType_Prepositional");

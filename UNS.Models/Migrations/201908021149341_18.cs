@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _18 : DbMigration
     {
         public override void Up()
@@ -11,7 +10,7 @@ namespace UNS.Models.Migrations
             AddColumn("dbo.FaxItems", "Fax", c => c.String(maxLength: 50));
             AlterColumn("dbo.PhoneItems", "Phone", c => c.String(maxLength: 50));
         }
-        
+
         public override void Down()
         {
             AlterColumn("dbo.PhoneItems", "Phone", c => c.String());

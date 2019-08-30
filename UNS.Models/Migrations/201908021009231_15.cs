@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _15 : DbMigration
     {
         public override void Up()
@@ -10,28 +9,28 @@ namespace UNS.Models.Migrations
             CreateTable(
                 "dbo.PhoneItems",
                 c => new
-                    {
-                        Id = c.Guid(nullable: false, identity: true),
-                        Phone = c.String(),
-                    })
+                {
+                    Id = c.Guid(nullable: false, identity: true),
+                    Phone = c.String(),
+                })
                 .PrimaryKey(t => t.Id);
-                       
+
             CreateTable(
                 "dbo.Organizations_Phones",
                 c => new
-                    {
-                        Organizations_ID = c.Guid(nullable: false),
-                        PhoneItem_ID = c.Guid(nullable: false),
-                    })
+                {
+                    Organizations_ID = c.Guid(nullable: false),
+                    PhoneItem_ID = c.Guid(nullable: false),
+                })
                 .PrimaryKey(t => new { t.Organizations_ID, t.PhoneItem_ID })
                 .ForeignKey("dbo.Organizations", t => t.Organizations_ID, cascadeDelete: true)
                 .ForeignKey("dbo.PhoneItems", t => t.PhoneItem_ID, cascadeDelete: true)
                 .Index(t => t.Organizations_ID)
                 .Index(t => t.PhoneItem_ID);
-           
-            
+
+
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.OwnerRawAddress", "Organization_ID", "dbo.Organizations");

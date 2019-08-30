@@ -4,11 +4,8 @@ namespace UNS.Models.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("fias.House")]
     public partial class House
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid HOUSEID { get; set; }
         [StringLength(6)]
         public string POSTALCODE { get; set; }

@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using bushAddon;
+using Microsoft.Office.Interop.Excel;
+using System.Collections.Generic;
+using UNS.Models.Entities;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace UNS.Models
 {
     public class ExcelLoader
     {
+        private IMapper Mapper = (new MapperConfiguration(cfg => { cfg.AddProfile<DUExcel_Range_MapProfile>(); }).CreateMapper());
         public List<Entities.IntegraDUExcel> Rows { get; set; } = new List<Entities.IntegraDUExcel>();
         public List<Entities.IntegraHouses> Houses { get; set; } = new List<Entities.IntegraHouses>();
         protected Excel.Application _application { get; set; }
@@ -42,6 +47,19 @@ namespace UNS.Models
                 newentity.Attach(row);
                 Houses.Add(newentity);
             }
+
+        }
+
+        public List<IntegraDU> MapRows(Excel.Worksheet worksheet)
+        {
+            Excel.Range wr = worksheet.Range["A1"].CurrentRegion;
+            var result = new List<UNS.Models.Entities.IntegraDU>();
+            foreach (Excel.Range row in wr.Rows)
+            {
+                var t = Mapper.Map<Range, IntegraDU>(row);
+               result.Add(t);
+            }
+            return result;
 
         }
     }

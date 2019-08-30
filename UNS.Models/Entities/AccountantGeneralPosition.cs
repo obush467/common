@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace UNS.Models.Entities
+﻿namespace UNS.Models.Entities
 {
     //[Table("AccountantGeneralPositions")]
     public class AccountantGeneralPosition : PersonPosition

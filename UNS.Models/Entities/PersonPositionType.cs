@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,5 +24,7 @@ namespace UNS.Models.Entities
         public string PositionType_Ablative { get; set; }
         [MaxLength(200)]
         public string PositionType_Prepositional { get; set; }
+
+        public virtual ICollection<PersonPosition> PersonPositions { get; set; }
     }
 }

@@ -59,6 +59,7 @@
             this.button_PrintProdactionComplects = this.Factory.CreateRibbonButton();
             this.printDialogDUAddon = new System.Windows.Forms.PrintDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.button5 = this.Factory.CreateRibbonButton();
             this.tabSogl.SuspendLayout();
             this.group1.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
@@ -161,6 +162,7 @@
             // 
             this.group5.Items.Add(this.button_UpdateBTI);
             this.group5.Items.Add(this.button7);
+            this.group5.Items.Add(this.button5);
             this.group5.Label = "group5";
             this.group5.Name = "group5";
             // 
@@ -218,6 +220,12 @@
             // 
             this.printDialogDUAddon.UseEXDialog = true;
             // 
+            // button5
+            // 
+            this.button5.Label = "button5";
+            this.button5.Name = "button5";
+            this.button5.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button5_Click);
+            // 
             // Ribbon1
             // 
             this.Name = "Ribbon1";
@@ -269,6 +277,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
         private System.Windows.Forms.PrintDialog printDialogDUAddon;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button5;
     }
 
     partial class ThisRibbonCollection

@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _568 : DbMigration
     {
         public override void Up()
@@ -18,7 +17,7 @@ namespace UNS.Models.Migrations
             DropColumn("dbo.AccountantGeneralPositions", "Organization_Id");
             DropColumn("dbo.DirectorPositions", "Organization_Id");*/
         }
-        
+
         public override void Down()
         {
             /*AddColumn("dbo.DirectorPositions", "Organization_Id", c => c.Guid());

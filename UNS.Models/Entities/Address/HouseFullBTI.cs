@@ -5,8 +5,8 @@ using System.Data.Entity.Spatial;
 
 namespace UNS.Models.Entities.Address
 {
-    [Table("HouseFullBTI",Schema = "address")]
-    public class HouseFullBTI 
+    [Table("HouseFullBTI", Schema = "address")]
+    public class HouseFullBTI
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

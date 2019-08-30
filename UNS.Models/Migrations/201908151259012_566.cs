@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _566 : DbMigration
     {
         public override void Up()
@@ -10,15 +9,15 @@ namespace UNS.Models.Migrations
             CreateTable(
                 "dbo.PersonPositions1",
                 c => new
-                    {
-                        Id = c.Guid(nullable: false, identity: true),
-                        BeginDate = c.DateTime(),
-                        EndDate = c.DateTime(),
-                        Organization_Id = c.Guid(nullable: false),
-                        Person_Id = c.Guid(),
-                        PositionType_Id = c.Guid(),
-                        Organization_Id1 = c.Guid(),
-                    })
+                {
+                    Id = c.Guid(nullable: false, identity: true),
+                    BeginDate = c.DateTime(),
+                    EndDate = c.DateTime(),
+                    Organization_Id = c.Guid(nullable: false),
+                    Person_Id = c.Guid(),
+                    PositionType_Id = c.Guid(),
+                    Organization_Id1 = c.Guid(),
+                })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Organizations", t => t.Organization_Id, cascadeDelete: true)
                 .ForeignKey("dbo.Persons", t => t.Person_Id)
@@ -28,7 +27,7 @@ namespace UNS.Models.Migrations
                 .Index(t => t.Person_Id)
                 .Index(t => t.PositionType_Id)
                 .Index(t => t.Organization_Id1);
-            
+
             AddColumn("dbo.EmailItems", "PersonPosition1_Id", c => c.Guid());
             AddColumn("dbo.FaxItems", "PersonPosition1_Id", c => c.Guid());
             AddColumn("dbo.PhoneItems", "PersonPosition1_Id", c => c.Guid());
@@ -39,7 +38,7 @@ namespace UNS.Models.Migrations
             AddForeignKey("dbo.FaxItems", "PersonPosition1_Id", "dbo.PersonPositions1", "Id");
             AddForeignKey("dbo.PhoneItems", "PersonPosition1_Id", "dbo.PersonPositions1", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.PersonPositions1", "Organization_Id1", "dbo.Organizations");

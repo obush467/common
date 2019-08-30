@@ -1,20 +1,19 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _558 : DbMigration
     {
         public override void Up()
         {
-           // DropForeignKey("dbo.PersonPositions", "Organization_Id", "dbo.Organizations");
+            // DropForeignKey("dbo.PersonPositions", "Organization_Id", "dbo.Organizations");
             DropIndex("dbo.PersonPositions", new[] { "Organization_Id" });
             RenameColumn("dbo.PersonPositions", "Organization_Id", "Organization_Id1");
             CreateIndex("dbo.PersonPositions", "Organization_Id1");
-            
+
             //AddForeignKey("dbo.PersonPositions", "Organization_Id1", "dbo.Organizations", "Id");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.PersonPositions", "Organization_Id1", "dbo.Organizations");

@@ -1,9 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    using System.Data.Entity.Spatial;
-    
+
     public partial class _38 : DbMigration
     {
         public override void Up()
@@ -20,7 +18,7 @@ namespace UNS.Models.Migrations
             AddColumn("address.HouseFull", "TotalArea", c => c.Single());
             //AlterColumn("address.HouseFull", "Address", c => c.String(maxLength: 1000));
         }
-        
+
         public override void Down()
         {
             AlterColumn("address.HouseFull", "Address", c => c.String());

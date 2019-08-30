@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _42 : DbMigration
     {
         public override void Up()
@@ -17,7 +16,7 @@ namespace UNS.Models.Migrations
             DropColumn("address.HouseFull", "Attribute");
             DropColumn("address.HouseFull", "TotalArea");
         }
-        
+
         public override void Down()
         {
             AddColumn("address.HouseFull", "TotalArea", c => c.Single());

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.Spatial;
 
 namespace UNS.Models.Entities
@@ -9,7 +8,7 @@ namespace UNS.Models.Entities
     public class Organization
     {
         //[Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }// = Guid.NewGuid();
         public virtual OrganizationType OrganizationType { get; set; }
         [MaxLength(300)]
         public string ShortName { get; set; }
@@ -49,17 +48,18 @@ namespace UNS.Models.Entities
         public string OKFS { get; set; }
         [MaxLength(11)]
         public string OKTMO { get; set; }
-        public virtual ICollection<PersonPosition> PersonPositions { get; set; }
+        public virtual ICollection<PersonPosition> PersonPositions { get; set; } = new List<PersonPosition>();
         //public virtual ICollection<DirectorPosition> DirectorPositions { get {return PersonPositions } }// = new List<DirectorPosition>();
         //public ICollection<AccountantGeneralPosition> AccountantGeneralPositions { get; set; }
         public DbGeography GeoData { get; set; }
         [MaxLength(255)]
         public string WebSite { get; set; }
-        public ICollection<FaxItem> FaxItems { get; set; }
-        public ICollection<EmailItem> EmailItems { get; set; }
-        public ICollection<PhoneItem> PhoneItems { get; set; }
-        public ICollection<OwnerRawAddress> OwnerRawAddresses{ get; set; }
-
-        public Organization()    { }
+        public virtual ICollection<FaxItem> FaxItems { get; set; } = new List<FaxItem>();
+        public virtual ICollection<EmailItem> EmailItems { get; set; }
+        public virtual ICollection<PhoneItem> PhoneItems { get; set; } = new List<PhoneItem>();
+        public virtual ICollection<OwnerRawAddress> OwnerRawAddresses { get; set; }
+        public virtual ICollection<Organization_House> Addresses{ get; set; }
+        public string Comments { get; set; }
+        public Organization() { }
     }
 }

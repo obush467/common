@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _30 : DbMigration
     {
         public override void Up()
@@ -14,7 +13,7 @@ namespace UNS.Models.Migrations
             //CreateIndex("dbo.PersonPositions", "Organization_Id");
             //AddForeignKey("dbo.PersonPositions", "Organization_Id", "dbo.Organizations", "Id", cascadeDelete: true);
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.PersonPositions", "Organization_Id", "dbo.Organizations");

@@ -4,11 +4,9 @@ namespace UNS.Models.Entities
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    [Table("fias.Room")]
     public partial class Room
     {
-        [StringLength(50)]
-        public string ROOMGUID { get; set; }
+        public Guid ROOMGUID { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -30,17 +28,12 @@ namespace UNS.Models.Entities
         [Column(TypeName = "smalldatetime")]
         public DateTime UPDATEDATE { get; set; }
 
-        [StringLength(50)]
-        public string HOUSEGUID { get; set; }
+        public Guid HOUSEGUID { get; set; }
 
-        [StringLength(50)]
-        public string ROOMID { get; set; }
+        public Guid ROOMID { get; set; }
+        public Guid? PREVID { get; set; }
 
-        [StringLength(50)]
-        public string PREVID { get; set; }
-
-        [StringLength(50)]
-        public string NEXTID { get; set; }
+        public Guid? NEXTID { get; set; }
 
         [Column(TypeName = "smalldatetime")]
         public DateTime STARTDATE { get; set; }
@@ -50,8 +43,7 @@ namespace UNS.Models.Entities
 
         public bool LIVESTATUS { get; set; }
 
-        [StringLength(50)]
-        public string NORMDOC { get; set; }
+        public Guid? NORMDOC { get; set; }
 
         public long OPERSTATUS { get; set; }
 

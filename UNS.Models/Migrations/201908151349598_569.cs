@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _569 : DbMigration
     {
         public override void Up()
@@ -15,7 +14,7 @@ namespace UNS.Models.Migrations
             AlterColumn("dbo.PersonPositions", "Organization_Id", c => c.Guid());
             CreateIndex("dbo.PersonPositions", "Organization_Id");*/
         }
-        
+
         public override void Down()
         {
             /*DropIndex("dbo.PersonPositions", new[] { "Organization_Id" });

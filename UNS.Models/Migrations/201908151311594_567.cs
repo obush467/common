@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _567 : DbMigration
     {
         public override void Up()
@@ -33,23 +32,23 @@ namespace UNS.Models.Migrations
             DropColumn("dbo.PhoneItems", "PersonPosition1_Id");
             DropTable("dbo.PersonPositions1");
         }
-        
+
         public override void Down()
         {
             CreateTable(
                 "dbo.PersonPositions1",
                 c => new
-                    {
-                        Id = c.Guid(nullable: false, identity: true),
-                        BeginDate = c.DateTime(),
-                        EndDate = c.DateTime(),
-                        Organization_Id = c.Guid(nullable: false),
-                        Person_Id = c.Guid(),
-                        PositionType_Id = c.Guid(),
-                        Organization_Id1 = c.Guid(),
-                    })
+                {
+                    Id = c.Guid(nullable: false, identity: true),
+                    BeginDate = c.DateTime(),
+                    EndDate = c.DateTime(),
+                    Organization_Id = c.Guid(nullable: false),
+                    Person_Id = c.Guid(),
+                    PositionType_Id = c.Guid(),
+                    Organization_Id1 = c.Guid(),
+                })
                 .PrimaryKey(t => t.Id);
-            
+
             AddColumn("dbo.PhoneItems", "PersonPosition1_Id", c => c.Guid());
             AddColumn("dbo.FaxItems", "PersonPosition1_Id", c => c.Guid());
             AddColumn("dbo.EmailItems", "PersonPosition1_Id", c => c.Guid());
