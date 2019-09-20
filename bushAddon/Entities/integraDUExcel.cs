@@ -8,6 +8,7 @@ namespace UNS.Models.Entities
 {
     public class IntegraDUExcel
     {
+        private Range _Number;
         private Range _DUtype; // Тип информационного указателя
         private Range _AdmArea; // Округ
         private Range _District; // Район
@@ -37,6 +38,8 @@ namespace UNS.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ID { get; set; }
+        [DisplayName("№")]
+        public object Number { get { return _Number.Value2; } set { _Number.Value2 = value; } }
         [DisplayName("Тип информационного указателя")]
         public object DUtype { get { return _DUtype.Value2; } set { _DUtype.Value2 = value; } }    //	
         public object AdmArea { get { return _AdmArea.Value2; } set { _AdmArea.Value2 = value; } }   //	
@@ -108,17 +111,17 @@ namespace UNS.Models.Entities
         {
             if (range.Rows.Count == 1 /*&& range.Columns.Count >= 26*/)
             {
-                _DUtype = range.Cells[1, 2]; // Тип информационного указателя
-                _AdmArea = range.Cells[1, 3]; // Округ
-                _District = range.Cells[1, 4]; // Район
-                _AddressO = range.Cells[1, 5]; // Улица
-                _AddressH = range.Cells[1, 6]; // Номер дома
-                _ContentO = range.Cells[1, 7]; // Информационное содержание - Улица
-                _ContentH = range.Cells[1, 8]; // Информационное содержание - Номер дома
-                _InstallStatus = range.Cells[1, 9]; // Статус установки
-                _UNOM = range.Cells[1, 10]; // UNOM
-                _UNIU = range.Cells[1, 11]; // Уникальный номер
-                //_Person = range.Cells[1, 12]; // Хто
+                _UNIU = range.Cells[1, 1]; // Уникальный номер
+                _Number = range.Cells[1, 2];
+                _DUtype = range.Cells[1, 3]; // Тип информационного указателя
+                _AdmArea = range.Cells[1, 4]; // Округ
+                _District = range.Cells[1, 5]; // Район
+                _AddressO = range.Cells[1, 6]; // Улица
+                _AddressH = range.Cells[1, 7]; // Номер дома
+                _ContentO = range.Cells[1, 8]; // Информационное содержание - Улица
+                _ContentH = range.Cells[1, 9]; // Информационное содержание - Номер дома
+                _InstallStatus = range.Cells[1, 10]; // Статус установки
+                _UNOM = range.Cells[1, 11]; // UNOM
                 _BTIwallType = range.Cells[1, 12]; // БТИ - Тип стен
                 _BTIdestination = range.Cells[1, 13]; // БТИ - Назначение
                 _Resume = range.Cells[1, 14]; // Заключение

@@ -7,6 +7,7 @@ using System.Linq;
 using UNS.Models.Configuration;
 using UNS.Models.Entities;
 using UNS.Models.Entities.Address;
+using UNS.Models.Entities.Fias;
 using UNS.Models.Models.Configuration;
 
 namespace UNS.Models
@@ -64,6 +65,14 @@ namespace UNS.Models
         public virtual DbSet<RawAddress> RawAddresses { get; set; }
         public virtual DbSet<HouseFull> HouseFulls { get; set; }
         public virtual DbSet<HouseFullBTI> HouseFullBTIs { get; set; }
+        public virtual DbSet<AddressBase> AddressBases { get; set; }
+        public virtual DbSet<AddressCode> AddressCodes { get; set; }
+        public virtual DbSet<AddressPrevNext> AddressPrevNexts { get; set; }
+        public virtual DbSet<AddressObject1> AddressObject1s { get; set; }
+        public virtual DbSet<Room1> Room1s { get; set; }
+        public virtual DbSet<Stead1> Stead1s { get; set; }
+        public virtual DbSet<IntegraDU_work> IntegraDU_Works { get; set; }
+        public virtual DbSet<IntegraDU_work_Installation> IntegraDU_Work_Installations { get; set; }
 
         /*[DbFunction("UNS.Models.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
@@ -95,11 +104,20 @@ namespace UNS.Models
             modelBuilder.Configurations.Add(new DirectorPositionConfiguration());
             modelBuilder.Entity<AccountantGeneralPosition>().ToTable("AccountantGeneralPositions");
 
+            modelBuilder.Configurations.Add(new integraDUConfiguration());
+            modelBuilder.Configurations.Add(new integraDUStagesConfiguration());
+            modelBuilder.Configurations.Add(new integraDU_workConfiguration());
+
             modelBuilder.Configurations.Add(new SteadConfiguration());
             modelBuilder.Configurations.Add(new HouseConfiguration());
             modelBuilder.Configurations.Add(new Del_HouseConfiguration());
             modelBuilder.Configurations.Add(new RoomConfiguration());
-
+            modelBuilder.Configurations.Add(new AddressCodeConfiguration());
+            modelBuilder.Configurations.Add(new AddressBaseConfiguration());
+            modelBuilder.Configurations.Add(new AddressPrevNextConfiguration());
+            modelBuilder.Configurations.Add(new AddressObject1Configuration());
+            modelBuilder.Configurations.Add(new Stead1Configuration());
+            modelBuilder.Configurations.Add(new Room1Configuration());
 
 
             modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
@@ -168,10 +186,8 @@ namespace UNS.Models
                 .IsUnicode(false);
 
 
-            modelBuilder.Entity<IntegraDUStages>()
-                .HasKey(t => t.ID);
-            modelBuilder.Entity<IntegraDU>()
-                .HasRequired(t => t.IntegraDUStages);
+
+
         }
     }
 }

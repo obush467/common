@@ -10,25 +10,25 @@ namespace UNS.Models
     public class ExcelLoader
     {
         private IMapper Mapper = (new MapperConfiguration(cfg => { cfg.AddProfile<DUExcel_Range_MapProfile>(); }).CreateMapper());
-        public List<Entities.IntegraDUExcel> Rows { get; set; } = new List<Entities.IntegraDUExcel>();
-        public List<Entities.IntegraHouses> Houses { get; set; } = new List<Entities.IntegraHouses>();
-        protected Excel.Application _application { get; set; }
+        public List<IntegraDUExcel> Rows { get; set; } = new List<IntegraDUExcel>();
+        public List<IntegraHouses> Houses { get; set; } = new List<IntegraHouses>();
+        protected Application _application { get; set; }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="application"></param>
-        public ExcelLoader(Excel.Application application)
+        public ExcelLoader(Application application)
         { _application = application; }
         /// <summary>
         /// 
         /// </summary>
         /// <param name="worksheet"></param>
-        public void AttachRows(Excel.Worksheet worksheet)
+        public void AttachRows(Worksheet worksheet)
         {
-            Excel.Range wr = worksheet.Range["A1"].CurrentRegion;
-            foreach (Excel.Range row in wr.Rows)
+            Range wr = worksheet.Range["A1"].CurrentRegion;
+            foreach (Range row in wr.Rows)
             {
-                Entities.IntegraDUExcel newentity = new Entities.IntegraDUExcel();
+                IntegraDUExcel newentity = new IntegraDUExcel();
                 newentity.Attach(row);
                 Rows.Add(newentity);
             }
@@ -38,23 +38,23 @@ namespace UNS.Models
         /// 
         /// </summary>
         /// <param name="worksheet"></param>
-        public void AttachHouses(Excel.Worksheet worksheet)
+        public void AttachHouses(Worksheet worksheet)
         {
-            Excel.Range wr = worksheet.Range["A1"].CurrentRegion;
-            foreach (Excel.Range row in wr.Rows)
+            Range wr = worksheet.Range["A1"].CurrentRegion;
+            foreach (Range row in wr.Rows)
             {
-                Entities.IntegraHouses newentity = new Entities.IntegraHouses();
+                IntegraHouses newentity = new IntegraHouses();
                 newentity.Attach(row);
                 Houses.Add(newentity);
             }
 
         }
 
-        public List<IntegraDU> MapRows(Excel.Worksheet worksheet)
+        public List<IntegraDU> MapRows(Worksheet worksheet)
         {
-            Excel.Range wr = worksheet.Range["A1"].CurrentRegion;
-            var result = new List<UNS.Models.Entities.IntegraDU>();
-            foreach (Excel.Range row in wr.Rows)
+            Range wr = worksheet.Range["A1"].CurrentRegion;
+            var result = new List<IntegraDU>();
+            foreach (Range row in wr.Rows)
             {
                 var t = Mapper.Map<Range, IntegraDU>(row);
                result.Add(t);

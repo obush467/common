@@ -55,7 +55,8 @@ namespace UNS.Common
                 }
                 foreach (var format in wdSaveFormats)
                     document.SaveAs2(Path.ChangeExtension(filename.FullName, null), format);
-                document.PrintOut();
+                Logger.Logger.Info(filename.FullName);
+                //document.PrintOut();
 
                 document.Close(WdSaveOptions.wdDoNotSaveChanges);
                 //ExportToPDF(filename);

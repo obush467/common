@@ -47,11 +47,14 @@
             this.button3 = this.Factory.CreateRibbonButton();
             this.group4 = this.Factory.CreateRibbonGroup();
             this.button4 = this.Factory.CreateRibbonButton();
-            this.button_CreateFolders = this.Factory.CreateRibbonButton();
             this.button6 = this.Factory.CreateRibbonButton();
-            this.group5 = this.Factory.CreateRibbonGroup();
             this.button_UpdateBTI = this.Factory.CreateRibbonButton();
-            this.button7 = this.Factory.CreateRibbonButton();
+            this.group5 = this.Factory.CreateRibbonGroup();
+            this.button_CreatePassports = this.Factory.CreateRibbonButton();
+            this.button_PassportPrint = this.Factory.CreateRibbonButton();
+            this.groupHyperlinks = this.Factory.CreateRibbonGroup();
+            this.button_CreateFolders = this.Factory.CreateRibbonButton();
+            this.button_CreateHyperlinks = this.Factory.CreateRibbonButton();
             this.tabProdaction = this.Factory.CreateRibbonTab();
             this.groupPrint = this.Factory.CreateRibbonGroup();
             this.bPrintDislocations = this.Factory.CreateRibbonButton();
@@ -59,13 +62,14 @@
             this.button_PrintProdactionComplects = this.Factory.CreateRibbonButton();
             this.printDialogDUAddon = new System.Windows.Forms.PrintDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.button5 = this.Factory.CreateRibbonButton();
+            this.button_InstallationPassport = this.Factory.CreateRibbonButton();
             this.tabSogl.SuspendLayout();
             this.group1.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
             this.group3.SuspendLayout();
             this.group4.SuspendLayout();
             this.group5.SuspendLayout();
+            this.groupHyperlinks.SuspendLayout();
             this.tabProdaction.SuspendLayout();
             this.groupPrint.SuspendLayout();
             this.SuspendLayout();
@@ -77,6 +81,7 @@
             this.tabSogl.Groups.Add(this.group3);
             this.tabSogl.Groups.Add(this.group4);
             this.tabSogl.Groups.Add(this.group5);
+            this.tabSogl.Groups.Add(this.groupHyperlinks);
             this.tabSogl.Label = "ДУ согласование";
             this.tabSogl.Name = "tabSogl";
             // 
@@ -96,12 +101,13 @@
             // 
             this.button2.Label = "КЛАДР развернуть";
             this.button2.Name = "button2";
-            this.button2.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button2_Click);
+            this.button2.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_KLADR_Click);
             // 
             // button1
             // 
             this.button1.Label = "Улица в конец";
             this.button1.Name = "button1";
+            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_ToFias_Click);
             // 
             // group3
             // 
@@ -133,8 +139,8 @@
             // group4
             // 
             this.group4.Items.Add(this.button4);
-            this.group4.Items.Add(this.button_CreateFolders);
             this.group4.Items.Add(this.button6);
+            this.group4.Items.Add(this.button_UpdateBTI);
             this.group4.Label = "БД";
             this.group4.Name = "group4";
             // 
@@ -144,12 +150,6 @@
             this.button4.Name = "button4";
             this.button4.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_UpdateByDB_Click);
             // 
-            // button_CreateFolders
-            // 
-            this.button_CreateFolders.Label = "Сделать папки";
-            this.button_CreateFolders.Name = "button_CreateFolders";
-            this.button_CreateFolders.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_CreateFolders_Click);
-            // 
             // button6
             // 
             this.button6.Label = "Перенести Владельца";
@@ -158,25 +158,53 @@
     "писем";
             this.button6.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_ReplaceOwnerToPrim_Click);
             // 
-            // group5
-            // 
-            this.group5.Items.Add(this.button_UpdateBTI);
-            this.group5.Items.Add(this.button7);
-            this.group5.Items.Add(this.button5);
-            this.group5.Label = "group5";
-            this.group5.Name = "group5";
-            // 
             // button_UpdateBTI
             // 
             this.button_UpdateBTI.Label = "Проставить БТИ";
             this.button_UpdateBTI.Name = "button_UpdateBTI";
             this.button_UpdateBTI.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_UpdateBTI_Click);
             // 
-            // button7
+            // group5
             // 
-            this.button7.Label = "button7";
-            this.button7.Name = "button7";
-            this.button7.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button7_Click);
+            this.group5.Items.Add(this.button_CreatePassports);
+            this.group5.Items.Add(this.button_PassportPrint);
+            this.group5.Label = "Тех. паспорт";
+            this.group5.Name = "group5";
+            // 
+            // button_CreatePassports
+            // 
+            this.button_CreatePassports.Label = "Создать";
+            this.button_CreatePassports.Name = "button_CreatePassports";
+            this.button_CreatePassports.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PassportCreate_Click);
+            // 
+            // button_PassportPrint
+            // 
+            this.button_PassportPrint.Label = "Печатать";
+            this.button_PassportPrint.Name = "button_PassportPrint";
+            this.button_PassportPrint.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_PassportPrint_Click);
+            // 
+            // groupHyperlinks
+            // 
+            this.groupHyperlinks.Items.Add(this.button_CreateFolders);
+            this.groupHyperlinks.Items.Add(this.button_CreateHyperlinks);
+            this.groupHyperlinks.Label = "Папки и гиперссылки";
+            this.groupHyperlinks.Name = "groupHyperlinks";
+            // 
+            // button_CreateFolders
+            // 
+            this.button_CreateFolders.Label = "Сделать папки";
+            this.button_CreateFolders.Name = "button_CreateFolders";
+            this.button_CreateFolders.SuperTip = "Создать папки с названиями в тексте выделенных ячеек, содержащиеся в выбранной в " +
+    "диалог основной папке, и присвоить гиперссылки на них.";
+            this.button_CreateFolders.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_CreateFolders_Click);
+            // 
+            // button_CreateHyperlinks
+            // 
+            this.button_CreateHyperlinks.Label = "Гиперссылки прибить";
+            this.button_CreateHyperlinks.Name = "button_CreateHyperlinks";
+            this.button_CreateHyperlinks.SuperTip = "Присвоить гиперссылки на папки с названиями в тексте выделенных ячеек, содержащие" +
+    "ся в выбранной в диалоге основной папке.";
+            this.button_CreateHyperlinks.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_CreateHyperlinks_Click);
             // 
             // tabProdaction
             // 
@@ -188,6 +216,7 @@
             // 
             this.groupPrint.Items.Add(this.bPrintDislocations);
             this.groupPrint.Items.Add(this.button8);
+            this.groupPrint.Items.Add(this.button_InstallationPassport);
             this.groupPrint.Items.Add(this.button_PrintProdactionComplects);
             this.groupPrint.Label = "Печать";
             this.groupPrint.Name = "groupPrint";
@@ -220,11 +249,11 @@
             // 
             this.printDialogDUAddon.UseEXDialog = true;
             // 
-            // button5
+            // button_InstallationPassport
             // 
-            this.button5.Label = "button5";
-            this.button5.Name = "button5";
-            this.button5.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button5_Click);
+            this.button_InstallationPassport.Label = "Задание";
+            this.button_InstallationPassport.Name = "button_InstallationPassport";
+            this.button_InstallationPassport.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.Button_InstallationPassport_Click);
             // 
             // Ribbon1
             // 
@@ -245,6 +274,8 @@
             this.group4.PerformLayout();
             this.group5.ResumeLayout(false);
             this.group5.PerformLayout();
+            this.groupHyperlinks.ResumeLayout(false);
+            this.groupHyperlinks.PerformLayout();
             this.tabProdaction.ResumeLayout(false);
             this.tabProdaction.PerformLayout();
             this.groupPrint.ResumeLayout(false);
@@ -267,7 +298,7 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group5;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button6;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_UpdateBTI;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button7;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_CreatePassports;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupPrint;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton bPrintDislocations;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button8;
@@ -277,7 +308,10 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
         private System.Windows.Forms.PrintDialog printDialogDUAddon;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button5;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_PassportPrint;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupHyperlinks;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_CreateHyperlinks;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_InstallationPassport;
     }
 
     partial class ThisRibbonCollection

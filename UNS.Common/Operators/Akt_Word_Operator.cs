@@ -13,8 +13,8 @@ namespace UNS.Common
 {
     public class Akt_Word_Operator : Word_Operator, IOutDocument<IntegraDUExcelLayout>
     {
-        protected DirectoryInfo _templateDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
-        protected DirectoryInfo _rootdir = new DirectoryInfo("c:\\Паспорта\\");
+        protected static DirectoryInfo _templateDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
+        protected static DirectoryInfo _rootdir = new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
         protected Word_Operator Word_Operator = new Word_Operator();
 
         public Akt_Word_Operator(DirectoryInfo templateDir, DirectoryInfo rootdir)
@@ -23,7 +23,7 @@ namespace UNS.Common
             _templateDir = templateDir;
         }
 
-        public Akt_Word_Operator() : this(new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\"), new DirectoryInfo("c:\\Паспорта\\"))
+        public Akt_Word_Operator() : this(_templateDir, _rootdir)
         { }
         public void Create(IEnumerable<IntegraDUExcelLayout> akts)
         {
