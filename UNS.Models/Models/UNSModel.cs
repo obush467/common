@@ -55,7 +55,7 @@ namespace UNS.Models
         public virtual DbSet<AccountantGeneralPosition> AccountantGeneralPositions { get; set; }
         public virtual DbSet<DirectorPosition> DirectorPositions { get; set; }
         public virtual DbSet<Person> Persons { get; set; }
-        public virtual DbSet<IntegraDUExcelLayout> IntegraDUExcelLayouts { get; set; }
+        public virtual DbSet<PassportContent> IntegraDUExcelLayouts { get; set; }
         public virtual DbSet<IntegraDU> IntegraDU { get; set; }
         public virtual DbSet<Organization_House> Organization_Houses { get; set; }
         public virtual DbSet<PhoneItem> Phones { get; set; }

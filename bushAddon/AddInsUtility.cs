@@ -22,15 +22,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using UNS.Common.Office;
 using System.Globalization;
-
-[ComVisible(true)]
-public interface IAddInUtilities
-{
-    void ImportData();
-    void PrintAkts(PrinterSettings printerSettings);
-    void PrintDislocations(PrinterSettings printerSettings);
-    void BTIWallType();
-}
+using bushAddon.Interfaces;
 
 [ComVisible(true)]
 [ClassInterface(ClassInterfaceType.None)]

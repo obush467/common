@@ -11,10 +11,6 @@ namespace UNS.Models.Entities
     {
         //public IntegraDUStages IntegraDUStages { get; set; }
 
-
-        [StringLength(255)]
-        public string Хто { get; set; }
-
         [Description("БТИ - Тип стен")]
         [StringLength(255)]
         public string BTIWallType { get; set; }
@@ -70,7 +66,7 @@ namespace UNS.Models.Entities
 
         public DateTime? ОТКАЗ { get; set; }
 
-        [Description("ХОТЕЛКИ на МОНТАЖА")]
+        [Description("ХОТЕЛКИ на МОНТАЖ")]
         [MaxLength(4000)]
         public string Istallation_Requirements { get; set; }
 
@@ -85,5 +81,6 @@ namespace UNS.Models.Entities
         public string EGKO_Y { get; set; }
         public Organization Organization { get; set; }
         public ICollection<IntegraDU_work> IntegraDU_Works { get; set; }
+        public Nullable<DateTime> PaidDate { get; set; }
     }
 }

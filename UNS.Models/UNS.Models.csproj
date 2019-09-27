@@ -88,6 +88,7 @@
       <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
@@ -103,6 +104,7 @@
     <Reference Include="System.Spatial, Version=5.8.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\InfConstructionsDX\InfConstructionsDX.Main\packages\System.Spatial.5.8.4\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -254,6 +256,10 @@
     <Compile Include="Migrations\201909121305557_614.Designer.cs">
       <DependentUpon>201909121305557_614.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909241349395_615.cs" />
+    <Compile Include="Migrations\201909241349395_615.Designer.cs">
+      <DependentUpon>201909241349395_615.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Configuration\integraDUStagesConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDUConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDU_workConfiguration.cs" />
@@ -270,7 +276,7 @@
     <Compile Include="Entities\PhoneItem.cs" />
     <Compile Include="Entities\FaxItem.cs" />
     <Compile Include="Entities\integraDU.cs" />
-    <Compile Include="Entities\IntegraDUExcelLayout.cs" />
+    <Compile Include="Entities\PassportContent.cs" />
     <Compile Include="Entities\integraDUStages.cs" />
     <Compile Include="Entities\Organization_House.cs" />
     <Compile Include="Entities\DUTechnicalCertificate.cs" />
@@ -814,6 +820,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909121305557_614.resx">
       <DependentUpon>201909121305557_614.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909241349395_615.resx">
+      <DependentUpon>201909241349395_615.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

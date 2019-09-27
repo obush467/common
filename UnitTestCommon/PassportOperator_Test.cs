@@ -1,0 +1,37 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UNS.Common;
+using UNS.Models;
+using UNS.Models.Entities;
+
+namespace UnitTestCommon
+{
+    [TestClass]
+    public class PassportOperator_Test
+    {
+        [TestMethod]
+        public void Print()
+        {
+            using (var context = new UNSModel("data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            {
+                context.Database.CommandTimeout = 180;
+                var integraDUExcelLayouts = context.IntegraDUExcelLayouts.Where(w => w.Stage == "18006").OrderBy(o => o.Number).ToList();
+                var days = new List<DateTime>()
+                {
+                    DateTime.Parse("2019-08-01"),
+                    DateTime.Parse("2019-08-02"),
+                    DateTime.Parse("2019-08-05"),
+                    DateTime.Parse("2019-08-06"),
+                    DateTime.Parse("2019-08-07"),
+                    DateTime.Parse("2019-08-08"),
+                    DateTime.Parse("2019-08-09")
+                };
+                new Passport_Word_Operator().Create(integraDUExcelLayouts);
+            }
+        }
+    }
+}

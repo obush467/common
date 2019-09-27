@@ -107,7 +107,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Akt_Word_Operator_Test.cs" />
     <Compile Include="ImageOperator_Test.cs" />
+    <Compile Include="PassportOperator_Test.cs" />
     <Compile Include="PDF_Operator_test.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

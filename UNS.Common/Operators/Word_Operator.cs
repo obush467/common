@@ -13,27 +13,17 @@ using Logger;
 
 namespace UNS.Common
 {
-    public class Word_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
+    public class Word_Operator<T> : IOutDocument<T>
     {
-        public Application wordApp = new Application();
-
+        public static Application wordApp = new Application();
         public delegate Table CreateFunc(Range range, string duType = null);
-
-        public void CreateBookmarkedDocument(FileInfo filename, FileInfo template, Hashtable hbookmarks, IEnumerable<WdSaveFormat> wdSaveFormats = null)
+        public Document CreateBookmarkedDocument(FileInfo template, Hashtable hbookmarks)
         {
-            if (wdSaveFormats == null)
-            {
-                wdSaveFormats = new List<WdSaveFormat>();
-                ((List<WdSaveFormat>)wdSaveFormats).Add(WdSaveFormat.wdFormatDocument);
-            }
-            //Application wordApp = new Application();
             Document document = wordApp.Documents.Add(template.FullName);
-            //wordApp.Visible = true;
             try
             {
                 foreach (var bookmark in hbookmarks.Keys)
                 {
-
                     if (document.Bookmarks.Exists(bookmark.ToString()))
                     {
                         var ts = new TypeSwitch()
@@ -41,55 +31,61 @@ namespace UNS.Common
                             {
                                 InlineShape shape = document.Bookmarks[bookmark].Range.InlineShapes.AddPicture(FileName: insertedObject.FromFile.FullName);
                                 var proportion = shape.Width / shape.Height;
-
                                 shape.LockAspectRatio = MsoTriState.msoTrue;
                                 shape.Height = insertedObject.Height;
                                 shape.Width = shape.Height * proportion;
                             })
                             .Case((string insertedstr) => document.Bookmarks[bookmark].Range.Text = insertedstr)
-                            .Case((CreateFunc createFunc) => { createFunc.Invoke(document.Bookmarks[bookmark].Range); })
-                            //ase((Func<Range, Table> ff=>{ff( })
-                            ;
+                            .Case((CreateFunc createFunc) => { createFunc.Invoke(document.Bookmarks[bookmark].Range); });
                         ts.Switch(hbookmarks[bookmark]);
                     }
                 }
-                foreach (var format in wdSaveFormats)
-                    document.SaveAs2(Path.ChangeExtension(filename.FullName, null), format);
-                Logger.Logger.Info(filename.FullName);
-                //document.PrintOut();
-
-                document.Close(WdSaveOptions.wdDoNotSaveChanges);
-                //ExportToPDF(filename);
             }
             catch (Exception ex)
-
             {
-                ex.Message.ToString();
+                Logger.Logger.Error(ex.Message);
+            }
+            return document;
+            }
+        public IEnumerable<FileInfo> CreateBookmarkedDocument(string fileBaseName, FileInfo template, Hashtable hbookmarks, IEnumerable<WdSaveFormat> wdSaveFormats = null)
+        {
+            if (wdSaveFormats == null)
+            {
+                wdSaveFormats = new List<WdSaveFormat>()
+                { WdSaveFormat.wdFormatDocument };
+            }
+            Document document = CreateBookmarkedDocument(template,hbookmarks);
+            var result = new List<FileInfo>();
+            try
+            { 
+                foreach (var format in wdSaveFormats)
+                {
+                    document.SaveAs2(fileBaseName, format);
+                    result.Add(new FileInfo(fileBaseName));
+                }
+                Logger.Logger.Info(fileBaseName);
+            }
+            catch (Exception ex)
+            {
+                Logger.Logger.Error(ex.Message);
             }
             finally
             {
-                //wordApp.Quit(WdSaveOptions.wdSaveChanges);
+                document.Close(WdSaveOptions.wdDoNotSaveChanges);
             }
-
+            return result;
         }
 
-        public override void ExportToPDF(FileInfo fileinfo)
+        public void ExportToPDF(FileInfo fileinfo)
         {
-            //Application wordApp = new Application();
             Document tempDocument = null;
             try
             {
-
                 FileInfo newname = new FileInfo(Path.ChangeExtension(fileinfo.FullName, ".pdf"));
-
-                tempDocument = wordApp.Documents.Open(fileinfo.FullName,
-                MsoTriState.msoTrue, MsoTriState.msoTrue,
-                MsoTriState.msoFalse);
-
+                tempDocument = wordApp.Documents.Open(fileinfo.FullName,MsoTriState.msoTrue, MsoTriState.msoTrue,MsoTriState.msoFalse);
                 tempDocument.ExportAsFixedFormat(
                     newname.FullName,
                     WdExportFormat.wdExportFormatPDF, false, WdExportOptimizeFor.wdExportOptimizeForPrint, WdExportRange.wdExportAllDocument);
-                //tempDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
             }
             catch (Exception er)
             {
@@ -103,36 +99,42 @@ namespace UNS.Common
             {
                 if (tempDocument != null)
                     tempDocument.Close(WdSaveOptions.wdDoNotSaveChanges);
-                //wordApp.Quit(WdSaveOptions.wdDoNotSaveChanges);
             }
         }
 
-        public override void Create(FileInfo document)
+        public FileInfo Create(T document)
+        {
+            throw new NotImplementedException();
+        }
+        public IEnumerable<FileInfo> Create(IEnumerable<FileInfo> document)
         {
             throw new NotImplementedException();
         }
 
-        public override void Print(FileInfo document, short copies = 1)
+        public void Print(FileInfo document, PrinterSettings printerSettings)
+        {
+            wordApp.Documents.Open(document.FullName);
+            wordApp.PrintOut();
+        }
+
+        public void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
+        {
+            foreach (var document in documents)
+            { Print(document, printerSettings); }
+        }
+
+
+        public void Print(T document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public override void Create(IEnumerable<FileInfo> document)
+        public IEnumerable<FileInfo> Create(IEnumerable<T> document)
         {
             throw new NotImplementedException();
         }
 
-        public override void Print(IEnumerable<FileInfo> document, short copies = 1)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Print(FileInfo document, PrinterSettings printerSettings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Print(IEnumerable<FileInfo> document, PrinterSettings printerSettings)
+        public void Print(IEnumerable<T> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

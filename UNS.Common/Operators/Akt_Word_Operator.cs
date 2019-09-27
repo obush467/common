@@ -11,7 +11,7 @@ using UNS.Common;
 
 namespace UNS.Common
 {
-    public class Akt_Word_Operator : Word_Operator, IOutDocument<IntegraDUExcelLayout>
+    public class Akt_Word_Operator : Word_Operator, IOutDocument<PassportContent>
     {
         protected static DirectoryInfo _templateDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
         protected static DirectoryInfo _rootdir = new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
@@ -25,15 +25,15 @@ namespace UNS.Common
 
         public Akt_Word_Operator() : this(_templateDir, _rootdir)
         { }
-        public void Create(IEnumerable<IntegraDUExcelLayout> akts)
+        public void Create(IEnumerable<PassportContent> akts)
         {
-            foreach (IntegraDUExcelLayout integraDUExcelLayout in akts)
+            foreach (PassportContent integraDUExcelLayout in akts)
             {
                 Create(integraDUExcelLayout);
             }
         }
 
-        public void Create(IntegraDUExcelLayout integraDUExcelLayout)
+        public void Create(PassportContent integraDUExcelLayout)
         {
             var flist = new List<FileInfo>();
             Hashtable hashtable = new Hashtable();
@@ -97,7 +97,7 @@ namespace UNS.Common
             flist.Add(newWordFileName);
         }
 
-        public void Print(IEnumerable<IntegraDUExcelLayout> akts)
+        public void Print(IEnumerable<PassportContent> akts)
         {
             foreach (var akt in akts)
             {
@@ -105,32 +105,32 @@ namespace UNS.Common
             }
         }
 
-        private void Print(IntegraDUExcelLayout akt)
+        private void Print(PassportContent akt)
         {
             throw new NotImplementedException();
         }
 
-        void IOutDocument<IntegraDUExcelLayout>.Print(IntegraDUExcelLayout document, short copies)
+        void IOutDocument<PassportContent>.Print(PassportContent document, short copies)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IntegraDUExcelLayout document, short copies = 1)
+        public void Print(PassportContent document, short copies = 1)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<IntegraDUExcelLayout> document, short copies = 1)
+        public void Print(IEnumerable<PassportContent> document, short copies = 1)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IntegraDUExcelLayout document, PrinterSettings printerSettings)
+        public void Print(PassportContent document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<IntegraDUExcelLayout> document, PrinterSettings printerSettings)
+        public void Print(IEnumerable<PassportContent> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

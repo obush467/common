@@ -161,7 +161,6 @@
     <Compile Include="Operators\Excel_Operator.cs" />
     <Compile Include="Operators\ImageOperator.cs" />
     <Compile Include="Operators\IOP.cs" />
-    <Compile Include="Operators\Operator.cs" />
     <Compile Include="Operators\PDF_Operator.cs" />
     <Compile Include="Operators\PPT_Operator.cs" />
     <Compile Include="PrintPattern.cs" />

@@ -13,6 +13,18 @@ namespace UnitTestCommon
     [TestClass]
     public class ImageOperator_Test
     {
+        /// <summary>
+        /// Переносит изображения из одной папки в другую с наложением на них номера ДУ и рраспределением по папкам с номерами и подддиректориями
+        /// </summary>
+        [TestMethod]
+        public void PrintAllImagesInFolder()
+        {
+            var ii = new ImageOperator();
+            foreach (var file in (new DirectoryInfo("C:\\Temp\\1\\").GetFiles("*", SearchOption.AllDirectories)))
+            {
+                ii.UpdateImage(new FileInfo(file.FullName), new DirectoryInfo("C:\\Temp\\2"));
+            }
+        }
         [TestMethod]
         public void UpdateImage()
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 
@@ -6,12 +7,9 @@ namespace UNS.Common.Interfaces
 {
     public interface IOutDocument<T>
     {
-        void Create(T document);
-        void Print(T document, short copies = 1);
-
+        FileInfo Create(T document);        
         void Print(T document, PrinterSettings printerSettings);
-        void Create(IEnumerable<T> document);
-        void Print(IEnumerable<T> document, short copies = 1);
+        IEnumerable<FileInfo> Create(IEnumerable<T> document);       
         void Print(IEnumerable<T> document, PrinterSettings printerSettings);
         void ExportToPDF(FileInfo fileInfo);
     }

@@ -89,8 +89,8 @@ namespace UNS.Common.Operators
             var reg = new Regex("\\d{5}ДУ\\d{6}");           
             var nameReg = reg.Match(inputfile.FullName).Value;
             var subdir = outputDir.CreateSubdirectory(nameReg);
-            var subdir2 = subdir.CreateSubdirectory("Фото_свет");
-            var newFilePath = Path.Combine(subdir2.FullName,inputfile.Name);
+            //var subdir2 = subdir.CreateSubdirectory("Фото_свет");
+            var newFilePath = Path.Combine(subdir.FullName,inputfile.Name);
             UpdateImage(inputfile, new FileInfo(newFilePath), nameReg);
         }
 

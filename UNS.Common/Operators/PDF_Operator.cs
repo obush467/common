@@ -10,24 +10,24 @@ using Logger;
 
 namespace UNS.Common
 {
-    public class PDF_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
+    public class PDF_Operator : IOutDocument<FileInfo>
     {
-        public override void Create(FileInfo document)
+        public FileInfo Create(FileInfo document)
         {
             throw new NotImplementedException();
         }
 
-        public override void Create(IEnumerable<FileInfo> document)
+        public IEnumerable<FileInfo> Create(IEnumerable<FileInfo> document)
         {
             throw new NotImplementedException();
         }
 
-        public override void ExportToPDF(FileInfo fileInfo)
+        public void ExportToPDF(FileInfo fileInfo)
         {
             throw new NotImplementedException();
         }
 
-        public override void Print(FileInfo fileInfo, short copies = 1)
+        public void Print(FileInfo fileInfo, short copies = 1)
         {
             PrinterSettings printerSettings = new PrinterSettings
             {
@@ -35,13 +35,13 @@ namespace UNS.Common
             };
             Print(fileInfo, printerSettings);
         }
-        public override void Print(IEnumerable<FileInfo> fileInfos, short copies = 1)
+        public void Print(IEnumerable<FileInfo> fileInfos, short copies = 1)
         {
             foreach (FileInfo fileInfo in fileInfos)
             { Print(fileInfo, copies); }
         }
 
-        public override void Print(FileInfo document, PrinterSettings printerSettings)
+        public void Print(FileInfo document, PrinterSettings printerSettings)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace UNS.Common
             }
         }
 
-        public override void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
+        public void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
         {
             foreach (FileInfo fileInfo in documents)
             { Print(fileInfo, printerSettings); }
