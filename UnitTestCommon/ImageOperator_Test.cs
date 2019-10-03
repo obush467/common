@@ -20,9 +20,9 @@ namespace UnitTestCommon
         public void PrintAllImagesInFolder()
         {
             var ii = new ImageOperator();
-            foreach (var file in (new DirectoryInfo("C:\\Temp\\1\\").GetFiles("*", SearchOption.AllDirectories)))
+            foreach (var du in (new DirectoryInfo("C:\\Temp\\1\\").GetFiles("*", SearchOption.AllDirectories)))            
             {
-                ii.UpdateImage(new FileInfo(file.FullName), new DirectoryInfo("C:\\Temp\\2"));
+                ii.UpdateImage(du, new DirectoryInfo("C:\\Temp\\2"));
             }
         }
         [TestMethod]

@@ -12,7 +12,13 @@ namespace UNS.Common.Operators
 {
     public class Excel_Operator : IDocumentOperator
     {
-        protected Workbook Workbook {get;set;}
+        protected Workbook Workbook {get; set;}
+        protected Application Application { get; set; }
+
+        public Excel_Operator(Application application)
+        { Application = application; }
+        public Excel_Operator():this(new Application())
+        { }
         public void ExportToPDF(FileInfo fileInfo)
         {
             throw new NotImplementedException();

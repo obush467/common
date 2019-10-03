@@ -12,8 +12,8 @@ namespace bushAddon.Interfaces
     public interface IAddInUtilities
     {
         void ImportData();
-        void PrintAkts(PrinterSettings printerSettings);
-        void PrintDislocations(PrinterSettings printerSettings);
+        void PrintAkts();
+        void PrintDislocations();
         void BTIWallType();
     }
 }

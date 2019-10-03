@@ -10,75 +10,50 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UNS.Models;
+using Excel=Microsoft.Office.Interop.Excel;
+using AutoMapper;
+using UNS.Models.Entities;
+using bushAddon;
 
 namespace UnitTestCommon
 {
-    //[TestClass]
+    [TestClass]
     public class UNSDataTest
     {
         [TestMethod]
-        public void IntegraDUExcelLayoutsTest()
+        public void MapExcelToDU()
         {
-            using (var context = new UNSModel("data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            var application = new Excel.Application();
+            Excel.Workbook workbook = application.Workbooks.Open("C:\\Temp\\Этап 2.xlsx");
+            var reestr = workbook.Sheets["Реестр"];
+            IMapper mapper = (new MapperConfiguration(cfg => { cfg.AddProfile<DUExcel_Range_MapProfile>(); }).CreateMapper());
+            var result = new List<IntegraDU>();
+            foreach (Excel.Range row in reestr.Range["A1"].CurrentRegion.Rows)
             {
-                var integraDUExcelLayouts = context.IntegraDUExcelLayouts.OrderBy(o => o.Number).ToList();
-                foreach (var integraDUExcelLayout in integraDUExcelLayouts)
-                {
-                    Hashtable hashtable = new Hashtable();
-                    if (integraDUExcelLayout.ContentObjectFullPath != null && integraDUExcelLayout.ContentHouseFullPath != null)
-                    {
-                        hashtable.Add("obj1", new InsertedObject()
-                        {
-                            FromFile = new FileInfo(integraDUExcelLayout.ContentObjectFullPath),
-                            Height = 80,
-                            Wight = 150
-                        });
-                        hashtable.Add("obj2", new InsertedObject()
-                        {
-                            FromFile = new FileInfo(integraDUExcelLayout.ContentHouseFullPath),
-                            Height = 80,
-                            Wight = 150
-                        });
-                    }
-                    else
-                        if (integraDUExcelLayout.ContentObjectFullPath != null && integraDUExcelLayout.ContentHouseFullPath == null)
-                    {
-                        hashtable.Add("obj1", new InsertedObject()
-                        {
-                            FromFile = new FileInfo(integraDUExcelLayout.ContentObjectFullPath),
-                            Height = 80,
-                            Wight = 150
-                        });
-                    }
-                    else
-                        if (integraDUExcelLayout.ContentObjectFullPath == null && integraDUExcelLayout.ContentHouseFullPath != null)
+                var rowres = mapper.Map<Excel.Range,IntegraDU>(row);
+                result.Add(rowres);
+            }        
+        }
 
-                        hashtable.Add("obj1", new InsertedObject()
-                        {
-                            FromFile = new FileInfo(integraDUExcelLayout.ContentHouseFullPath),
-                            Height = 80,
-                            Wight = 150
-                        });
-
-                    hashtable.Add("UNIU", integraDUExcelLayout.UNIU);
-                    hashtable.Add("Okrug", integraDUExcelLayout.Okrug);
-                    hashtable.Add("District", integraDUExcelLayout.District);
-                    hashtable.Add("Address", string.Join(", ", integraDUExcelLayout.AddressObject, integraDUExcelLayout.AddressHouse));
-                    hashtable.Add("DUType", integraDUExcelLayout.DUType);
-                    hashtable.Add("date_of_manufacture", DateTime.Now.ToLongDateString());
-                    string rootdir = "\\\\bushmakin\\mssqlserver\\UNS\\DU_Files\\";
-                    DirectoryInfo saveDir = new DirectoryInfo(new Uri(new Uri(rootdir), integraDUExcelLayout.UNIU).LocalPath);
-                    if (!saveDir.Exists) saveDir.Create();
-                    var newWordFileName = new FileInfo(Path.Combine(
-                                                saveDir.FullName,
-                                                Path.ChangeExtension(string.Join("_", integraDUExcelLayout.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")),
-                                            "docx")));
-                   (new Word_Operator()).CreateBookmarkedDocument(newWordFileName,
-                        new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Приложение5_Технический_паспорт.dotx"), hashtable);
-                    (new Word_Operator()).ExportToPDF(newWordFileName);
-                }
+        [TestMethod]
+        public void MapExcelToDU1()
+        {
+            var counter = 0;
+            var counterLength = 100;
+            var application = new Excel.Application();
+            var e = new ExcelLoader(application);
+            Excel.Workbook workbook = application.Workbooks.Open("C:\\Temp\\Этап 2.xlsx");
+            Excel.Workbook workbook2 = application.Workbooks.Open("C:\\Temp\\Этап 21.xlsx");
+            //application.Visible = false;
+            var reestr = workbook.Sheets["Реестр"];
+            var result=e.MapRows(reestr);
+            var gr = ((IEnumerable<IntegraDU>)result).GroupBy(g => counter++ / counterLength);
+            foreach (var g in gr)
+            {
+                e.MapRows(g.ToList(), workbook2.ActiveSheet);
+                workbook2.Save();
             }
-
+            application.Visible = true;
         }
 
     }

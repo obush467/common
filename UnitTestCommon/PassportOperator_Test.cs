@@ -16,10 +16,10 @@ namespace UnitTestCommon
         [TestMethod]
         public void Print()
         {
-            using (var context = new UNSModel("data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            using (var context = new UNSModel())
             {
                 context.Database.CommandTimeout = 180;
-                var integraDUExcelLayouts = context.IntegraDUExcelLayouts.Where(w => w.Stage == "18006").OrderBy(o => o.Number).ToList();
+                //var integraDUExcelLayouts = context.IntegraDU.Where(w => w.Stage == "18006").OrderBy(o => o.Number).Select(s=>(PassportContent)s).ToList();
                 var days = new List<DateTime>()
                 {
                     DateTime.Parse("2019-08-01"),
@@ -30,7 +30,7 @@ namespace UnitTestCommon
                     DateTime.Parse("2019-08-08"),
                     DateTime.Parse("2019-08-09")
                 };
-                new Passport_Word_Operator().Create(integraDUExcelLayouts);
+                //new Passport_Word_Operator().Create(integraDUExcelLayouts);
             }
         }
     }

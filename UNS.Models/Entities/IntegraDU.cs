@@ -64,7 +64,9 @@ namespace UNS.Models.Entities
         [Description("Дата передачи в производство")]
         public DateTime? IntoProductionDate{ get; set; } //Дата_передачи_в_производство 
 
-        public DateTime? ОТКАЗ { get; set; }
+        [Description("Оттказ")]
+        [StringLength(255)]
+        public string Refusal { get; set; }
 
         [Description("ХОТЕЛКИ на МОНТАЖ")]
         [MaxLength(4000)]

@@ -76,7 +76,7 @@ namespace UNS.Common
             return result;
         }
 
-        public void ExportToPDF(FileInfo fileinfo)
+        public virtual void ExportToPDF(FileInfo fileinfo)
         {
             Document tempDocument = null;
             try
@@ -102,39 +102,39 @@ namespace UNS.Common
             }
         }
 
-        public FileInfo Create(T document)
+        public virtual FileInfo Create(T document)
         {
             throw new NotImplementedException();
         }
-        public IEnumerable<FileInfo> Create(IEnumerable<FileInfo> document)
+        public virtual IEnumerable<FileInfo> Create(IEnumerable<FileInfo> document)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(FileInfo document, PrinterSettings printerSettings)
+        public virtual void Print(FileInfo document, PrinterSettings printerSettings)
         {
             wordApp.Documents.Open(document.FullName);
             wordApp.PrintOut();
         }
 
-        public void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
+        public virtual void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
         {
             foreach (var document in documents)
             { Print(document, printerSettings); }
         }
 
 
-        public void Print(T document, PrinterSettings printerSettings)
+        public virtual void Print(T document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<FileInfo> Create(IEnumerable<T> document)
+        public virtual IEnumerable<FileInfo> Create(IEnumerable<T> document)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<T> document, PrinterSettings printerSettings)
+        public virtual void Print(IEnumerable<T> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

@@ -1,0 +1,59 @@
+﻿<Window xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  x:Class="UNS.Dialogs.Views.SelectFotoDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+             xmlns:local="clr-namespace:UNS.Dialogs.ViewModels"
+             mc:Ignorable="d" 
+            d:DesignHeight="310" d:DesignWidth="360"
+            Height="310" Width="360"
+            ResizeMode="NoResize"
+            xmlns:ViewModels="clr-namespace:UNS.Dialogs.ViewModels"
+            Title="Копировать фото"
+            DataContext="{dxmvvm:ViewModelSource Type=ViewModels:SelectFotoDialogViewModel}">
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:FolderBrowserDialogService Description="{Binding Description}"
+            ShowNewFolderButton="{Binding ShowNewFolderButton}" 
+            RootFolder="Desktop"
+            RestorePreviouslySelectedDirectory="True"/>
+    </dxmvvm:Interaction.Behaviors>
+    <Grid Margin="0" Width="330">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
+            <StackPanel Orientation="Vertical">
+            <TextBlock 
+                Text="Выбрать папку назначения: "
+                Margin="5" 
+                VerticalAlignment="Center"/>
+            <dxe:TextEdit 
+            Text="{Binding ResultPath, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+            Grid.Row="1" 
+            Margin="5"
+            IsReadOnly="True" 
+            AcceptsReturn="True" Width="150"/>
+            </StackPanel>
+            <Button 
+                Content="Выбрать папку" 
+                Command="{Binding ShowDialogCommand}" 
+                Margin="15"/>
+        </StackPanel>
+        <CheckBox Content="Фото демонтажа" x:Name="chUnInstallation" IsChecked="{Binding UnInstallationFolder}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+        <CheckBox Content="Фото монтажа" x:Name="chInstallation" IsChecked="{Binding InstallationFolder}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Grid.Row="2"/>
+        <CheckBox Content="Фото ремонта" x:Name="chRepairs" IsChecked="{Binding RepairsFolder}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"  Grid.Row="3"/>
+        <CheckBox Content="Фото подключения" x:Name="chConnection" IsChecked="{Binding ConnectionFolder}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"  Grid.Row="4"/>
+        <CheckBox Content="Фото свет" x:Name="chLight" IsChecked="{Binding LightFolder}" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top"  Grid.Row="5"/>
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right" Width="auto" Margin="0">
+            <Button Content="Копировать фото" x:Name="btnCopy" Margin="5" Padding="10,0,10,0" Command="{Binding CopyCommand}" />
+            <Button Content="Отмена"  Margin="5" x:Name="btnCancel" Padding="10,0,10,0" Click="BtnCancel_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

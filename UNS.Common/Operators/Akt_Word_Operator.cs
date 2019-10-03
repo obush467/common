@@ -11,11 +11,11 @@ using UNS.Common;
 
 namespace UNS.Common
 {
-    public class Akt_Word_Operator : Word_Operator, IOutDocument<PassportContent>
+    public class Akt_Word_Operator : Word_Operator<PassportContent>, IOutDocument<PassportContent>
     {
         protected static DirectoryInfo _templateDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
         protected static DirectoryInfo _rootdir = new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
-        protected Word_Operator Word_Operator = new Word_Operator();
+       
 
         public Akt_Word_Operator(DirectoryInfo templateDir, DirectoryInfo rootdir)
         {
@@ -92,7 +92,7 @@ namespace UNS.Common
                                     "docx")));
             var saveFormats = new List<WdSaveFormat>();
             saveFormats.Add(WdSaveFormat.wdFormatPDF);
-            Word_Operator.CreateBookmarkedDocument(newWordFileName,
+            CreateBookmarkedDocument(newWordFileName.FullName,
                 _templateDir.GetFiles("прил_4_ЭЛЕКТРИКА.dotx").SingleOrDefault(), hashtable, saveFormats);
             flist.Add(newWordFileName);
         }
@@ -106,11 +106,6 @@ namespace UNS.Common
         }
 
         private void Print(PassportContent akt)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IOutDocument<PassportContent>.Print(PassportContent document, short copies)
         {
             throw new NotImplementedException();
         }

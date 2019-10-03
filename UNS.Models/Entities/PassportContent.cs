@@ -9,5 +9,6 @@ namespace UNS.Models.Entities
         public string ContentObjectFullPath {get; set;}
         public string ContentHouseFullPath { get; set;}
         public DateTime DateManufacture { get; set; }
+
     }
 }

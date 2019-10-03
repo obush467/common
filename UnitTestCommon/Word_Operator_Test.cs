@@ -39,7 +39,7 @@ namespace UnitTestCommon
             hashtable.Add("DUType", "ssssssssssssssssssssssssssss");
             hashtable.Add("tableDU", typeof(DUTypesTable_Creator));
             hashtable.Add("date_of_manufacture", DateTime.Now.ToLongDateString());
-            (new Word_Operator()).CreateBookmarkedDocument(new FileInfo("X:\\eeeee.docx"),
+            (new Word_Operator<FileInfo>()).CreateBookmarkedDocument("X:\\eeeee.docx",
                 new FileInfo("Z:\\Шаблоны\\Приложение5_Технический_паспорт1.dotx"), hashtable);
 
         }
@@ -51,18 +51,6 @@ namespace UnitTestCommon
             doc.Application.Visible = true;
 
             DUTypesTable_Creator.Create(doc.Range(), "ДУ-М-УД");
-        }
-
-        [TestMethod]
-        public void CreateAkts()
-        {
-
-            using (var context = new UNSModel("data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
-            {
-                context.Database.CommandTimeout = 180;
-                var integraDUExcelLayouts = context.IntegraDUExcelLayouts.ToList();
-                (new Akt_Word_Operator()).Create(integraDUExcelLayouts);
-            }
         }
 
     }

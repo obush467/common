@@ -72,8 +72,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="CodeFirstStoreFunctions, Version=1.1.3.0, Culture=neutral, PublicKeyToken=46c4868af4307d2c, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.CodeFirstStoreFunctions.1.1.3\lib\net45\CodeFirstStoreFunctions.dll</HintPath>
@@ -116,6 +116,8 @@
     <Compile Include="Entities\DU_work.cs" />
     <Compile Include="Entities\Fias\AddressObjectBase.cs" />
     <Compile Include="Entities\Fias\AO.cs" />
+    <Compile Include="Entities\SimplifiedLetter.cs" />
+    <Compile Include="Mappers\PassportContent_DUStages.cs" />
     <Compile Include="Migrations\201908161322599_570.cs" />
     <Compile Include="Migrations\201908161322599_570.Designer.cs">
       <DependentUpon>201908161322599_570.cs</DependentUpon>
@@ -260,9 +262,22 @@
     <Compile Include="Migrations\201909241349395_615.Designer.cs">
       <DependentUpon>201909241349395_615.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909301739369_616.cs" />
+    <Compile Include="Migrations\201909301739369_616.Designer.cs">
+      <DependentUpon>201909301739369_616.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910020845091_617.cs" />
+    <Compile Include="Migrations\201910020845091_617.Designer.cs">
+      <DependentUpon>201910020845091_617.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910031127005_618.cs" />
+    <Compile Include="Migrations\201910031127005_618.Designer.cs">
+      <DependentUpon>201910031127005_618.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Configuration\integraDUStagesConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDUConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDU_workConfiguration.cs" />
+    <Compile Include="Models\Configuration\SimplifiedLetterConfiguration.cs" />
     <Compile Include="Models\Configuration\Room1Configuration.cs" />
     <Compile Include="Models\Configuration\AddressObject1sConfiguration.cs" />
     <Compile Include="Models\Configuration\AddressBaseConfiguration.cs" />
@@ -823,6 +838,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909241349395_615.resx">
       <DependentUpon>201909241349395_615.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909301739369_616.resx">
+      <DependentUpon>201909301739369_616.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910020845091_617.resx">
+      <DependentUpon>201910020845091_617.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910031127005_618.resx">
+      <DependentUpon>201910031127005_618.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

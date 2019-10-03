@@ -47,49 +47,134 @@ namespace bushAddon
         {
             return source.Value2;
         }
-       /* public static DateTime ConvertValue<T>(Range source) where ff:DateTime
+    }
+
+    public static class ToRangeConverter<T>
+    {
+        public static object Convert(T source)
         {
-            double d = double.Parse(source.Value2);
-            return DateTime.FromOADate(d);
-        }*/
+            if (source != null)
+
+            {
+                try
+                {
+                    return source.ToString();
+                }
+                catch (Exception)
+                { return default(T); }
+            }
+            else
+            { return default(T); }
+        }
+        public static  object ConvertValue(int? source)
+        {
+            return source;
+        }
+        public static object ConvertValue(DateTime source)
+         {
+             return source.ToOADate();
+         }
 
     }
 
 
-        public class DateTimeTypeConverter : ITypeConverter<Range, IntegraDU>
+    public class ExcelToDUTypeConverter : ITypeConverter<Range, IntegraDU>
     {
+        public DateTime? ToDateTime(object date)
+        {
+            try
+            {
+                return (date != null) ? (DateTime?)DateTime.FromOADate((double)date) : null;
+            }
+            catch (Exception)
+            { return null; }
+
+        }
+
+        public int? ToInt(object date)
+        {
+            try
+            {
+                return (date != null) ? (int?)int.Parse(date.ToString()) : null;
+            }
+            catch (Exception)
+            { return null; }
+        }
         public IntegraDU Convert(Range source, IntegraDU destination, ResolutionContext context)
         {
             if (destination == null) destination = new IntegraDU();
             try
             {
-                destination.Number = RangeConverter<int?>.Convert(source.Cells[1, 1]); //Номер
-                destination.DUType = RangeConverter<string>.Convert(source.Cells[1, 2]);// Тип информационного указателя
-                destination.Okrug = RangeConverter<string>.Convert(source.Cells[1, 3]); // Округ
-                destination.District= RangeConverter<string>.Convert(source.Cells[1, 4]); // Район
-                destination.AddressObject = RangeConverter<string>.Convert(source.Cells[1, 5]); // Улица
-                destination.AddressHouse = RangeConverter<string>.Convert(source.Cells[1, 6]); // Номер дома
-                destination.ContentObject = RangeConverter<string>.Convert(source.Cells[1, 7]); // Информационное содержание - Улица
-                destination.ContentHouse = RangeConverter<string>.Convert(source.Cells[1, 8]); // Информационное содержание - Номер дома
-                destination.InstallationStatus = RangeConverter<string>.Convert(source.Cells[1, 9]); // Статус установки
-                destination.UNOM= RangeConverter<int?>.Convert(source.Cells[1, 10]); // UNOM
-                destination.UNIU = RangeConverter<string>.Convert(source.Cells[1, 11]); // Уникальный номер
-                                                               //destination..Person,s=>s.MapFrom(m=>source.Cells[1, 12].Value2; // Хто
-                destination.BTIWallType = RangeConverter<string>.Convert(source.Cells[1, 13]); // БТИ - Тип стен
-                destination.BTITarget = RangeConverter<string>.Convert(source.Cells[1, 14]); // БТИ - Назначение
-                destination.Resume = RangeConverter<string>.Convert(source.Cells[1, 15]); // Заключение
-                destination.Comment = RangeConverter<string>.Convert(source.Cells[1, 16]); // Примечания
-                destination.WallType = RangeConverter<string>.Convert(source.Cells[1, 17]); // Тип стен
-                destination.HouseOwner = RangeConverter<string>.Convert(source.Cells[1, 18]); // Принадлежность
-                destination.Foto = RangeConverter<string>.Convert(source.Cells[1, 19]); // Тип съёмки
-                destination.Contacts = RangeConverter<string>.Convert(source.Cells[1, 20]); // Контактные данные
-                destination.Director = RangeConverter<string>.Convert(source.Cells[1, 21]); // Руководитель
-                destination.DirectorPosition = RangeConverter<string>.Convert(source.Cells[1, 22]); // Должность руководителя
-                destination.LetterOutNumber = RangeConverter<string>.Convert(source.Cells[1, 23]); // номер исх письма
-                destination.LetterOutData = RangeConverter<DateTime?>.Convert(source.Cells[1, 24]); // Дата исх письма
-                destination.LetterIn = RangeConverter<string>.Convert(source.Cells[1, 25]); // Наличие ответа вход
-                destination.CoordinationDate = RangeConverter<DateTime?>.Convert(source.Cells[1, 26]); // Дата согласования
-                destination.IntoProductionDate = RangeConverter<DateTime?>.Convert(source.Cells[1, 27]); // Дата передачи в производство
+                dynamic[,] excelArray = source.Value2 as dynamic[,];
+                destination.UNIU = excelArray[1, 1];
+                destination.Number = ToInt(excelArray[1, 2]); //Номер
+                destination.DUType = excelArray[1, 3];// Тип информационного указателя
+                destination.Okrug = excelArray[1, 4]; // Округ
+                destination.District = excelArray[1, 5]; // Район
+                destination.AddressObject = excelArray[1, 6]; // Улица
+                destination.AddressHouse = excelArray[1, 7]; // Номер дома
+                destination.ContentObject = excelArray[1, 8]; // Информационное содержание - Улица
+                destination.ContentHouse = excelArray[1, 9]; // Информационное содержание - Номер дома
+                destination.InstallationStatus = excelArray[1, 10]; // Статус установки
+                destination.UNOM = ToInt(excelArray[1, 11]); // UNOM                
+                destination.BTIWallType = excelArray[1, 12]; // БТИ - Тип стен
+                destination.BTITarget = excelArray[1, 13]; // БТИ - Назначение
+                destination.Resume = excelArray[1, 14]; // Заключение
+                destination.Comment = excelArray[1, 15]; // Примечания
+                destination.HouseOwner = excelArray[1, 16]; // Принадлежность
+                destination.Contacts = excelArray[1, 17]; // Контактные данные
+                destination.Director = excelArray[1, 18]; // Руководитель
+                destination.DirectorPosition = excelArray[1, 19]; // Должность руководителя
+                destination.LetterOutNumber = excelArray[1, 20]; // номер исх письма
+                destination.LetterOutData = ToDateTime(excelArray[1, 21]); // Дата исх письма
+                destination.LetterIn = excelArray[1, 22]; // Наличие ответа вход
+                destination.CoordinationDate = ToDateTime(excelArray[1, 23]);// Дата согласования
+                destination.IntoProductionDate = ToDateTime(excelArray[1, 24]); // Дата передачи в производство
+                destination.Refusal = excelArray[1, 25];//ОТКАЗ 
+                destination.IntoProductionDate = ToDateTime(excelArray[1, 26]); ;//ХОТЕЛКИ на МОНТАЖ   
+                destination.IntoProductionDate = ToDateTime(excelArray[1, 27]); ;//ДУ изготовлен
+            }
+            catch (Exception e)
+            { }
+            return destination;
+        }
+    }
+
+    public class DUToExcelTypeConverter : ITypeConverter<IntegraDU,Range>
+    {
+        public Range Convert(IntegraDU source,Range destination, ResolutionContext context)
+        {
+            try
+            {
+                dynamic[,] excelArray = destination.Cells.Value2 as dynamic [,];
+                excelArray[1, 1]= ToRangeConverter<string>.Convert(source.UNIU);// Уникальный номер 
+                excelArray[1, 2] = ToRangeConverter<int?>.Convert(source.Number);//Номер
+                excelArray[1, 3] = ToRangeConverter<string>.Convert(source.DUType);// Тип информационного указателя
+                excelArray[1, 4]=source.Okrug; // Округ
+                excelArray[1, 5] = source.District; // Район
+                excelArray[1, 6] = ToRangeConverter<string>.Convert(source.AddressObject); // Улица
+                excelArray[1, 7] = ToRangeConverter<string>.Convert(source.AddressHouse); // Номер дома
+                excelArray[1, 8] = ToRangeConverter<string>.Convert(source.ContentObject); // Информационное содержание - Улица
+                excelArray[1, 9] = ToRangeConverter<string>.Convert(source.ContentHouse); // Информационное содержание - Номер дома
+                excelArray[1, 10] = ToRangeConverter<string>.Convert(source.InstallationStatus); // Статус установки
+                excelArray[1, 11] = ToRangeConverter<int?>.Convert(source.UNOM); // UNOM
+                excelArray[1, 12] = ToRangeConverter<string>.Convert(source.BTIWallType); // БТИ - Тип стен
+                excelArray[1, 13] = ToRangeConverter<string>.Convert(source.BTITarget); // БТИ - Назначение
+                excelArray[1, 14] = ToRangeConverter<string>.Convert(source.Resume); // Заключение
+                excelArray[1, 15] = ToRangeConverter<string>.Convert(source.Comment); // Примечания
+                excelArray[1, 16] = ToRangeConverter<string>.Convert(source.HouseOwner); // Принадлежность              
+                excelArray[1, 17] = ToRangeConverter<string>.Convert(source.Contacts); // Контактные данные
+                excelArray[1, 18] = ToRangeConverter<string>.Convert(source.Director); // Руководитель
+                excelArray[1, 19] = ToRangeConverter<string>.Convert(source.DirectorPosition); // Должность руководителя
+                excelArray[1, 20] = ToRangeConverter<string>.Convert(source.LetterOutNumber); // номер исх письма
+                excelArray[1, 21] = ToRangeConverter<DateTime?>.Convert(source.LetterOutData); // Дата исх письма
+                excelArray[1, 22] = ToRangeConverter<string>.Convert(source.LetterIn); // Наличие ответа вход
+                excelArray[1, 23] = ToRangeConverter<DateTime?>.Convert(source.CoordinationDate); // Дата согласования
+                excelArray[1, 24] = ToRangeConverter<DateTime?>.Convert(source.IntoProductionDate); // Дата передачи в производство                
+                excelArray[1, 25] = ToRangeConverter<string>.Convert(source.Refusal); // ОТКАЗ
+                excelArray[1, 26] = ToRangeConverter<string>.Convert(source.Istallation_Requirements); // ХОТЕЛКИ на МОНТАЖ
+                excelArray[1, 27] = ToRangeConverter<DateTime?>.Convert(source.Done_to_installation); // ДУ изготовлен
+                destination.Value2 = excelArray;
             }
             catch (Exception e)
             { }
@@ -100,36 +185,10 @@ namespace bushAddon
     {
         public DUExcel_Range_MapProfile() : base()
         {
-            var excelvalues = new object[30];
             CreateMap<Microsoft.Office.Interop.Excel.Range, IntegraDU>()
-            .ConvertUsing(new DateTimeTypeConverter())
-            /*.ForMember(d => d.Number, s => s.MapFrom(m => m.Cells[1, 2])) // Тип информационного указателя
-            .ForMember(d => d.Okrug, s => s.MapFrom(m => m.Cells[1, 3])) // Округ
-            //_District,s=>s.MapFrom(m=>m.Cells[1, 4]; // Район
-            .ForMember(d => d.AddressObject, s => s.MapFrom(m => m.Cells[1, 5])) // Улица
-            .ForMember(d => d.AddressHouse, s => s.MapFrom(m => m.Cells[1, 6])) // Номер дома
-            .ForMember(d => d.ContentObject, s => s.MapFrom(m => m.Cells[1, 7])) // Информационное содержание - Улица
-            .ForMember(d => d.ContentHouse, s => s.MapFrom(m => m.Cells[1, 8])) // Информационное содержание - Номер дома
-            .ForMember(d => d.InstallationStatus, s => s.MapFrom(m => m.Cells[1, 9])) // Статус установки
-            .ForMember(d => d.UNOM, s => s.MapFrom(m => m.Cells[1, 10])) // UNOM
-            .ForMember(d => d.UNIU, s => s.MapFrom(m => m.Cells[1, 11])) // Уникальный номер
-            //.ForMember(d => d.Person,s=>s.MapFrom(m=>m.Cells[1, 12])) // Хто
-            .ForMember(d => d.BTIWallType, s => s.MapFrom(m => m.Cells[1, 13])) // БТИ - Тип стен
-            .ForMember(d => d.BTITarget, s => s.MapFrom(m => m.Cells[1, 14])) // БТИ - Назначение
-            .ForMember(d => d.Resume, s => s.MapFrom(m => m.Cells[1, 15])) // Заключение
-            .ForMember(d => d.Comment, s => s.MapFrom(m => m.Cells[1, 16])) // Примечания
-            .ForMember(d => d.WallType, s => s.MapFrom(m => m.Cells[1, 17])) // Тип стен
-            .ForMember(d => d.HouseOwner, s => s.MapFrom(m => m.Cells[1, 18])) // Принадлежность
-            .ForMember(d => d.Foto, s => s.MapFrom(m => m.Cells[1, 19])) // Тип съёмки
-            .ForMember(d => d.Contacts, s => s.MapFrom(m => m.Cells[1, 20])) // Контактные данные
-            .ForMember(d => d.Director, s => s.MapFrom(m => m.Cells[1, 21])) // Руководитель
-            .ForMember(d => d.DirectorPosition, s => s.MapFrom(m => m.Cells[1, 22])) // Должность руководителя
-            .ForMember(d => d.LetterOutNumber, s => s.MapFrom(m => m.Cells[1, 23])) // номер исх письма
-            .ForMember(d => d.LetterOutData, s => s.MapFrom(m => m.Cells[1, 24])) // Дата исх письма
-            .ForMember(d => d.LetterIn, s => s.MapFrom(m => m.Cells[1, 25])) // Наличие ответа вход
-            .ForMember(d => d.CoordinationDate, s => s.MapFrom(m => m.Cells[1, 26])) // Дата согласования
-            .ForMember(d => d.IntoProductionDate, s => s.MapFrom(m => m.Cells[1, 27])) // Дата передачи в производство*/
-            ;
+            .ConvertUsing(new ExcelToDUTypeConverter());
+            CreateMap<IntegraDU , Microsoft.Office.Interop.Excel.Range>()
+            .ConvertUsing(new DUToExcelTypeConverter());
         }
     }
 }

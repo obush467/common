@@ -24,7 +24,8 @@ namespace UNS.Common
             _templateDir = templateDir;
         }
         public Passport_Word_Operator() : this(new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\"), new DirectoryInfo("\\\\NAS-D4\\integra\\DU_files\\"))
-        { }
+        {
+        }
 
         public IEnumerable<FileInfo> Create(IEnumerable<PassportContent> passportContents)
         {
@@ -35,7 +36,6 @@ namespace UNS.Common
                 }
             return result;
         }
-
         public FileInfo Create(string Number, string UNIU, string Okrug, string District, string AddressObject, string AddressHouse, string DUType, DateTime date_of_manufacture)
         {           
             Hashtable hashtable = new Hashtable

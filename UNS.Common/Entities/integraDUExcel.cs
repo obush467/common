@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace UNS.Models.Entities
+namespace UNS.Common.Entities
 {
     public class IntegraDUExcel
     {
@@ -125,10 +125,8 @@ namespace UNS.Models.Entities
                 _BTIwallType = range.Cells[1, 12]; // БТИ - Тип стен
                 _BTIdestination = range.Cells[1, 13]; // БТИ - Назначение
                 _Resume = range.Cells[1, 14]; // Заключение
-                _Comment = range.Cells[1, 15]; // Примечания
-                //_WallType = range.Cells[1, 17]; // Тип стен
-                _HouseOwner = range.Cells[1, 16]; // Принадлежность
-                //_Foto = range.Cells[1, 19]; // Тип съёмки
+                _Comment = range.Cells[1, 15]; // Примечания               
+                _HouseOwner = range.Cells[1, 16]; // Принадлежность               
                 _Contacts = range.Cells[1, 17]; // Контактные данные
                 _Director = range.Cells[1, 18]; // Руководитель
                 _DirectorPosition = range.Cells[1, 19]; // Должность руководителя

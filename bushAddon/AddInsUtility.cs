@@ -1,6 +1,7 @@
 ﻿using bushAddon;
 using UNS.Common;
-using Microsoft.Office.Interop.Excel;
+using Excel=Microsoft.Office.Interop.Excel;
+using Word=Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,21 +16,35 @@ using Utility;
 using UNS.Common.Interfaces;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-using UNS.Views.Dialogs;
-using UNS.ViewModels;
+using UNS.Common.Views;
+using UNS.Common.ViewModels;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using UNS.Common.Office;
 using System.Globalization;
 using bushAddon.Interfaces;
+using AutoMapper;
+using UNS.Models.Mappers;
+using UNS.Common.Operators;
+using UNS.Dialogs;
+using UNS.Dialogs.ViewModels;
+using DevExpress.Mvvm;
+using DevExpress.Mvvm.UI;
+using UNS.Common.Entities;
 
 [ComVisible(true)]
 [ClassInterface(ClassInterfaceType.None)]
 public class AddInUtilities : IAddInUtilities
 {
-    DirectoryInfo rootletters = new DirectoryInfo("\\\\NAS-D4\\integra\\Письма\\");
-    DirectoryInfo templatesDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
+    DateTimeFormatInfo dateInFileNameFormat = new DateTimeFormatInfo()
+    {
+        DateSeparator = "-",
+        TimeSeparator = "-+"
+    };
+    public IMapper Mapper=new MapperConfiguration(cfg=>cfg.AddProfile<PassportContent_DUStages>()).CreateMapper();
+    readonly DirectoryInfo rootletters = new DirectoryInfo("\\\\NAS-D4\\integra\\Письма\\");
+    readonly DirectoryInfo templatesDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
     private string _lettersTemplate = "Адреса в письмо2.xltx";
     FileInfo LettersTemplate
     {
@@ -37,65 +52,61 @@ public class AddInUtilities : IAddInUtilities
         set { _lettersTemplate = value.Name; }
     }
     public DirectoryInfo DUFilesDir { get; set; } =
-        (new DirectoryInfo("C:\\DU_Files\\")).Exists ?
+        new DirectoryInfo("C:\\DU_Files\\").Exists ?
             new DirectoryInfo("C:\\DU_Files\\") :
             new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
-    // This method tries to write a string to cell A1 in the active worksheet.
-    public void ImportData()
+     public void ImportData()
     {
-        Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Worksheet;
-
-        if (activeWorksheet != null)
+        if (Globals.ThisAddIn.Application.ActiveSheet is Excel.Worksheet activeWorksheet)
         {
-            Range range1 = activeWorksheet.get_Range("A1", System.Type.Missing);
+            Excel.Range range1 = activeWorksheet.get_Range("A1", System.Type.Missing);
             range1.Value2 = "This is my data";
         }
     }
 
-
-    public void PrintDislocations(PrinterSettings printerSettings)
+    public void PrintDislocations()
     {
-        if (printerSettings == null) printerSettings = new PrinterSettings() { Copies = 1 };
-        var printDialog = new PrePrintDialog();
-        var printFiles = SelectFilesByNumbers<Dislocation>(
-            SelectByPattern(),
-            new List<PrintPattern>()
-            {
+        Print(SelectFilesByPatterns(
+                new List<PrintPattern>()
+                {
                 new PrintPattern()
                 {
                     Pattern = "*дислокация*",
                     Copies = 1
                 }
-            });
-        var printFilesPreview = printFiles.Select(s => new Dislocation()
-        {
-            UNIU = s.Pattern
-        });
-
-        printDialog.DataContext = new PrePrintDialogViewModel<Dislocation>(printFilesPreview) { Title = "Печать дислокаций" };
-
-        if ((bool)printDialog.ShowDialog() && (bool)printDialog.DialogResult)
-        {
-            foreach (var printFile in printFiles)
-            { printFile.Print(); };
-        }
+                }));
     }
 
-    public void PrintAkts(PrinterSettings printerSettings)
+    public void PrintPassports()
     {
-        Print(new List<PrintPattern>()
+        Print(SelectFilesByPatterns(
+            new List<PrintPattern>()
+            {
+                new PrintPattern()
+                {
+                    Pattern = "*технический_паспорт*",
+                    PrinterSettings = new PrinterSettings()
+                    {
+                            Copies = 1,
+                            Duplex = Duplex.Vertical
+                    }}}));
+    }
+
+    public void PrintAkts()
+    {
+        Print(SelectFilesByPatterns(new List<PrintPattern>()
         {
             new PrintPattern()
             {
                 Pattern = "*Акт_монтажа_заготовка*.pdf",
                 Copies = 1
             }
-        });
+        }));
     }
 
-    public void PrintProdactionComplects(PrinterSettings printerSettings)
+    public void PrintProdactionComplects()
     {
-        Print(new List<PrintPattern>()
+        Print(SelectFilesByPatterns(new List<PrintPattern>()
         {
             new PrintPattern()
             {
@@ -107,18 +118,18 @@ public class AddInUtilities : IAddInUtilities
                 Pattern = "*Акт_монтажа_заготовка*",
                 Copies = 1
             }
-        });
+        }));
     }
 
     internal void CreateDuFolders(string directoryPath)
     {
         try
         {
-            Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Worksheet;
+            Excel.Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Excel.Worksheet;
             EnableCalculations(false);
-            Range r = Globals.ThisAddIn.Application.Selection as Range;
+            Excel.Range r = Globals.ThisAddIn.Application.Selection as Excel.Range;
             DirectoryInfo dir = new DirectoryInfo(directoryPath);
-            foreach (Range r1 in r.Cells)
+            foreach (Excel.Range r1 in r.Cells)
             {
                 if (dir.Exists)
                 {
@@ -147,58 +158,87 @@ public class AddInUtilities : IAddInUtilities
         }
     }
 
-    internal object PrintPassport()
+    internal void Print(IEnumerable<FileItem> printItems)
     {
-        throw new NotImplementedException();
+        try
+        {
+            EnableCalculations(false);
+            var printDialog = new PrePrintDialog();
+
+            var preview = printItems.Select(s => new { Номер = s.Pattern, Имя_файла = s.FileInfo.Name, Наличие = s.Status }).AsEnumerable();
+            printDialog.DataContext = new PrePrintDialogViewModel<dynamic>(preview) { Title = "Печать" };
+            if ((bool)printDialog.ShowDialog() && (bool)printDialog.DialogResult)
+            {
+                foreach (var printFile in printItems)
+                { printFile.Print(); };
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.Logger.Error(ex.Message);
+        }
+        finally
+        {
+            EnableCalculations(true);
+        }
     }
 
-    public void InstallationPassportPrint()
+    public IEnumerable<FileItem> SelectFilesByPatterns(IEnumerable<PrintPattern> printPatterns)
+    {
+       return SelectFilesByNumbers(SelectByPattern(),printPatterns);
+    }
+
+    public void InstallationPassportsPrint()
     {
         List<IntegraDUExcel> integraDUs = ReestrSheet();
-        var UNIUs = SelectByPattern();         
-        var templateName = Path.Combine(templatesDir.FullName, "Установка.xltx");
-        Workbook newWB = Globals.ThisAddIn.Application.Workbooks
-            .Add(templateName);
-        int n = 1;
+        var UNIUs = SelectByPattern();       
         foreach (var UNIU in UNIUs)
         {
-            IntegraDUExcel row= (from integraDU in integraDUs
-             where integraDU.UNIU.ToString() == UNIU
-             select integraDU).FirstOrDefault();
-            Range destRow = newWB.Sheets[1].Cells.Rows[n + 1];
-            newWB.Sheets[1].Range("UNIU").Value = row.UNIU;// Уникальный номер
-            newWB.Sheets[1].Range("DUType").Value = row.DUtype; //Тип ДУ
-            newWB.Sheets[1].Range("AdmArea").Value = row.AdmArea; //Округ
-            newWB.Sheets[1].Range("District").Value = row.District;// Район
-            newWB.Sheets[1].Range("AddressObject").Value = row.AddressO;// Улица
-            newWB.Sheets[1].Range("AddressHouse").Value = row.AddressH;// Номер дома
-            newWB.Sheets[1].Range("ContentObject").Value = row.ContentO;// Информационное содержание - Улица
-            newWB.Sheets[1].Range("ContentHouse").Value = row.ContentH;// Информационное содержание -Номер дома                                                                      
-            newWB.Sheets[1].Range("WallType").Value = row.BTIwallType;// БТИ - Тип стен
-            newWB.Sheets[1].Range("Purpose").Value = row.BTIdestination;// БТИ - Назначение
-            newWB.Sheets[1].Range("HouseOwner").Value = row.HouseOwner;// Принадлежность
-            newWB.Sheets[1].Range("Contacts").Value = row.Contacts;// Контактные данные
-            DateTimeFormatInfo ddd = new DateTimeFormatInfo()
-            {
-                DateSeparator = "-",
-                TimeSeparator = "-+"
-            };           
-            string filename = String.Join("_",UNIU,"задание_на_монтаж",DateTime.Now.ToString("yyyy-MM-dd-hh-mm",ddd));
+            var newWB = InstallationPassportCreate(integraDUs, UNIU);
+            string filename = String.Join("_", UNIU, "задание_на_монтаж", DateTime.Now.ToString("yyyy-MM-dd-hh-mm", dateInFileNameFormat))+ ".xlsx";
             newWB.PrintOutEx();
-            newWB.SaveAs(("Z:\\Для производства\\В печать\\" + filename + ".xlsx").Replace(@"\\", ":"));
+            newWB.SaveAs(Path.Combine(DUFilesDir.FullName,"Для производства","В печать",filename ).Replace(@"\\", ":"));
+            newWB.Close();
         }
 
     }
-
+    public Excel.Workbook InstallationPassportPrint(IEnumerable<IntegraDUExcel> integraDUExcels, string UNIU)
+    {
+        var ip=InstallationPassportCreate(integraDUExcels, UNIU);
+        ip.PrintOutEx();
+        return ip;
+    }
+    public Excel.Workbook InstallationPassportCreate(IEnumerable<IntegraDUExcel> integraDUExcels, string UNIU)
+    {
+        var templateName = Path.Combine(templatesDir.FullName, "Установка.xltx");
+        Excel.Workbook newWB = Globals.ThisAddIn.Application.Workbooks.Add(templateName);       
+        IntegraDUExcel row = (from integraDU in integraDUExcels
+                              where integraDU.UNIU.ToString() == UNIU
+                              select integraDU).FirstOrDefault();
+        Excel.Range destRow = newWB.Sheets[1].Cells.Rows[2];
+        newWB.Sheets[1].Range("UNIU").Value = row.UNIU;// Уникальный номер
+        newWB.Sheets[1].Range("DUType").Value = row.DUtype; //Тип ДУ
+        newWB.Sheets[1].Range("AdmArea").Value = row.AdmArea; //Округ
+        newWB.Sheets[1].Range("District").Value = row.District;// Район
+        newWB.Sheets[1].Range("AddressObject").Value = row.AddressO;// Улица
+        newWB.Sheets[1].Range("AddressHouse").Value = row.AddressH;// Номер дома
+        newWB.Sheets[1].Range("ContentObject").Value = row.ContentO;// Информационное содержание - Улица
+        newWB.Sheets[1].Range("ContentHouse").Value = row.ContentH;// Информационное содержание -Номер дома                                                                      
+        newWB.Sheets[1].Range("WallType").Value = row.BTIwallType;// БТИ - Тип стен
+        newWB.Sheets[1].Range("Purpose").Value = row.BTIdestination;// БТИ - Назначение
+        newWB.Sheets[1].Range("HouseOwner").Value = row.HouseOwner;// Принадлежность
+        newWB.Sheets[1].Range("Contacts").Value = row.Contacts;// Контактные данные
+        return newWB;
+    }
     internal void CreateDuHyperlinks(string directoryPath)
     {
         try
         {
-            Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Worksheet;
+            Excel.Worksheet activeWorksheet = Globals.ThisAddIn.Application.ActiveSheet as Excel.Worksheet;
             EnableCalculations(false);
-            Range r = Globals.ThisAddIn.Application.Selection as Range;
+            Excel.Range r = Globals.ThisAddIn.Application.Selection as Excel.Range;
             DirectoryInfo dir = new DirectoryInfo(directoryPath);
-            foreach (Range r1 in r.Cells)
+            foreach (Excel.Range r1 in r.Cells)
             {
                 try
                 {
@@ -216,69 +256,28 @@ public class AddInUtilities : IAddInUtilities
             EnableCalculations(true);
         }
     }
-    protected List<T> SelectFilesByNumbers<T>(IEnumerable<string> numbers, IEnumerable<PrintPattern> printPatterns) where T : FileItem, new()
+    protected List<FileItem> SelectFilesByNumbers(IEnumerable<string> numbers, IEnumerable<PrintPattern> printPatterns)
     {
-        var numberFiles = new List<T>();
+        var numberFiles = new List<FileItem>();
         foreach (var number in numbers)
         {
             DirectoryInfo dir = new DirectoryInfo(Path.Combine(DUFilesDir.FullName, number));
-
             if (dir.Exists)
             {
                 foreach (var pattern in printPatterns)
                 {
                     var file = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault();
                     if (file != null && file.Exists)
-                    { numberFiles.Add(new T() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
-                    else
-                    { numberFiles.Add(new T() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
+                    { numberFiles.Add(new FileItem() { FileInfo = file, Pattern = number, PrinterSettings = pattern.PrinterSettings }); }
                 }
             }
             else
             {
                 foreach (var pattern in printPatterns)
-                    numberFiles.Add(new T() { FileInfo = null, Pattern = number, PrinterSettings = pattern.PrinterSettings });
+                    numberFiles.Add(new FileItem() { FileInfo = null, Pattern = number, PrinterSettings = pattern.PrinterSettings });
             }
         }
         return numberFiles;
-    }
-
-
-
-    public void Print(IEnumerable<PrintPattern> printpatterns)
-    {
-        try
-        {
-            EnableCalculations(false);
-            var findNuimbers = SelectByPattern();
-            if (findNuimbers != null && findNuimbers.Any())
-            {
-                PrePrintDialog view = new PrePrintDialog()
-                {
-                    DataContext = new PrePrintDialogViewModel<FileItem>(new ObservableCollection<FileItem>())
-                };
-                view.ShowDialog();
-                foreach (var findNumber in findNuimbers)
-                {
-                    DirectoryInfo dir = new DirectoryInfo(Path.Combine(DUFilesDir.FullName, findNumber));
-                    if (dir.Exists)
-                    {
-                        foreach (var pattern in printpatterns)
-                        {
-                            var file = new FileItem() { FileInfo = dir.GetFiles(pattern.Pattern).OrderByDescending(o => o.CreationTime).FirstOrDefault(), PrinterSettings = pattern.PrinterSettings };
-                            file.Print();
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception innere)
-        { }
-        finally
-        {
-            EnableCalculations(true);
-        }
-
     }
 
     internal void UpdateByDB()
@@ -327,42 +326,63 @@ public class AddInUtilities : IAddInUtilities
         var currentBookName = Path.GetFileNameWithoutExtension(Globals.ThisAddIn.Application.ActiveWorkbook.Name);
         try
         {
-            Range firm = Globals.ThisAddIn.Application.Selection as Range;
-            List<IntegraDUExcel> integraDUs = ReestrSheet();
-            List<IntegraDUExcel> selected = (from row in integraDUs
-                                             where row.HouseOwner != null &&
-                                                   row.HouseOwner.ToString() == firm.Value2
-                                             orderby row.AddressO, row.AddressH
-                                             select row).ToList();
-            if (selected != null && selected.Count > 0)
+            Excel.Range firm = Globals.ThisAddIn.Application.Selection as Excel.Range;
+            using (var context = new UNSModel())
             {
-                Workbook newWB = Globals.ThisAddIn.Application.Workbooks
-                        .Add(LettersTemplate.FullName);
-                for (int n = 0; n <= selected.Count - 1; n++)
+                var fullselected = (from row in ReestrSheet()
+                                                 join unsrow in context.IntegraDUStages
+                                                 on row.UNIU equals unsrow.UNIU
+                                                 where row.HouseOwner != null &&
+                                                       row.HouseOwner.ToString() == firm.Value2
+                                                       && row.LetterOutData==null
+                                                       && row.LetterOutNumber==null
+                                                 orderby row.AddressO, row.AddressH
+                                                 select new { row, unsrow }).ToList();
+                var unsselected = fullselected.Select(s => s.unsrow);
+                var selected = fullselected.Select(s => s.row);
+                if (selected.Any())
                 {
-                    Range destRow = newWB.Sheets[1].Cells.Rows[n + 2];
-                    destRow.Cells[1, 1].Value = n + 1;
-                    destRow.Cells[1, 2].Value = selected[n].AddressO;
-                    destRow.Cells[1, 3].Value = selected[n].AddressH;
-                    destRow.Cells[1, 4].Value = selected[n].UNOM;
-                    destRow.Cells[1, 5].Value = selected[n].UNIU;
-                    if (selected[n].LetterOutNumber == null) selected[n].LetterOutNumber = "в работу";
+                    var currentDateLetterCount = context.SimplifiedLetters.Where(w => w.OutgoingDate == DateTime.Today).Count();
+                    currentDateLetterCount++;
+                    var selectedFirst = selected.FirstOrDefault();
+                    var newLeller = new SimplifiedLetter()
+                    {
+                        OutgoingNumber = string.Join("/", DateTime.Now.ToString("yyyyMMdd"), currentDateLetterCount.ToString()),
+                        OutgoingDate = DateTime.Now.Date,
+                        Recipient = selectedFirst.HouseOwner?.ToString(),
+                        RecipientDirectorName = selectedFirst.Director?.ToString(),
+                        RecipientDirectorPosition = selectedFirst.DirectorPosition?.ToString(),
+                        IntegraDUStages = unsselected.ToList()
+                    };
+                    Excel.Workbook newWB = Globals.ThisAddIn.Application.Workbooks
+                            .Add(LettersTemplate.FullName);
+                    for (int n = 0; n <= selected.Count() - 1; n++)
+                    {
+                        Excel.Range destRow = newWB.Sheets[1].Cells.Rows[n + 2];
+                        destRow.Cells[1, 1].Value = n + 1;
+                        destRow.Cells[1, 2].Value = selected.ElementAt(n).AddressO;
+                        destRow.Cells[1, 3].Value = selected.ElementAt(n).AddressH;
+                        destRow.Cells[1, 4].Value = selected.ElementAt(n).UNOM;
+                        destRow.Cells[1, 5].Value = selected.ElementAt(n).UNIU;
+                        if (selected.ElementAt(n).LetterOutNumber == null) selected.ElementAt(n).LetterOutNumber = newLeller.OutgoingNumber;
+                        if (selected.ElementAt(n).LetterOutData == null) selected.ElementAt(n).LetterOutData = newLeller.OutgoingDate;
+                        
+                    }
+                    var newpath = Path.Combine(rootletters.FullName, currentBookName, "На отправку", firm.Value2.Replace(@"\\", ":").Replace(@"""", ""));//+ ".xlsx"
+                    newWB.SaveAs(newpath, Excel.XlFileFormat.xlOpenXMLWorkbook);
+                    newWB.Close();
+                    var oper = new QueryToHouseOwner_Word_Operator();                    
+                    oper.Create(newpath,
+                        newLeller.Recipient,
+                        newLeller.RecipientDirectorPosition,
+                        newLeller.RecipientDirectorName,
+                        newLeller.OutgoingNumber,
+                        newLeller.OutgoingDate
+
+                        );
+                    context.SimplifiedLetters.Add(newLeller);
+                    context.SaveChanges();
                 }
-                var newpath = Path.Combine(rootletters.FullName, currentBookName, "На отправку", firm.Value2.Replace(@"\\", ":").Replace(@"""", "") + ".xlsx");
-                newWB.SaveAs(newpath);
-                newWB.Close();
-                //var wordOp = new Word_Operator();
-                var bookmInserter = new Hashtable();
-                if (selected.FirstOrDefault().DirectorPosition != null)
-                    bookmInserter.Add("ChiefPosition", selected.FirstOrDefault().DirectorPosition.ToString());
-                if (selected.FirstOrDefault().Director != null)
-                {
-                    bookmInserter.Add("ChiefFullName", selected.FirstOrDefault().Director.ToString());
-                    bookmInserter.Add("ChiefShortName", selected.FirstOrDefault().Director.ToString());
-                }
-                if (selected.FirstOrDefault().HouseOwner != null)
-                    bookmInserter.Add("Organization", selected.FirstOrDefault().HouseOwner.ToString());
-                //Word_Operator.CreateBookmarkedDocument(new FileInfo(Path.ChangeExtension(newpath, "docx")), (new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Запрос1.dotx")), bookmInserter);
             }
         }
         catch (Exception innere)
@@ -437,72 +457,31 @@ public class AddInUtilities : IAddInUtilities
     /// <summary>
     /// Создание технических паспортов в основной папке
     /// </summary>
-    internal void CreatePassport()
+    internal void CreatePassports()
     {
-        using (var context = new UNSModel())
-        {
-            var UNIUs = SelectByPattern();
-            ;
-            foreach (var UNIU in UNIUs)
+        //Task.Run(() =>
+        //{
+            using (var context = new UNSModel())
             {
-                var integraDUExcelLayout = context.IntegraDUExcelLayouts.Where(w => w.UNIU == UNIU).FirstOrDefault();
-                Hashtable hashtable = new Hashtable();
-                if (integraDUExcelLayout.ContentObjectFullPath != null && integraDUExcelLayout.ContentHouseFullPath != null)
+                var UNIUs = SelectByPattern();
+                var passportOperator = new Passport_Word_Operator();
+                var newPassportContents=new List<PassportContent>();
+                var idu = context.IntegraDUStages.Where(w => UNIUs.Contains(w.UNIU)).ToList().Select(s=> Mapper.Map<IntegraDUStages,PassportContent>(s));
+                foreach (var UNIU in UNIUs)
                 {
-                    hashtable.Add("obj1", new InsertedObject()
-                    {
-                        FromFile = new FileInfo(integraDUExcelLayout.ContentObjectFullPath),
-                        Height = 80,
-                        Wight = 150
-                    });
-                    hashtable.Add("obj2", new InsertedObject()
-                    {
-                        FromFile = new FileInfo(integraDUExcelLayout.ContentHouseFullPath),
-                        Height = 80,
-                        Wight = 150
-                    });
+                    var newPassportContent = idu.Where(w=>w.UNIU==UNIU).FirstOrDefault();
+                    newPassportContents.Add(newPassportContent);
                 }
-                else
-                    if (integraDUExcelLayout.ContentObjectFullPath != null && integraDUExcelLayout.ContentHouseFullPath == null)
-                {
-                    hashtable.Add("obj1", new InsertedObject()
-                    {
-                        FromFile = new FileInfo(integraDUExcelLayout.ContentObjectFullPath),
-                        Height = 80,
-                        Wight = 150
-                    });
-                }
-                else
-                    if (integraDUExcelLayout.ContentObjectFullPath == null && integraDUExcelLayout.ContentHouseFullPath != null)
-
-                    hashtable.Add("obj1", new InsertedObject()
-                    {
-                        FromFile = new FileInfo(integraDUExcelLayout.ContentHouseFullPath),
-                        Height = 80,
-                        Wight = 150
-                    });
-
-                hashtable.Add("UNIU", integraDUExcelLayout.UNIU);
-                hashtable.Add("Okrug", integraDUExcelLayout.Okrug);
-                hashtable.Add("District", integraDUExcelLayout.District);
-                hashtable.Add("Address", string.Join(", ", integraDUExcelLayout.AddressObject, integraDUExcelLayout.AddressHouse));
-                hashtable.Add("DUType", integraDUExcelLayout.DUType);
-                hashtable.Add("date_of_manufacture", DateTime.Now.ToLongDateString());
-                DirectoryInfo saveDir = new DirectoryInfo(Path.Combine(DUFilesDir.FullName, integraDUExcelLayout.UNIU));
-                var newWordFileName = new FileInfo(Path.Combine(
-                                            saveDir.FullName,
-                                            Path.ChangeExtension(string.Join("_", integraDUExcelLayout.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")),
-                                        "docx")));
-                // Passport_Word_Operator.CreateBookmarkedDocument(newWordFileName,
-                //    new FileInfo("\\\\NAS-D4\\integra\\Шаблоны\\Приложение5_Технический_паспорт8.dotx"), hashtable);
-                //Word_Operator.ExportToPDF(newWordFileName);
+                passportOperator.Create(newPassportContents);
+                context.PassportContents.AddRange(newPassportContents);
+                context.SaveChanges();
             }
-        }
+        //});
     }
 
     private List<IntegraDUExcel> ReestrSheet()
     {
-        Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
+        Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
         EnableCalculations(false);
         Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
         ExcelLoader _excelLoader = new ExcelLoader(Globals.ThisAddIn.Application);
@@ -517,7 +496,7 @@ public class AddInUtilities : IAddInUtilities
     }
     private List<IntegraHouses> HouseSheet()
     {
-        Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
+        Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
         EnableCalculations(false);
         Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
         ExcelLoader _excelLoader = new ExcelLoader(Globals.ThisAddIn.Application);
@@ -531,7 +510,7 @@ public class AddInUtilities : IAddInUtilities
 
     protected void EnableCalculations(bool Enable)
     {
-        foreach (Worksheet sh in Globals.ThisAddIn.Application.Sheets)
+        foreach (Excel.Worksheet sh in Globals.ThisAddIn.Application.Sheets)
         {
             sh.EnableCalculation = Enable;
         }
@@ -543,11 +522,11 @@ public class AddInUtilities : IAddInUtilities
     /// <returns></returns>
     public List<string> SelectByPattern()
     {
-        Range selected = Globals.ThisAddIn.Application.Selection as Range;
+        Excel.Range selected = Globals.ThisAddIn.Application.Selection as Excel.Range;
         var result = new List<string>();
         try
         {
-            foreach (Range range in selected)
+            foreach (Excel.Range range in selected)
             {
                 var matchNumber = Regex.Match(((string)range.Value2).Trim(), "\\d{5}ДУ\\d{6}");
                 if (matchNumber != null && matchNumber.Captures.Count > 0 && !range.EntireRow.Hidden)
@@ -568,7 +547,7 @@ public class AddInUtilities : IAddInUtilities
     }
     public List<IntegraDU> ReestrSheet1()
     {
-        Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
+        Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
         EnableCalculations(false);
         Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
         ExcelLoader _excelLoader = new ExcelLoader(Globals.ThisAddIn.Application);
@@ -579,5 +558,12 @@ public class AddInUtilities : IAddInUtilities
     public void CopyFoto()
     {
         var UNIUs = SelectByPattern();
-    }
+        var selectFoto = SelectFotoDialogViewModel.Create(UNIUs,DUFilesDir);
+        var d = new SelectFotoDialogView
+        {
+            DataContext = selectFoto
+        };
+        d.ShowDialog();
+        }
+    
 }

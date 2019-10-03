@@ -15,6 +15,7 @@ using UNS.Models.Entities;
 using UNS.Models;
 using Utility;
 using AutoMapper;
+using System.Drawing.Printing;
 
 namespace bushAddon
 {
@@ -68,12 +69,6 @@ namespace bushAddon
             ((RibbonButton)sender).Enabled = true;
         }
 
-
-        private void Button_toPrinting_Click(object sender, RibbonControlEventArgs e)
-        {
-            Globals.ThisAddIn.utilities.InstallationPassportPrint();
-        }
-
         private void Button_UpdateByDB_Click(object sender, RibbonControlEventArgs e)
         {
             Globals.ThisAddIn.utilities.UpdateByDB();
@@ -81,16 +76,16 @@ namespace bushAddon
 
         private void Button_PrintDislocations_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.utilities.PrintDislocations(printDialogDUAddon.PrinterSettings);
+            Globals.ThisAddIn.utilities.PrintDislocations();
         }
         private void Button_PrintAkts_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.utilities.PrintAkts(printDialogDUAddon.PrinterSettings);
+            Globals.ThisAddIn.utilities.PrintAkts();
         }
 
         private void Button_PrintProdactionComplects_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.utilities.PrintProdactionComplects(printDialogDUAddon.PrinterSettings);
+            Globals.ThisAddIn.utilities.PrintProdactionComplects();
         }
         private void Button_ReplaceOwnerToPrim_Click(object sender, RibbonControlEventArgs e)
         {
@@ -104,7 +99,7 @@ namespace bushAddon
 
         private void Button_PassportCreate_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.utilities.CreatePassport();
+            Globals.ThisAddIn.utilities.CreatePassports();
         }
 
         private void Button_KLADR_Click(object sender, RibbonControlEventArgs e)
@@ -114,12 +109,17 @@ namespace bushAddon
 
         private void Button_PassportPrint_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.utilities.PrintPassport();
+            Globals.ThisAddIn.utilities.PrintPassports();
         }
 
         private void Button_InstallationPassport_Click(object sender, RibbonControlEventArgs e)
         {
-            Globals.ThisAddIn.utilities.InstallationPassportPrint();
+            Globals.ThisAddIn.utilities.InstallationPassportsPrint();
+        }
+
+        private void BtnCopyPhotos_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.utilities.CopyFoto();
         }
     }
 }

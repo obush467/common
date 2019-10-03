@@ -158,13 +158,17 @@ namespace UNS.Common.Operators
                     newWidth,
                     newHeight);
             }
-        var printDoc = new PrintDocument();
-            printDoc.DefaultPageSettings=pageSettings;
-            if (!file.Exists) { return;}            
-            printDoc.PrinterSettings = printerSettings;
-            printDoc.PrintPage += ppp;
-            printDoc.Print();
-            bmp.Dispose();
+            using (var printDoc = new PrintDocument
+            {
+                DefaultPageSettings = pageSettings
+            })
+            {
+                if (!file.Exists) { return; }
+                printDoc.PrinterSettings = printerSettings;
+                printDoc.PrintPage += ppp;
+                printDoc.Print();
+                bmp.Dispose();
+            }
          }
 
        

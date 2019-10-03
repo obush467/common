@@ -54,14 +54,14 @@ namespace UNS.Models
         public virtual DbSet<PersonPosition> PersonPositions { get; set; }
         public virtual DbSet<AccountantGeneralPosition> AccountantGeneralPositions { get; set; }
         public virtual DbSet<DirectorPosition> DirectorPositions { get; set; }
-        public virtual DbSet<Person> Persons { get; set; }
-        public virtual DbSet<PassportContent> IntegraDUExcelLayouts { get; set; }
+        public virtual DbSet<Person> Persons { get; set; }       
         public virtual DbSet<IntegraDU> IntegraDU { get; set; }
+        public virtual DbSet<IntegraDUStages> IntegraDUStages { get; set; }
         public virtual DbSet<Organization_House> Organization_Houses { get; set; }
         public virtual DbSet<PhoneItem> Phones { get; set; }
         public virtual DbSet<FaxItem> FaxItems { get; set; }
         public virtual DbSet<EmailItem> EmailItems { get; set; }
-        public virtual DbSet<OwnerRawAddress> ownerRawAddresses { get; set; }
+        public virtual DbSet<OwnerRawAddress> OwnerRawAddresses { get; set; }
         public virtual DbSet<RawAddress> RawAddresses { get; set; }
         public virtual DbSet<HouseFull> HouseFulls { get; set; }
         public virtual DbSet<HouseFullBTI> HouseFullBTIs { get; set; }
@@ -73,6 +73,8 @@ namespace UNS.Models
         public virtual DbSet<Stead1> Stead1s { get; set; }
         public virtual DbSet<IntegraDU_work> IntegraDU_Works { get; set; }
         public virtual DbSet<IntegraDU_work_Installation> IntegraDU_Work_Installations { get; set; }
+        public virtual DbSet<PassportContent> PassportContents { get; set; }
+        public virtual DbSet<SimplifiedLetter> SimplifiedLetters { get; set; }
 
         /*[DbFunction("UNS.Models.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
@@ -118,9 +120,10 @@ namespace UNS.Models
             modelBuilder.Configurations.Add(new AddressObject1Configuration());
             modelBuilder.Configurations.Add(new Stead1Configuration());
             modelBuilder.Configurations.Add(new Room1Configuration());
+            modelBuilder.Configurations.Add(new SimplifiedLetterConfiguration());
 
-
-            modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
+            modelBuilder.Entity<PassportContent>().ToTable("PassportContents");
+           modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
             modelBuilder.ComplexType<AddressOwnerFind_Result>();
             modelBuilder.Entity<AddressObjectType>()
                 .Property(e => e.KOD_T_ST)

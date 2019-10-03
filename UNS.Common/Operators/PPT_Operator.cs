@@ -11,17 +11,17 @@ using Logger;
 
 namespace UNS.Common
 {
-    public class PPT_Operator : Operator<FileInfo>, IOutDocument<FileInfo>
+    public class PPT_Operator : IOutDocument<FileInfo>
     {
         //protected DirectoryInfo pdfPath = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
         //protected DirectoryInfo originalPptDir = new DirectoryInfo("Z:\\Выборки_по_районам\\1");
         protected PowerPoint.Application pptApplication = new PowerPoint.Application();
-        public override void Print(IEnumerable<FileInfo> files, short copies = 1)
+        public void Print(IEnumerable<FileInfo> files, short copies = 1)
         {
             foreach (FileInfo f in files)
             { Print(f, copies); }
         }
-        public override void Print(FileInfo file, short copies = 1)
+        public void Print(FileInfo file, short copies = 1)
         {
             PrinterSettings printerSettings = new PrinterSettings
             {
@@ -29,7 +29,7 @@ namespace UNS.Common
             };
             Print(file,printerSettings);
         }
-        public override void ExportToPDF(FileInfo file)
+        public void ExportToPDF(FileInfo file)
         {
             // Create COM Objects
             PowerPoint.Application pptApplication = null;
@@ -77,17 +77,17 @@ namespace UNS.Common
             }
         }
 
-        public override void Create(FileInfo document)
+        public void Create(FileInfo document)
         {
             throw new NotImplementedException();
         }
 
-        public override void Create(IEnumerable<FileInfo> document)
+        public void Create(IEnumerable<FileInfo> document)
         {
             throw new NotImplementedException();
         }
 
-        public override void Print(FileInfo document, PrinterSettings printerSettings)
+        public void Print(FileInfo document, PrinterSettings printerSettings)
         {
             PowerPoint.Presentation pptPresentation = null;
             try
@@ -117,11 +117,20 @@ namespace UNS.Common
             }
         }
 
-        public override void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
+        public void Print(IEnumerable<FileInfo> documents, PrinterSettings printerSettings)
         {
             foreach (var document in documents)
                 Print(document, printerSettings);
         }
 
+        FileInfo IOutDocument<FileInfo>.Create(FileInfo document)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<FileInfo> IOutDocument<FileInfo>.Create(IEnumerable<FileInfo> document)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

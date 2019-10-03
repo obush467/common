@@ -11,8 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using UNS.Models;
-using UNS.ViewModels;
-using UNS.Views.Dialogs;
+using UNS.Common.ViewModels;
+using UNS.Common.Views;
 
 
 namespace UnitTestCommon
