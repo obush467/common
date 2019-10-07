@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
+﻿using System.Data.Entity.ModelConfiguration;
 using UNS.Models.Entities;
 
 namespace UNS.Models.Configuration

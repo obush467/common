@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _604 : DbMigration
     {
         public override void Up()
@@ -19,7 +18,7 @@ namespace UNS.Models.Migrations
             AddForeignKey("fias.AddressCodes", "AddressCode_ID", "fias.AddressBases", "ID");
             AddForeignKey("fias.AddressBases", "AddressCode_AddressCode_ID", "fias.AddressCodes", "AddressCode_ID");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("fias.AddressBases", "AddressCode_AddressCode_ID", "fias.AddressCodes");

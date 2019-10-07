@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _608 : DbMigration
     {
         public override void Up()
@@ -13,7 +12,7 @@ namespace UNS.Models.Migrations
             //AddPrimaryKey("dbo.integraDUStages", "ID");
             //AddForeignKey("dbo.integraDU", "ID", "dbo.integraDUStages", "ID");
         }
-        
+
         public override void Down()
         {
             DropForeignKey("dbo.integraDU", "ID", "dbo.integraDUStages");

@@ -1,13 +1,10 @@
-﻿using UNS.Common.Interfaces;
-using UNS.Common.Operators;
-using Microsoft.Office.Core;
+﻿using Microsoft.Office.Core;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
-using Utility;
+using UNS.Common.Interfaces;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
-using Logger;
 
 namespace UNS.Common
 {
@@ -27,7 +24,7 @@ namespace UNS.Common
             {
                 Copies = copies
             };
-            Print(file,printerSettings);
+            Print(file, printerSettings);
         }
         public void ExportToPDF(FileInfo file)
         {
@@ -100,7 +97,7 @@ namespace UNS.Common
                 //if(printerSettings.CanDuplex) pptPresentation.PrintOptions.can
                 pptPresentation.PrintOut();
 #if DEBUG
-                Logger.Logger.Debug("Отпечатано "+document.FullName);
+                Logger.Logger.Debug("Отпечатано " + document.FullName);
 #endif
             }
             catch (Exception printerror)

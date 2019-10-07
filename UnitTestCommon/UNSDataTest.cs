@@ -1,19 +1,12 @@
-﻿using UNS.Common;
-using UNS.Common.Interfaces;
-using UNS.Common.Office;
+﻿using AutoMapper;
+using bushAddon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UNS.Models;
-using Excel=Microsoft.Office.Interop.Excel;
-using AutoMapper;
 using UNS.Models.Entities;
-using bushAddon;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace UnitTestCommon
 {
@@ -30,9 +23,9 @@ namespace UnitTestCommon
             var result = new List<IntegraDU>();
             foreach (Excel.Range row in reestr.Range["A1"].CurrentRegion.Rows)
             {
-                var rowres = mapper.Map<Excel.Range,IntegraDU>(row);
+                var rowres = mapper.Map<Excel.Range, IntegraDU>(row);
                 result.Add(rowres);
-            }        
+            }
         }
 
         [TestMethod]
@@ -46,7 +39,7 @@ namespace UnitTestCommon
             Excel.Workbook workbook2 = application.Workbooks.Open("C:\\Temp\\Этап 21.xlsx");
             //application.Visible = false;
             var reestr = workbook.Sheets["Реестр"];
-            var result=e.MapRows(reestr);
+            var result = e.MapRows(reestr);
             var gr = ((IEnumerable<IntegraDU>)result).GroupBy(g => counter++ / counterLength);
             foreach (var g in gr)
             {
@@ -56,6 +49,39 @@ namespace UnitTestCommon
             application.Visible = true;
         }
 
+        [TestMethod]
+        public void DU_K_UD()
+        {
+            using (var context = new UNSModel())
+            {
+                var t = new DU_K_UD();
+                context.RRR.Add(t);
+                context.SaveChanges();
+            }
+        }
+        [TestMethod]
+        public void DU_K_UD1()
+        {
+            using (var context = new UNSModel(@"data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
+            {
+               context.Configuration.AutoDetectChangesEnabled = true; //var t = context.AddressBases.FirstOrDefault() ;
+                var y = context.RawAddresses.FirstOrDefault();
+                y.Source=y.Source+y.Source;                
+                context.SaveChanges();
+            }
+        }
+
+        [TestMethod]
+        public void DU_K_UD2()
+        {
+            using (var context = new UNSModel())
+            {
+                /*var t = new InstallationPlace() { Location = new UNS.Models.Entities.Address.Location() { Address = new AddressBase() } };
+                context.InstallationPlace.Add(t);
+                context.SaveChanges();*/
+            }
+        }
+
     }
-    }
+}
 

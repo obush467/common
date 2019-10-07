@@ -1,13 +1,12 @@
-﻿using UNS.Common.Interfaces;
-using Microsoft.Office.Interop.Word;
+﻿using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using UNS.Common.Interfaces;
 using UNS.Models.Entities;
-using UNS.Common;
 
 namespace UNS.Common
 {
@@ -15,8 +14,6 @@ namespace UNS.Common
     {
         protected static DirectoryInfo _templateDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
         protected static DirectoryInfo _rootdir = new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
-       
-
         public Akt_Word_Operator(DirectoryInfo templateDir, DirectoryInfo rootdir)
         {
             _rootdir = rootdir;
@@ -25,7 +22,7 @@ namespace UNS.Common
 
         public Akt_Word_Operator() : this(_templateDir, _rootdir)
         { }
-        public void Create(IEnumerable<PassportContent> akts)
+        public new void Create(IEnumerable<PassportContent> akts)
         {
             foreach (PassportContent integraDUExcelLayout in akts)
             {
@@ -33,12 +30,14 @@ namespace UNS.Common
             }
         }
 
-        public void Create(PassportContent integraDUExcelLayout)
+        public new void Create(PassportContent integraDUExcelLayout)
         {
             var flist = new List<FileInfo>();
-            Hashtable hashtable = new Hashtable();
-            hashtable.Add("DU1", integraDUExcelLayout.UNIU);
-            hashtable.Add("DU2", integraDUExcelLayout.UNIU);
+            Hashtable hashtable = new Hashtable
+            {
+                { "DU1", integraDUExcelLayout.UNIU },
+                { "DU2", integraDUExcelLayout.UNIU }
+            };
             switch (integraDUExcelLayout.DUType)
             {
                 case "ДУ-К-УД":
@@ -90,8 +89,10 @@ namespace UNS.Common
                                         saveDir.FullName,
                                         Path.ChangeExtension(string.Join("_", integraDUExcelLayout.UNIU, "Акт_монтажа_заготовка"),
                                     "docx")));
-            var saveFormats = new List<WdSaveFormat>();
-            saveFormats.Add(WdSaveFormat.wdFormatPDF);
+            var saveFormats = new List<WdSaveFormat>
+            {
+                WdSaveFormat.wdFormatPDF
+            };
             CreateBookmarkedDocument(newWordFileName.FullName,
                 _templateDir.GetFiles("прил_4_ЭЛЕКТРИКА.dotx").SingleOrDefault(), hashtable, saveFormats);
             flist.Add(newWordFileName);
@@ -110,22 +111,13 @@ namespace UNS.Common
             throw new NotImplementedException();
         }
 
-        public void Print(PassportContent document, short copies = 1)
+
+        public new void Print(PassportContent document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<PassportContent> document, short copies = 1)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Print(PassportContent document, PrinterSettings printerSettings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Print(IEnumerable<PassportContent> document, PrinterSettings printerSettings)
+        public new void Print(IEnumerable<PassportContent> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

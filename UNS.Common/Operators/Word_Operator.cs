@@ -1,15 +1,12 @@
-﻿using UNS.Common.Interfaces;
-using UNS.Common.Office;
-using UNS.Common.Operators;
-using Microsoft.Office.Core;
+﻿using Microsoft.Office.Core;
 using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
-using Utility;
-using Logger;
+using UNS.Common.Interfaces;
+using UNS.Common.Office;
 
 namespace UNS.Common
 {
@@ -46,7 +43,7 @@ namespace UNS.Common
                 Logger.Logger.Error(ex.Message);
             }
             return document;
-            }
+        }
         public IEnumerable<FileInfo> CreateBookmarkedDocument(string fileBaseName, FileInfo template, Hashtable hbookmarks, IEnumerable<WdSaveFormat> wdSaveFormats = null)
         {
             if (wdSaveFormats == null)
@@ -54,10 +51,10 @@ namespace UNS.Common
                 wdSaveFormats = new List<WdSaveFormat>()
                 { WdSaveFormat.wdFormatDocument };
             }
-            Document document = CreateBookmarkedDocument(template,hbookmarks);
+            Document document = CreateBookmarkedDocument(template, hbookmarks);
             var result = new List<FileInfo>();
             try
-            { 
+            {
                 foreach (var format in wdSaveFormats)
                 {
                     document.SaveAs2(fileBaseName, format);
@@ -82,7 +79,7 @@ namespace UNS.Common
             try
             {
                 FileInfo newname = new FileInfo(Path.ChangeExtension(fileinfo.FullName, ".pdf"));
-                tempDocument = wordApp.Documents.Open(fileinfo.FullName,MsoTriState.msoTrue, MsoTriState.msoTrue,MsoTriState.msoFalse);
+                tempDocument = wordApp.Documents.Open(fileinfo.FullName, MsoTriState.msoTrue, MsoTriState.msoTrue, MsoTriState.msoFalse);
                 tempDocument.ExportAsFixedFormat(
                     newname.FullName,
                     WdExportFormat.wdExportFormatPDF, false, WdExportOptimizeFor.wdExportOptimizeForPrint, WdExportRange.wdExportAllDocument);

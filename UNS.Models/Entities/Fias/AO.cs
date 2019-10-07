@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace UNS.Models.Entities.Fias
 {
-   public class AddressObject1: AddressBase
+    public class AddressObject1 : AddressBase
     {
         [StringLength(120)]
         public string FORMALNAME { get; set; }
-            [StringLength(1)]
+        [StringLength(1)]
         public string AUTOCODE { get; set; }
 
         [StringLength(3)]

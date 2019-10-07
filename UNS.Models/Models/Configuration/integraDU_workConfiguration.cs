@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UNS.Models.Entities;
 
 namespace UNS.Models.Models.Configuration
@@ -20,5 +15,5 @@ namespace UNS.Models.Models.Configuration
             //HasRequired<IntegraDU>().WithMany(s=>s.IntegraDU_Works).HasForeignKey(s=>s.IntegraDU_ID);
         }
     }
-    
+
 }

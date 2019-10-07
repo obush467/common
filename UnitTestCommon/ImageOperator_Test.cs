@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UNS.Common.Operators;
 
 namespace UnitTestCommon
@@ -20,7 +17,7 @@ namespace UnitTestCommon
         public void PrintAllImagesInFolder()
         {
             var ii = new ImageOperator();
-            foreach (var du in (new DirectoryInfo("C:\\Temp\\1\\").GetFiles("*", SearchOption.AllDirectories)))            
+            foreach (var du in (new DirectoryInfo("C:\\Temp\\1\\").GetFiles("*", SearchOption.AllDirectories)))
             {
                 ii.UpdateImage(du, new DirectoryInfo("C:\\Temp\\2"));
             }
@@ -238,7 +235,7 @@ namespace UnitTestCommon
         public void Uri()
         {
             DirectoryInfo directory = new DirectoryInfo("c:\\temp\\pp");
-            var uri = new Uri(new Uri(directory.FullName,UriKind.Absolute), new Uri("sdfsdfs",UriKind.Relative));
+            var uri = new Uri(new Uri(directory.FullName, UriKind.Absolute), new Uri("sdfsdfs", UriKind.Relative));
         }
 
         [TestMethod]
@@ -334,10 +331,10 @@ namespace UnitTestCommon
  };
             DirectoryInfo directory = new DirectoryInfo("Z:\\DU_files");
             var io1 = new ImageOperator();
-            var uri =io1.SelectPhotos(directory, numbers, new List<string>() { "фото_свет" });
+            var uri = io1.SelectPhotos(directory, numbers, new List<string>() { "фото_свет" });
             foreach (var file in uri)
             {
-               // io1.Print(file, new PrinterSettings(), new PageSettings());
+                // io1.Print(file, new PrinterSettings(), new PageSettings());
             }
         }
     }

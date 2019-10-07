@@ -4,7 +4,7 @@ using UNS.Models.Entities;
 
 namespace UNS.Models.Models.Configuration
 {
-   public class Stead1Configuration : EntityTypeConfiguration<Stead1>
+    public class Stead1Configuration : EntityTypeConfiguration<Stead1>
     {
         public Stead1Configuration() : base()
         {

@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Office.Interop.Excel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UNS.Models.Entities;
 
 namespace bushAddon
@@ -13,11 +9,10 @@ namespace bushAddon
     {
         public int? Convert(Range source, ResolutionContext context)
         {
-            int result;
             if (source != null && source.Value2 != null)
 
             {
-                int.TryParse(source.Value2, out result);
+                int.TryParse(source.Value2, out int result);
                 return result;
             }
             else
@@ -38,10 +33,10 @@ namespace bushAddon
                     return source.Value2;
                 }
                 catch (Exception)
-                { return default(T); }
+                { return default; }
             }
             else
-            { return default(T); }
+            { return default; }
         }
         public static int ConvertValue(Range source)
         {
@@ -66,14 +61,14 @@ namespace bushAddon
             else
             { return default(T); }
         }
-        public static  object ConvertValue(int? source)
+        public static object ConvertValue(int? source)
         {
             return source;
         }
         public static object ConvertValue(DateTime source)
-         {
-             return source.ToOADate();
-         }
+        {
+            return source.ToOADate();
+        }
 
     }
 
@@ -135,22 +130,22 @@ namespace bushAddon
                 destination.IntoProductionDate = ToDateTime(excelArray[1, 27]); ;//ДУ изготовлен
             }
             catch (Exception e)
-            { }
+            { Logger.Logger.Error(e.Message); }
             return destination;
         }
     }
 
-    public class DUToExcelTypeConverter : ITypeConverter<IntegraDU,Range>
+    public class DUToExcelTypeConverter : ITypeConverter<IntegraDU, Range>
     {
-        public Range Convert(IntegraDU source,Range destination, ResolutionContext context)
+        public Range Convert(IntegraDU source, Range destination, ResolutionContext context)
         {
             try
             {
-                dynamic[,] excelArray = destination.Cells.Value2 as dynamic [,];
-                excelArray[1, 1]= ToRangeConverter<string>.Convert(source.UNIU);// Уникальный номер 
+                dynamic[,] excelArray = destination.Cells.Value2 as dynamic[,];
+                excelArray[1, 1] = ToRangeConverter<string>.Convert(source.UNIU);// Уникальный номер 
                 excelArray[1, 2] = ToRangeConverter<int?>.Convert(source.Number);//Номер
                 excelArray[1, 3] = ToRangeConverter<string>.Convert(source.DUType);// Тип информационного указателя
-                excelArray[1, 4]=source.Okrug; // Округ
+                excelArray[1, 4] = source.Okrug; // Округ
                 excelArray[1, 5] = source.District; // Район
                 excelArray[1, 6] = ToRangeConverter<string>.Convert(source.AddressObject); // Улица
                 excelArray[1, 7] = ToRangeConverter<string>.Convert(source.AddressHouse); // Номер дома
@@ -177,7 +172,7 @@ namespace bushAddon
                 destination.Value2 = excelArray;
             }
             catch (Exception e)
-            { }
+            { Logger.Logger.Error(e.Message); }
             return destination;
         }
     }
@@ -187,7 +182,7 @@ namespace bushAddon
         {
             CreateMap<Microsoft.Office.Interop.Excel.Range, IntegraDU>()
             .ConvertUsing(new ExcelToDUTypeConverter());
-            CreateMap<IntegraDU , Microsoft.Office.Interop.Excel.Range>()
+            CreateMap<IntegraDU, Microsoft.Office.Interop.Excel.Range>()
             .ConvertUsing(new DUToExcelTypeConverter());
         }
     }

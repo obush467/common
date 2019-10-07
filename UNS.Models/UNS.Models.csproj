@@ -91,12 +91,8 @@
     <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.SqlClient, Version=4.5.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SqlClient.4.6.1\lib\net461\System.Data.SqlClient.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
+    <Reference Include="System.Data.SqlClient, Version=4.6.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\InfConstructionsDX\InfConstructionsDX.Main\packages\System.Data.SqlClient.4.7.0\lib\net461\System.Data.SqlClient.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Runtime.Serialization.Primitives" />
@@ -113,9 +109,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Address\Location.cs" />
+    <Compile Include="Entities\ConstractionBase.cs" />
+    <Compile Include="Entities\ConstractionElement.cs" />
     <Compile Include="Entities\DU_work.cs" />
     <Compile Include="Entities\Fias\AddressObjectBase.cs" />
     <Compile Include="Entities\Fias\AO.cs" />
+    <Compile Include="Entities\InstallationPlace.cs" />
+    <Compile Include="Entities\LightBoxElement.cs" />
+    <Compile Include="Entities\LightingEquipment.cs" />
     <Compile Include="Entities\SimplifiedLetter.cs" />
     <Compile Include="Mappers\PassportContent_DUStages.cs" />
     <Compile Include="Migrations\201908161322599_570.cs" />
@@ -274,9 +276,42 @@
     <Compile Include="Migrations\201910031127005_618.Designer.cs">
       <DependentUpon>201910031127005_618.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910041401009_619.cs" />
+    <Compile Include="Migrations\201910041401009_619.Designer.cs">
+      <DependentUpon>201910041401009_619.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071512417_620.cs" />
+    <Compile Include="Migrations\201910071512417_620.Designer.cs">
+      <DependentUpon>201910071512417_620.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071705453_621.cs" />
+    <Compile Include="Migrations\201910071705453_621.Designer.cs">
+      <DependentUpon>201910071705453_621.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071712394_622.cs" />
+    <Compile Include="Migrations\201910071712394_622.Designer.cs">
+      <DependentUpon>201910071712394_622.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071728400_623.cs" />
+    <Compile Include="Migrations\201910071728400_623.Designer.cs">
+      <DependentUpon>201910071728400_623.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071754028_624.cs" />
+    <Compile Include="Migrations\201910071754028_624.Designer.cs">
+      <DependentUpon>201910071754028_624.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071756475_625.cs" />
+    <Compile Include="Migrations\201910071756475_625.Designer.cs">
+      <DependentUpon>201910071756475_625.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071830274_626.cs" />
+    <Compile Include="Migrations\201910071830274_626.Designer.cs">
+      <DependentUpon>201910071830274_626.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Configuration\integraDUStagesConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDUConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDU_workConfiguration.cs" />
+    <Compile Include="Models\Configuration\LocationConfiguration.cs" />
     <Compile Include="Models\Configuration\SimplifiedLetterConfiguration.cs" />
     <Compile Include="Models\Configuration\Room1Configuration.cs" />
     <Compile Include="Models\Configuration\AddressObject1sConfiguration.cs" />
@@ -848,13 +883,34 @@
     <EmbeddedResource Include="Migrations\201910031127005_618.resx">
       <DependentUpon>201910031127005_618.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910041401009_619.resx">
+      <DependentUpon>201910041401009_619.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071512417_620.resx">
+      <DependentUpon>201910071512417_620.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071705453_621.resx">
+      <DependentUpon>201910071705453_621.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071712394_622.resx">
+      <DependentUpon>201910071712394_622.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071728400_623.resx">
+      <DependentUpon>201910071728400_623.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071754028_624.resx">
+      <DependentUpon>201910071754028_624.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071756475_625.resx">
+      <DependentUpon>201910071756475_625.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071830274_626.resx">
+      <DependentUpon>201910071830274_626.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-    if not exist "$(TargetDir)x86" md "$(TargetDir)x86"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\x86\*.*" "$(TargetDir)x86"
-    if not exist "$(TargetDir)amd64" md "$(TargetDir)amd64"
-    xcopy /s /y "$(SolutionDir)packages\Microsoft.SqlServer.Compact.4.0.8876.1\NativeBinaries\amd64\*.*" "$(TargetDir)amd64"</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

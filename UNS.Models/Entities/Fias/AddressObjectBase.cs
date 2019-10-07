@@ -1,6 +1,7 @@
 namespace UNS.Models.Entities
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     public class AddressBase
@@ -8,10 +9,10 @@ namespace UNS.Models.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Guid ID { get; set; }
-        public Guid GUID { get; set; }     
+        public Guid GUID { get; set; }
         public Guid? PARENTGUID { get; set; }
         public Guid? NORMDOC { get; set; }
-        public DateTime? UPDATEDATE { get; set; }     
+        public DateTime? UPDATEDATE { get; set; }
         public DateTime? STARTDATE { get; set; }
         public DateTime? ENDDATE { get; set; }
         [StringLength(6)]
@@ -19,8 +20,9 @@ namespace UNS.Models.Entities
 
         [StringLength(100)]
         public string CADNUM { get; set; }
-        public virtual AddressPrevNext PrevNext { get; set; }
         public virtual AddressCode AddressCode { get; set; }
+        public ICollection<AddressBase> PREV { get; set; }
+        public ICollection<AddressBase> NEXT { get; set; }
     }
     public class AddressCode
     {
@@ -45,18 +47,17 @@ namespace UNS.Models.Entities
     public partial class AddressPrevNext
     {
         public Guid AddressBase_ID { get; set; }
-        public Guid? PREVID { get; set; }
-        public Guid? NEXTID { get; set; }
+
         public int? OPERSTATUS { get; set; }
         [StringLength(2)]
         public string REGIONCODE { get; set; }
         public bool LIVESTATUS { get; set; }
         public virtual AddressBase AddressBase { get; set; }
-        public virtual AddressBase PREV { get; set; }
-        public virtual AddressBase NEXT { get; set; }
+       /* public virtual AddressBase PREV { get; set; }
+        public virtual AddressBase NEXT { get; set; }*/
 
     }
-    public partial class Room1:AddressBase
+    public partial class Room1 : AddressBase
     {
 
         [Required]
@@ -72,8 +73,8 @@ namespace UNS.Models.Entities
 
         [StringLength(100)]
         public string ROOMCADNUM { get; set; }
-}
-    public partial class Stead1: AddressBase
+    }
+    public partial class Stead1 : AddressBase
     {
 
         [StringLength(120)]

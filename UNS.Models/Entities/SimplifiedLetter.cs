@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UNS.Models.Entities
 {
-    public class SimplifiedLetter:Document
+    public class SimplifiedLetter : Document
     {
         public string Sender { get; set; }
         public string Recipient { get; set; }

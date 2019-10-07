@@ -1,12 +1,9 @@
-﻿using UNS.Common.Interfaces;
-using UNS.Common.Operators;
-using Spire.Pdf;
+﻿using Spire.Pdf;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
-using Utility;
-using Logger;
+using UNS.Common.Interfaces;
 
 namespace UNS.Common
 {

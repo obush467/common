@@ -1,48 +1,33 @@
-﻿using bushAddon;
-using UNS.Common;
-using Excel=Microsoft.Office.Interop.Excel;
-using Word=Microsoft.Office.Interop.Word;
+﻿using AutoMapper;
+using bushAddon;
+using bushAddon.Interfaces;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Printing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using UNS.Models.Entities;
-using UNS.Models;
-using Utility;
-using UNS.Common.Interfaces;
-using System.Windows.Forms;
-using System.Threading.Tasks;
-using UNS.Common.Views;
-using UNS.Common.ViewModels;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using UNS.Common.Office;
-using System.Globalization;
-using bushAddon.Interfaces;
-using AutoMapper;
-using UNS.Models.Mappers;
-using UNS.Common.Operators;
-using UNS.Dialogs;
-using UNS.Dialogs.ViewModels;
-using DevExpress.Mvvm;
-using DevExpress.Mvvm.UI;
+using UNS.Common;
 using UNS.Common.Entities;
+using UNS.Common.ViewModels;
+using UNS.Common.Views;
+using UNS.Models;
+using UNS.Models.Entities;
+using UNS.Models.Mappers;
+using Excel = Microsoft.Office.Interop.Excel;
 
 [ComVisible(true)]
 [ClassInterface(ClassInterfaceType.None)]
 public class AddInUtilities : IAddInUtilities
 {
-    DateTimeFormatInfo dateInFileNameFormat = new DateTimeFormatInfo()
+    readonly DateTimeFormatInfo dateInFileNameFormat = new DateTimeFormatInfo()
     {
         DateSeparator = "-",
         TimeSeparator = "-+"
     };
-    public IMapper Mapper=new MapperConfiguration(cfg=>cfg.AddProfile<PassportContent_DUStages>()).CreateMapper();
+    public IMapper Mapper = new MapperConfiguration(cfg => cfg.AddProfile<PassportContent_DUStages>()).CreateMapper();
     readonly DirectoryInfo rootletters = new DirectoryInfo("\\\\NAS-D4\\integra\\Письма\\");
     readonly DirectoryInfo templatesDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
     private string _lettersTemplate = "Адреса в письмо2.xltx";
@@ -55,7 +40,7 @@ public class AddInUtilities : IAddInUtilities
         new DirectoryInfo("C:\\DU_Files\\").Exists ?
             new DirectoryInfo("C:\\DU_Files\\") :
             new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
-     public void ImportData()
+    public void ImportData()
     {
         if (Globals.ThisAddIn.Application.ActiveSheet is Excel.Worksheet activeWorksheet)
         {
@@ -164,7 +149,6 @@ public class AddInUtilities : IAddInUtilities
         {
             EnableCalculations(false);
             var printDialog = new PrePrintDialog();
-
             var preview = printItems.Select(s => new { Номер = s.Pattern, Имя_файла = s.FileInfo.Name, Наличие = s.Status }).AsEnumerable();
             printDialog.DataContext = new PrePrintDialogViewModel<dynamic>(preview) { Title = "Печать" };
             if ((bool)printDialog.ShowDialog() && (bool)printDialog.DialogResult)
@@ -185,50 +169,57 @@ public class AddInUtilities : IAddInUtilities
 
     public IEnumerable<FileItem> SelectFilesByPatterns(IEnumerable<PrintPattern> printPatterns)
     {
-       return SelectFilesByNumbers(SelectByPattern(),printPatterns);
+        return SelectFilesByNumbers(SelectByPattern(), printPatterns);
     }
 
     public void InstallationPassportsPrint()
     {
         List<IntegraDUExcel> integraDUs = ReestrSheet();
-        var UNIUs = SelectByPattern();       
+        var UNIUs = SelectByPattern();
         foreach (var UNIU in UNIUs)
         {
             var newWB = InstallationPassportCreate(integraDUs, UNIU);
-            string filename = String.Join("_", UNIU, "задание_на_монтаж", DateTime.Now.ToString("yyyy-MM-dd-hh-mm", dateInFileNameFormat))+ ".xlsx";
-            newWB.PrintOutEx();
-            newWB.SaveAs(Path.Combine(DUFilesDir.FullName,"Для производства","В печать",filename ).Replace(@"\\", ":"));
-            newWB.Close();
+            if (newWB != null)
+            {
+                newWB.PrintOutEx();
+                //string filename = String.Join("_", UNIU, "задание_на_монтаж", DateTime.Now.ToString("yyyy-MM-dd-hh-mm", dateInFileNameFormat)) + ".xlsx";                
+                //newWB.SaveAs(Path.Combine(DUFilesDir.FullName, "Для производства", "В печать", filename).Replace(@"\\", ":"));
+                newWB.Close(SaveChanges:false);
+            }
         }
-
     }
     public Excel.Workbook InstallationPassportPrint(IEnumerable<IntegraDUExcel> integraDUExcels, string UNIU)
     {
-        var ip=InstallationPassportCreate(integraDUExcels, UNIU);
+        var ip = InstallationPassportCreate(integraDUExcels, UNIU);
         ip.PrintOutEx();
         return ip;
     }
     public Excel.Workbook InstallationPassportCreate(IEnumerable<IntegraDUExcel> integraDUExcels, string UNIU)
     {
-        var templateName = Path.Combine(templatesDir.FullName, "Установка.xltx");
-        Excel.Workbook newWB = Globals.ThisAddIn.Application.Workbooks.Add(templateName);       
+       
         IntegraDUExcel row = (from integraDU in integraDUExcels
-                              where integraDU.UNIU.ToString() == UNIU
+                              where integraDU.UNIU.ToString().Trim() == UNIU
                               select integraDU).FirstOrDefault();
-        Excel.Range destRow = newWB.Sheets[1].Cells.Rows[2];
-        newWB.Sheets[1].Range("UNIU").Value = row.UNIU;// Уникальный номер
-        newWB.Sheets[1].Range("DUType").Value = row.DUtype; //Тип ДУ
-        newWB.Sheets[1].Range("AdmArea").Value = row.AdmArea; //Округ
-        newWB.Sheets[1].Range("District").Value = row.District;// Район
-        newWB.Sheets[1].Range("AddressObject").Value = row.AddressO;// Улица
-        newWB.Sheets[1].Range("AddressHouse").Value = row.AddressH;// Номер дома
-        newWB.Sheets[1].Range("ContentObject").Value = row.ContentO;// Информационное содержание - Улица
-        newWB.Sheets[1].Range("ContentHouse").Value = row.ContentH;// Информационное содержание -Номер дома                                                                      
-        newWB.Sheets[1].Range("WallType").Value = row.BTIwallType;// БТИ - Тип стен
-        newWB.Sheets[1].Range("Purpose").Value = row.BTIdestination;// БТИ - Назначение
-        newWB.Sheets[1].Range("HouseOwner").Value = row.HouseOwner;// Принадлежность
-        newWB.Sheets[1].Range("Contacts").Value = row.Contacts;// Контактные данные
-        return newWB;
+        if (row != null)
+        {
+            var templateName = Path.Combine(templatesDir.FullName, "Установка.xltx");
+            Excel.Workbook newWB = Globals.ThisAddIn.Application.Workbooks.Add(templateName);
+            Excel.Range destRow = newWB.Sheets[1].Cells.Rows[2];
+            newWB.Sheets[1].Range("UNIU").Value = row.UNIU;// Уникальный номер
+            newWB.Sheets[1].Range("DUType").Value = row.DUtype; //Тип ДУ
+            newWB.Sheets[1].Range("AdmArea").Value = row.AdmArea; //Округ
+            newWB.Sheets[1].Range("District").Value = row.District;// Район
+            newWB.Sheets[1].Range("AddressObject").Value = row.AddressObject;// Улица
+            newWB.Sheets[1].Range("AddressHouse").Value = row.AddressHouse;// Номер дома
+            newWB.Sheets[1].Range("ContentObject").Value = row.ContentObject;// Информационное содержание - Улица
+            newWB.Sheets[1].Range("ContentHouse").Value = row.ContentHouse;// Информационное содержание -Номер дома                                                                      
+            newWB.Sheets[1].Range("WallType").Value = row.BTIwallType;// БТИ - Тип стен
+            newWB.Sheets[1].Range("Purpose").Value = row.BTIdestination;// БТИ - Назначение
+            newWB.Sheets[1].Range("HouseOwner").Value = row.HouseOwner;// Принадлежность
+            newWB.Sheets[1].Range("Contacts").Value = row.Contacts;// Контактные данные
+            return newWB;
+        }
+        else return null;
     }
     internal void CreateDuHyperlinks(string directoryPath)
     {
@@ -294,7 +285,6 @@ public class AddInUtilities : IAddInUtilities
                  //&& integraDU.LetterOutNumber == null
                  && integraDU.HouseOwner == null
                  select integraDU).ToList();
-
             foreach (IntegraDUExcel destRow in hasUNOMs)
             {
                 try
@@ -313,9 +303,9 @@ public class AddInUtilities : IAddInUtilities
                 catch (FormatException)
                 { }
                 catch (InvalidOperationException ie)
-                { }
-                catch (Exception e1)
-                { }
+                { Logger.Logger.Error(ie.Message); }
+                catch (Exception exception)
+                { Logger.Logger.Error(exception.Message); }
             }
             EnableCalculations(true);
         }
@@ -330,14 +320,14 @@ public class AddInUtilities : IAddInUtilities
             using (var context = new UNSModel())
             {
                 var fullselected = (from row in ReestrSheet()
-                                                 join unsrow in context.IntegraDUStages
-                                                 on row.UNIU equals unsrow.UNIU
-                                                 where row.HouseOwner != null &&
-                                                       row.HouseOwner.ToString() == firm.Value2
-                                                       && row.LetterOutData==null
-                                                       && row.LetterOutNumber==null
-                                                 orderby row.AddressO, row.AddressH
-                                                 select new { row, unsrow }).ToList();
+                                    join unsrow in context.IntegraDUStages
+                                    on row.UNIU equals unsrow.UNIU
+                                    where row.HouseOwner != null &&
+                                          row.HouseOwner.ToString() == firm.Value2
+                                          && row.LetterOutData == null
+                                          && row.LetterOutNumber == null
+                                    orderby row.AddressObject, row.AddressHouse
+                                    select new { row, unsrow }).ToList();
                 var unsselected = fullselected.Select(s => s.unsrow);
                 var selected = fullselected.Select(s => s.row);
                 if (selected.Any())
@@ -360,25 +350,23 @@ public class AddInUtilities : IAddInUtilities
                     {
                         Excel.Range destRow = newWB.Sheets[1].Cells.Rows[n + 2];
                         destRow.Cells[1, 1].Value = n + 1;
-                        destRow.Cells[1, 2].Value = selected.ElementAt(n).AddressO;
-                        destRow.Cells[1, 3].Value = selected.ElementAt(n).AddressH;
+                        destRow.Cells[1, 2].Value = selected.ElementAt(n).AddressObject;
+                        destRow.Cells[1, 3].Value = selected.ElementAt(n).AddressHouse;
                         destRow.Cells[1, 4].Value = selected.ElementAt(n).UNOM;
                         destRow.Cells[1, 5].Value = selected.ElementAt(n).UNIU;
                         if (selected.ElementAt(n).LetterOutNumber == null) selected.ElementAt(n).LetterOutNumber = newLeller.OutgoingNumber;
                         if (selected.ElementAt(n).LetterOutData == null) selected.ElementAt(n).LetterOutData = newLeller.OutgoingDate;
-                        
                     }
                     var newpath = Path.Combine(rootletters.FullName, currentBookName, "На отправку", firm.Value2.Replace(@"\\", ":").Replace(@"""", ""));//+ ".xlsx"
                     newWB.SaveAs(newpath, Excel.XlFileFormat.xlOpenXMLWorkbook);
                     newWB.Close();
-                    var oper = new QueryToHouseOwner_Word_Operator();                    
+                    var oper = new QueryToHouseOwner_Word_Operator();
                     oper.Create(newpath,
                         newLeller.Recipient,
                         newLeller.RecipientDirectorPosition,
                         newLeller.RecipientDirectorName,
                         newLeller.OutgoingNumber,
                         newLeller.OutgoingDate
-
                         );
                     context.SimplifiedLetters.Add(newLeller);
                     context.SaveChanges();
@@ -386,7 +374,7 @@ public class AddInUtilities : IAddInUtilities
             }
         }
         catch (Exception innere)
-        { }
+        { Logger.Logger.Error(innere.Message); }
         finally
         {
             EnableCalculations(true);
@@ -459,24 +447,21 @@ public class AddInUtilities : IAddInUtilities
     /// </summary>
     internal void CreatePassports()
     {
-        //Task.Run(() =>
-        //{
-            using (var context = new UNSModel())
+        using (var context = new UNSModel())
+        {
+            var UNIUs = SelectByPattern();
+            var passportOperator = new Passport_Word_Operator();
+            var newPassportContents = new List<PassportContent>();
+            var idu = context.IntegraDUStages.Where(w => UNIUs.Contains(w.UNIU)).ToList().Select(s => Mapper.Map<IntegraDUStages, PassportContent>(s));
+            foreach (var UNIU in UNIUs)
             {
-                var UNIUs = SelectByPattern();
-                var passportOperator = new Passport_Word_Operator();
-                var newPassportContents=new List<PassportContent>();
-                var idu = context.IntegraDUStages.Where(w => UNIUs.Contains(w.UNIU)).ToList().Select(s=> Mapper.Map<IntegraDUStages,PassportContent>(s));
-                foreach (var UNIU in UNIUs)
-                {
-                    var newPassportContent = idu.Where(w=>w.UNIU==UNIU).FirstOrDefault();
-                    newPassportContents.Add(newPassportContent);
-                }
-                passportOperator.Create(newPassportContents);
-                context.PassportContents.AddRange(newPassportContents);
-                context.SaveChanges();
+                var newPassportContent = idu.Where(w => w.UNIU == UNIU).FirstOrDefault();
+                newPassportContents.Add(newPassportContent);
             }
-        //});
+            passportOperator.Create(newPassportContents);
+            context.PassportContents.AddRange(newPassportContents);
+            context.SaveChanges();
+        }
     }
 
     private List<IntegraDUExcel> ReestrSheet()
@@ -487,11 +472,8 @@ public class AddInUtilities : IAddInUtilities
         ExcelLoader _excelLoader = new ExcelLoader(Globals.ThisAddIn.Application);
         _excelLoader.AttachRows(WSSource);
         return (from row in _excelLoader.Rows
-                where row.UNIU != null &&
-                      row.UNOM != null
-                      && row.UNOM != null
-                      && row.UNIU != null
-                orderby row.AddressO, row.AddressH
+                where row.UNIU != null
+                orderby row.AddressObject, row.AddressHouse
                 select row).ToList();
     }
     private List<IntegraHouses> HouseSheet()
@@ -545,7 +527,7 @@ public class AddInUtilities : IAddInUtilities
         }
         return result;
     }
-    public List<IntegraDU> ReestrSheet1()
+    public List<UNS.Models.Entities.IntegraDU> ReestrSheet1()
     {
         Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
         EnableCalculations(false);
@@ -558,12 +540,7 @@ public class AddInUtilities : IAddInUtilities
     public void CopyFoto()
     {
         var UNIUs = SelectByPattern();
-        var selectFoto = SelectFotoDialogViewModel.Create(UNIUs,DUFilesDir);
-        var d = new SelectFotoDialogView
-        {
-            DataContext = selectFoto
-        };
-        d.ShowDialog();
-        }
-    
+        DialogsService.SelectPhotoDialog(UNIUs, DUFilesDir);
+    }
+
 }

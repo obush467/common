@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
-using System.Drawing.Printing;
+using System.Text.RegularExpressions;
 
 namespace UNS.Common.Operators
 {
@@ -28,13 +26,13 @@ namespace UNS.Common.Operators
 
         /*public void Copy(FileoryInfo inputDir, DirectoryInfo outputDir, IEnumerable<string> numbers, IEnumerable<string> inputsubdirs, bool renameBySubdirs, bool copyToSubdirs, bool withOverlayText)
         {*/
-            public IEnumerable<object> SelectPhotos(DirectoryInfo inputDir, IEnumerable<string> numbers, IEnumerable<string> inputsubdirs)
+        public IEnumerable<object> SelectPhotos(DirectoryInfo inputDir, IEnumerable<string> numbers, IEnumerable<string> inputsubdirs)
         {
-            var result=new List<object>();
-            var directories =inputDir.GetDirectories("*",SearchOption.TopDirectoryOnly).Where(w=>numbers.Contains(w.Name)).ToList();
+            var result = new List<object>();
+            var directories = inputDir.GetDirectories("*", SearchOption.TopDirectoryOnly).Where(w => numbers.Contains(w.Name)).ToList();
             foreach (var directory in directories)
             {
-                var subdirectories = directory.GetDirectories().Where(w=>inputsubdirs.Contains(w.Name.ToLower())).ToList();
+                var subdirectories = directory.GetDirectories().Where(w => inputsubdirs.Contains(w.Name.ToLower())).ToList();
                 foreach (var subdirectory in subdirectories)
                 {
                     var files = subdirectory.GetFiles().Where(w => Extensions.Contains(w.Extension)).OrderBy(o => o.CreationTime).ThenBy(o => o.Name).ToList();
@@ -43,20 +41,20 @@ namespace UNS.Common.Operators
             }
             return result;
         }
-        public IEnumerable<FileInfo> CopyByNumbers(DirectoryInfo inputDir, DirectoryInfo outputDir,IEnumerable<string> numbers, IEnumerable<string> inputsubdirs,bool renameBySubdirs, bool copyToSubdirs,bool withOverlayText)
+        public IEnumerable<FileInfo> CopyByNumbers(DirectoryInfo inputDir, DirectoryInfo outputDir, IEnumerable<string> numbers, IEnumerable<string> inputsubdirs, bool renameBySubdirs, bool copyToSubdirs, bool withOverlayText)
         {
-            var result = new List<FileInfo>();           
+            var result = new List<FileInfo>();
             var inputDirUri = inputDir.FullName;
             var outputDirUri = outputDir.FullName;
             foreach (var number in numbers)
             {
-                var inputNumberuri = Path.Combine(inputDirUri,number);
+                var inputNumberuri = Path.Combine(inputDirUri, number);
                 var outputNumberuri = Path.Combine(outputDirUri, number);
                 foreach (var subdir in inputsubdirs)
                 {
                     var inputSubdiruri = Path.Combine(inputNumberuri, subdir);
-                    var outputSubdiruri = copyToSubdirs? Path.Combine(outputNumberuri, subdir): outputNumberuri;
-                    var findfiles =new DirectoryInfo(inputSubdiruri).GetFiles().Where(w => Extensions.Contains(w.Extension.ToLower()));
+                    var outputSubdiruri = copyToSubdirs ? Path.Combine(outputNumberuri, subdir) : outputNumberuri;
+                    var findfiles = new DirectoryInfo(inputSubdiruri).GetFiles().Where(w => Extensions.Contains(w.Extension.ToLower()));
                     if (findfiles != null && findfiles.Any())
                     {
                         foreach (var file in findfiles)
@@ -64,11 +62,11 @@ namespace UNS.Common.Operators
                             var md5 = CalculateMD5(file.FullName);
                             var newFileName = renameBySubdirs
                                 ? renameBySubdirs
-                                    ?Path.Combine(outputSubdiruri, String.Join("_", number, subdir, md5) + file.Extension)
-                                    :Path.Combine(outputSubdiruri, String.Join("_", number, md5) + file.Extension)
-                                :renameBySubdirs 
-                                    ?Path.Combine(outputNumberuri, String.Join("_", number, subdir, md5) + file.Extension)
-                                    :Path.Combine(outputNumberuri, String.Join("_", number, md5) + file.Extension);
+                                    ? Path.Combine(outputSubdiruri, String.Join("_", number, subdir, md5) + file.Extension)
+                                    : Path.Combine(outputSubdiruri, String.Join("_", number, md5) + file.Extension)
+                                : renameBySubdirs
+                                    ? Path.Combine(outputNumberuri, String.Join("_", number, subdir, md5) + file.Extension)
+                                    : Path.Combine(outputNumberuri, String.Join("_", number, md5) + file.Extension);
                             var wdir = (new FileInfo(newFileName)).Directory;
                             if (!wdir.Exists)
                             {
@@ -84,20 +82,20 @@ namespace UNS.Common.Operators
             }
             return result;
         }
-        public void UpdateImage(FileInfo inputfile,DirectoryInfo outputDir)
+        public void UpdateImage(FileInfo inputfile, DirectoryInfo outputDir)
         {
-            var reg = new Regex("\\d{5}ДУ\\d{6}");           
+            var reg = new Regex("\\d{5}ДУ\\d{6}");
             var nameReg = reg.Match(inputfile.FullName).Value;
             var subdir = outputDir.CreateSubdirectory(nameReg);
             //var subdir2 = subdir.CreateSubdirectory("Фото_свет");
-            var newFilePath = Path.Combine(subdir.FullName,inputfile.Name);
+            var newFilePath = Path.Combine(subdir.FullName, inputfile.Name);
             UpdateImage(inputfile, new FileInfo(newFilePath), nameReg);
         }
 
         public void UpdateImage(FileInfo inputfile, FileInfo outputFile, string text)
         {
             OverlayTextOnImage(
-                Bitmap.FromFile(inputfile.FullName),text)
+                Bitmap.FromFile(inputfile.FullName), text)
                 .Save(outputFile.FullName, System.Drawing.Imaging.ImageFormat.Jpeg); //путь и имя сохранения файла
         }
 
@@ -106,7 +104,7 @@ namespace UNS.Common.Operators
             var image = (Image)input.Clone();
             using (Graphics g = Graphics.FromImage(image))
             {
-                RectangleF drawRect = new RectangleF(0, image.Height - image.Height / 10, image.Width, image.Height/10);
+                RectangleF drawRect = new RectangleF(0, image.Height - image.Height / 10, image.Width, image.Height / 10);
                 Font drawFont = new Font("Verdana", image.Height / 30);
                 SolidBrush drawBrush = new SolidBrush(Color.White);
                 g.DrawString(text, drawFont, drawBrush, drawRect);//текст на картинке, шрифт и его размер        
@@ -169,8 +167,8 @@ namespace UNS.Common.Operators
                 printDoc.Print();
                 bmp.Dispose();
             }
-         }
+        }
 
-       
+
     }
 }

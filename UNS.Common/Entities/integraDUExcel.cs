@@ -19,14 +19,11 @@ namespace UNS.Common.Entities
         private Range _InstallStatus; // Статус установки
         private Range _UNOM; // UNOM
         private Range _UNIU; // Уникальный номер
-        private Range _Person; // Хто
         private Range _BTIwallType; // БТИ - Тип стен
         private Range _BTIdestination; // БТИ - Назначение
         private Range _Resume; // Заключение
         private Range _Comment; // Примечания
-        private Range _WallType; // Тип стен
         private Range _HouseOwner; // Принадлежность
-        private Range _Foto; // Тип съёмки
         private Range _Contacts; // Контактные данные
         private Range _Director; // Руководитель
         private Range _DirectorPosition; // Должность руководителя
@@ -46,13 +43,13 @@ namespace UNS.Common.Entities
         [DisplayName("Район")]
         public object District { get { return _District.Value2; } set { _District.Value2 = value; } }  //	
         [DisplayName("Улица")]
-        public object AddressO { get { return _AddressO.Value2; } set { _AddressO.Value2 = value; } }  //	
+        public object AddressObject { get { return _AddressO.Value2; } set { _AddressO.Value2 = value; } }  //	
         [DisplayName("Номер дома")]
-        public object AddressH { get { return _AddressH.Value2; } set { _AddressH.Value2 = value; } }  //	
+        public object AddressHouse { get { return _AddressH.Value2; } set { _AddressH.Value2 = value; } }  //	
         [DisplayName("Информационное содержание - Улица")]
-        public object ContentO { get { return _ContentO.Value2; } set { _ContentO.Value2 = value; } }  //	
+        public object ContentObject { get { return _ContentO.Value2; } set { _ContentO.Value2 = value; } }  //	
         [DisplayName("Информационное содержание - Номер дома")]
-        public object ContentH { get { return _ContentH.Value2; } set { _ContentH.Value2 = value; } }  //	
+        public object ContentHouse { get { return _ContentH.Value2; } set { _ContentH.Value2 = value; } }  //	
         [DisplayName("Статус установки")]
         public object InstallStatus
         {
@@ -75,8 +72,7 @@ namespace UNS.Common.Entities
         }  //	
         [DisplayName("Уникальный номер")]
         public object UNIU { get { return _UNIU.Value2; } set { _UNIU.Value2 = value; } }  //	
-        [DisplayName("Хто")]
-        public object Person { get { return _Person.Value2; } set { _Person.Value2 = value; } }    //	
+
         [DisplayName("БТИ - Тип стен")]
         public object BTIwallType { get { return _BTIwallType.Value2; } set { _BTIwallType.Value2 = value; } }   //	
         [DisplayName("БТИ - Назначение")]
@@ -85,12 +81,10 @@ namespace UNS.Common.Entities
         public object Resume { get { return _Resume.Value2; } set { _Resume.Value2 = value; } }    //	
         [DisplayName("Примечания")]
         public object Comment { get { return _Comment.Value2; } set { _Comment.Value2 = value; } }   //	
-        [DisplayName("Тип стен")]
-        public object WallType { get { return _WallType.Value2; } set { _WallType.Value2 = value; } }  //	
+
         [DisplayName("Принадлежность")]
         public object HouseOwner { get { return _HouseOwner.Value2; } set { _HouseOwner.Value2 = value; _HouseOwner.Interior.Color = 65535; } }    //	
-        [DisplayName("Тип съёмки")]
-        public object Foto { get { return _Foto.Value2; } set { _Foto.Value2 = value; } }  //	
+
         [DisplayName("Контактные данные")]
         public object Contacts { get { return _Contacts.Value2; } set { _Contacts.Value2 = value; } }  //	
         [DisplayName("Руководитель")]

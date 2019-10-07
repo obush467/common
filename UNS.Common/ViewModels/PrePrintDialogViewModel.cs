@@ -1,13 +1,7 @@
 ﻿using DevExpress.Mvvm;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Drawing.Printing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UNS.Common.ViewModels
 {
@@ -21,7 +15,7 @@ namespace UNS.Common.ViewModels
         #region Properties
         public ObservableCollection<T> PrintList { get; set; }
         public string Title { get; set; } = "";
-        public PrinterSettings PrinterSettings { get; set;}
+        public PrinterSettings PrinterSettings { get; set; }
         #endregion
         #region Methods
         public void Print()

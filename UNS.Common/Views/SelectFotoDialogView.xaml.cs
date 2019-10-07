@@ -1,22 +1,7 @@
-﻿using System;
+﻿using DevExpress.Xpf.Core;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using DevExpress.Mvvm;
-using DevExpress.Mvvm.DataAnnotations;
-using DevExpress.Mvvm.POCO;
-using DevExpress.Xpf.Core;
 
 namespace UNS.Common.Views
 {
@@ -33,7 +18,7 @@ namespace UNS.Common.Views
             InitializeComponent();
         }
 
-        public SelectFotoDialogView(List<string> uNIUs, DirectoryInfo dUFilesDir):base()
+        public SelectFotoDialogView(List<string> uNIUs, DirectoryInfo dUFilesDir) : base()
         {
             this.uNIUs = uNIUs;
             this.dUFilesDir = dUFilesDir;
@@ -46,7 +31,7 @@ namespace UNS.Common.Views
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;           
+            DialogResult = false;
         }
     }
 }

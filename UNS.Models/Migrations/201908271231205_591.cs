@@ -1,8 +1,7 @@
 namespace UNS.Models.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
-    
+
     public partial class _591 : DbMigration
     {
         public override void Up()
@@ -12,7 +11,7 @@ namespace UNS.Models.Migrations
             RenameColumn("dbo.integraDU", "Принадлежность", "HouseOwner");
             AlterColumn("dbo.IntegraDUStages", "UNOM", c => c.Int());
         }
-        
+
         public override void Down()
         {
             AddColumn("dbo.integraDU", "Принадлежность", c => c.String(maxLength: 255));

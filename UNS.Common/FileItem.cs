@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing.Printing;
 using System.ComponentModel.DataAnnotations;
-using UNS.Common;
+using System.Drawing.Printing;
+using System.IO;
 using UNS.Common.Interfaces;
 
 namespace UNS.Common
-{ 
+{
     public class FileItem : PrintPattern, IOut
     {
         public FileInfo FileInfo { get; set; }

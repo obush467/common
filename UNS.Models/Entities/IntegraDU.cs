@@ -20,20 +20,20 @@ namespace UNS.Models.Entities
         public string BTITarget { get; set; }
 
         [StringLength(255)]
-        public string  Resume { get; set; } //Заключение
+        public string Resume { get; set; } //Заключение
 
         [StringLength(255)]
-        public string  Comment { get; set; } //Примечания
+        public string Comment { get; set; } //Примечания
 
         [Description("Тип стен")]
         [StringLength(255)]
         public string WallType { get; set; } // Тип_стен
 
         [StringLength(255)]
-        public string HouseOwner{ get; set; } //Принадлежность 
+        public string HouseOwner { get; set; } //Принадлежность 
         [Description("Тип съёмки")]
         [StringLength(255)]
-        public string Foto {get; set; } //Тип_съёмки {
+        public string Foto { get; set; } //Тип_съёмки {
 
         [Description("Контактные данные")]
         [StringLength(255)]
@@ -45,24 +45,24 @@ namespace UNS.Models.Entities
 
         [Description("Должность руководителя")]
         [StringLength(255)]
-        public string DirectorPosition{ get; set; } //Должность_руководителя 
+        public string DirectorPosition { get; set; } //Должность_руководителя 
 
         [Description("номер исх письма")]
         [StringLength(255)]
-        public string LetterOutNumber{ get; set; } //Номер_исх_письма 
+        public string LetterOutNumber { get; set; } //Номер_исх_письма 
 
         [Description("Дата исх письма")]
-        public DateTime? LetterOutData{ get; set; } //Дата_исх_письма 
+        public DateTime? LetterOutData { get; set; } //Дата_исх_письма 
 
         [Description("Наличие ответа вход")]
         [StringLength(255)]
-        public string LetterIn{ get; set; } //Наличие_ответа_вход 
+        public string LetterIn { get; set; } //Наличие_ответа_вход 
 
         [Description("Дата согласования")]
         public DateTime? CoordinationDate { get; set; }//Дата_согласования 
 
         [Description("Дата передачи в производство")]
-        public DateTime? IntoProductionDate{ get; set; } //Дата_передачи_в_производство 
+        public DateTime? IntoProductionDate { get; set; } //Дата_передачи_в_производство 
 
         [Description("Оттказ")]
         [StringLength(255)]

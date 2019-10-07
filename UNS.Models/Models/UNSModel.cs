@@ -54,7 +54,7 @@ namespace UNS.Models
         public virtual DbSet<PersonPosition> PersonPositions { get; set; }
         public virtual DbSet<AccountantGeneralPosition> AccountantGeneralPositions { get; set; }
         public virtual DbSet<DirectorPosition> DirectorPositions { get; set; }
-        public virtual DbSet<Person> Persons { get; set; }       
+        public virtual DbSet<Person> Persons { get; set; }
         public virtual DbSet<IntegraDU> IntegraDU { get; set; }
         public virtual DbSet<IntegraDUStages> IntegraDUStages { get; set; }
         public virtual DbSet<Organization_House> Organization_Houses { get; set; }
@@ -75,6 +75,10 @@ namespace UNS.Models
         public virtual DbSet<IntegraDU_work_Installation> IntegraDU_Work_Installations { get; set; }
         public virtual DbSet<PassportContent> PassportContents { get; set; }
         public virtual DbSet<SimplifiedLetter> SimplifiedLetters { get; set; }
+        public virtual DbSet<InstallationPlace> InstallationPlace {get;set;}
+        public virtual DbSet<DU_K_UD> RRR { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
 
         /*[DbFunction("UNS.Models.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
@@ -121,9 +125,10 @@ namespace UNS.Models
             modelBuilder.Configurations.Add(new Stead1Configuration());
             modelBuilder.Configurations.Add(new Room1Configuration());
             modelBuilder.Configurations.Add(new SimplifiedLetterConfiguration());
+            modelBuilder.Configurations.Add(new LocationConfiguration());
 
             modelBuilder.Entity<PassportContent>().ToTable("PassportContents");
-           modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
+            modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
             modelBuilder.ComplexType<AddressOwnerFind_Result>();
             modelBuilder.Entity<AddressObjectType>()
                 .Property(e => e.KOD_T_ST)
@@ -152,32 +157,24 @@ namespace UNS.Models
             modelBuilder.Entity<FlatType>()
                 .Property(e => e.SHORTNAME)
                 .IsUnicode(false);
-
-
             modelBuilder.Entity<HouseStateStatus>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
-
             modelBuilder.Entity<Landmark>()
                 .Property(e => e.OKATO)
                 .IsUnicode(false);
-
             modelBuilder.Entity<NormativeDocument>()
                 .Property(e => e.DOCNAME)
                 .IsUnicode(false);
-
             modelBuilder.Entity<NormativeDocument>()
                 .Property(e => e.DOCNUM)
                 .IsUnicode(false);
-
             modelBuilder.Entity<NormativeDocument>()
                 .HasOptional(e => e.NormativeDocument1)
                 .WithRequired(e => e.NormativeDocument2);
-
             modelBuilder.Entity<NormativeDocumentType>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
-
             modelBuilder.Entity<NormativeDocumentType>()
                 .HasMany(e => e.NormativeDocument)
                 .WithRequired(e => e.NormativeDocumentType)
@@ -187,10 +184,6 @@ namespace UNS.Models
             modelBuilder.Entity<OperationStatus>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
-
-
-
-
         }
     }
 }

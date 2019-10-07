@@ -1,14 +1,12 @@
-﻿using UNS.Common.Interfaces;
-using UNS.Common.Office;
-using Microsoft.Office.Interop.Word;
+﻿using Microsoft.Office.Interop.Word;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
+using UNS.Common.Office;
 using UNS.Models.Entities;
-using UNS.Common;
 
 namespace UNS.Common
 {
@@ -27,17 +25,17 @@ namespace UNS.Common
         {
         }
 
-        public IEnumerable<FileInfo> Create(IEnumerable<PassportContent> passportContents)
+        public new IEnumerable<FileInfo> Create(IEnumerable<PassportContent> passportContents)
         {
             var result = new List<FileInfo>();
             foreach (var b in passportContents)
-                {
-                    result.Add(Create(b.Number.ToString(), b.UNIU, b.Okrug, b.District, b.AddressObject, b.AddressHouse, b.DUType,b.DateManufacture));
-                }
+            {
+                result.Add(Create(b.Number.ToString(), b.UNIU, b.Okrug, b.District, b.AddressObject, b.AddressHouse, b.DUType, b.DateManufacture));
+            }
             return result;
         }
         public FileInfo Create(string Number, string UNIU, string Okrug, string District, string AddressObject, string AddressHouse, string DUType, DateTime date_of_manufacture)
-        {           
+        {
             Hashtable hashtable = new Hashtable
             {
                 { "UNIU", UNIU },
@@ -54,7 +52,7 @@ namespace UNS.Common
             }
             DirectoryInfo saveDir = new DirectoryInfo(new Uri(new Uri(_rootdir.FullName), UNIU).LocalPath);
             if (!saveDir.Exists) saveDir.Create();
-            var newWordFileName = Path.Combine(saveDir.FullName,string.Join("_", Number, UNIU, "технический_паспорт"));
+            var newWordFileName = Path.Combine(saveDir.FullName, string.Join("_", Number, UNIU, "технический_паспорт"));
             var saveFormats = new List<WdSaveFormat>
             {
                 WdSaveFormat.wdFormatPDF
@@ -63,7 +61,7 @@ namespace UNS.Common
                 _templateDir.GetFiles(TemplateFileName).SingleOrDefault(), hashtable, saveFormats);
             return new FileInfo(newWordFileName);
         }
-        public FileInfo Create(PassportContent passportContent)
+        public new FileInfo Create(PassportContent passportContent)
         {
             Hashtable hashtable = new Hashtable
             {
@@ -139,13 +137,15 @@ namespace UNS.Common
 
             DirectoryInfo saveDir = new DirectoryInfo(new Uri(new Uri(_rootdir.FullName), passportContent.UNIU).LocalPath);
             if (!saveDir.Exists) saveDir.Create();
-            var newWordFileName = Path.Combine(saveDir.FullName,string.Join("_", passportContent.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")));
+            var newWordFileName = Path.Combine(saveDir.FullName, string.Join("_", passportContent.UNIU, "технический_паспорт", DateTime.Now.ToString("yyyyMMdd")));
 
-            var saveFormats = new List<WdSaveFormat>();
-            saveFormats.Add(WdSaveFormat.wdFormatPDF);
+            var saveFormats = new List<WdSaveFormat>
+            {
+                WdSaveFormat.wdFormatPDF
+            };
             CreateBookmarkedDocument(newWordFileName,
                 _templateDir.GetFiles("Приложение5_Технический_паспорт9.dotx").SingleOrDefault(), hashtable, saveFormats);
-            return new FileInfo( newWordFileName);
+            return new FileInfo(newWordFileName);
 
         }
 
@@ -160,12 +160,12 @@ namespace UNS.Common
                 Print(integraDUExcelLayout);
         }
 
-        public void Print(PassportContent document, PrinterSettings printerSettings)
+        public new void Print(PassportContent document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public void Print(IEnumerable<PassportContent> document, PrinterSettings printerSettings)
+        public new void Print(IEnumerable<PassportContent> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

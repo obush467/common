@@ -58,7 +58,7 @@ namespace UNS.Models.Entities
         public virtual ICollection<EmailItem> EmailItems { get; set; }
         public virtual ICollection<PhoneItem> PhoneItems { get; set; } = new List<PhoneItem>();
         public virtual ICollection<OwnerRawAddress> OwnerRawAddresses { get; set; }
-        public virtual ICollection<Organization_House> Addresses{ get; set; }
+        public virtual ICollection<Organization_House> Addresses { get; set; }
         public string Comments { get; set; }
         public Organization() { }
     }

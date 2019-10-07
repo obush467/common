@@ -59,5 +59,15 @@ namespace UNS.Common.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IMG_20190801_143403 {
+            get {
+                object obj = ResourceManager.GetObject("IMG_20190801_143403", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

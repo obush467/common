@@ -1,16 +1,7 @@
-﻿using UNS.Common;
-using UNS.Common.Office;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using UNS.Models;
+using UNS.Common;
 using UNS.Common.ViewModels;
 using UNS.Common.Views;
 
@@ -35,5 +26,5 @@ namespace UnitTestCommon
         }
 
     }
-    }
+}
 

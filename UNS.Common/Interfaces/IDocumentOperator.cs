@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Printing;
+﻿using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UNS.Common.Interfaces
 {
@@ -15,5 +10,5 @@ namespace UNS.Common.Interfaces
         void Save(FileInfo file);
         void ExportToPDF(FileInfo fileInfo);
 
-        }
     }
+}
