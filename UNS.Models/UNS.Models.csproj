@@ -109,12 +109,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\AddressRoom.cs" />
     <Compile Include="Entities\Address\Location.cs" />
     <Compile Include="Entities\ConstractionBase.cs" />
     <Compile Include="Entities\ConstractionElement.cs" />
     <Compile Include="Entities\DU_work.cs" />
-    <Compile Include="Entities\Fias\AddressObjectBase.cs" />
-    <Compile Include="Entities\Fias\AO.cs" />
+    <Compile Include="Entities\Fias\AddressBase.cs" />
+    <Compile Include="Entities\Fias\AddressCode.cs" />
+    <Compile Include="Entities\Fias\AddressStatus.cs" />
+    <Compile Include="Entities\Fias\AddressStead.cs" />
+    <Compile Include="Entities\Fias\AddressAO.cs" />
     <Compile Include="Entities\InstallationPlace.cs" />
     <Compile Include="Entities\LightBoxElement.cs" />
     <Compile Include="Entities\LightingEquipment.cs" />
@@ -308,13 +312,56 @@
     <Compile Include="Migrations\201910071830274_626.Designer.cs">
       <DependentUpon>201910071830274_626.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910071855089_627.cs" />
+    <Compile Include="Migrations\201910071855089_627.Designer.cs">
+      <DependentUpon>201910071855089_627.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071917318_628.cs" />
+    <Compile Include="Migrations\201910071917318_628.Designer.cs">
+      <DependentUpon>201910071917318_628.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910071921477_629.cs" />
+    <Compile Include="Migrations\201910071921477_629.Designer.cs">
+      <DependentUpon>201910071921477_629.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910081019409_630.cs" />
+    <Compile Include="Migrations\201910081019409_630.Designer.cs">
+      <DependentUpon>201910081019409_630.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910081156185_631.cs" />
+    <Compile Include="Migrations\201910081156185_631.Designer.cs">
+      <DependentUpon>201910081156185_631.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910081218153_632.cs" />
+    <Compile Include="Migrations\201910081218153_632.Designer.cs">
+      <DependentUpon>201910081218153_632.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Fias\AddressHouse.cs" />
+    <Compile Include="Migrations\201910081325504_633.cs" />
+    <Compile Include="Migrations\201910081325504_633.Designer.cs">
+      <DependentUpon>201910081325504_633.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910081450190_634.cs" />
+    <Compile Include="Migrations\201910081450190_634.Designer.cs">
+      <DependentUpon>201910081450190_634.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910081454589_635.cs" />
+    <Compile Include="Migrations\201910081454589_635.Designer.cs">
+      <DependentUpon>201910081454589_635.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201910081456207_636.cs" />
+    <Compile Include="Migrations\201910081456207_636.Designer.cs">
+      <DependentUpon>201910081456207_636.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Configuration\AddressHouseConfiguration.cs" />
+    <Compile Include="Models\Configuration\AccountantGeneralPositionConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDUStagesConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDUConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDU_workConfiguration.cs" />
     <Compile Include="Models\Configuration\LocationConfiguration.cs" />
     <Compile Include="Models\Configuration\SimplifiedLetterConfiguration.cs" />
-    <Compile Include="Models\Configuration\Room1Configuration.cs" />
-    <Compile Include="Models\Configuration\AddressObject1sConfiguration.cs" />
+    <Compile Include="Models\Configuration\AddressRoomConfiguration.cs" />
+    <Compile Include="Models\Configuration\AddressAOConfiguration.cs" />
     <Compile Include="Models\Configuration\AddressBaseConfiguration.cs" />
     <Compile Include="Models\Configuration\AddressCodeConfiguration.cs" />
     <Compile Include="Models\Configuration\Del_HouseConfiguration.cs" />
@@ -326,7 +373,6 @@
     <Compile Include="Entities\PhoneItem.cs" />
     <Compile Include="Entities\FaxItem.cs" />
     <Compile Include="Entities\integraDU.cs" />
-    <Compile Include="Entities\PassportContent.cs" />
     <Compile Include="Entities\integraDUStages.cs" />
     <Compile Include="Entities\Organization_House.cs" />
     <Compile Include="Entities\DUTechnicalCertificate.cs" />
@@ -584,9 +630,10 @@
     <Compile Include="Models\Configuration\PersonPositionConfiguration.cs" />
     <Compile Include="Models\Configuration\RawAddresConfiguration.cs" />
     <Compile Include="Models\Configuration\RoomConfiguration.cs" />
-    <Compile Include="Models\Configuration\AddressPrevNextConfiguration.cs" />
-    <Compile Include="Models\Configuration\Stead1Configuration.cs" />
+    <Compile Include="Models\Configuration\AddressStatusConfiguration.cs" />
+    <Compile Include="Models\Configuration\AddressSteadConfiguration.cs" />
     <Compile Include="Models\Configuration\SteadConfiguration.cs" />
+    <Compile Include="Models\DUTechnicalCertificateConfiguration.cs" />
     <Compile Include="Models\UNSModel.cs" />
     <Compile Include="Entities\Organization.cs" />
     <Compile Include="Entities\OrganizationType.cs" />
@@ -906,6 +953,36 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910071830274_626.resx">
       <DependentUpon>201910071830274_626.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071855089_627.resx">
+      <DependentUpon>201910071855089_627.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071917318_628.resx">
+      <DependentUpon>201910071917318_628.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910071921477_629.resx">
+      <DependentUpon>201910071921477_629.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081019409_630.resx">
+      <DependentUpon>201910081019409_630.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081156185_631.resx">
+      <DependentUpon>201910081156185_631.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081218153_632.resx">
+      <DependentUpon>201910081218153_632.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081325504_633.resx">
+      <DependentUpon>201910081325504_633.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081450190_634.resx">
+      <DependentUpon>201910081450190_634.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081454589_635.resx">
+      <DependentUpon>201910081454589_635.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910081456207_636.resx">
+      <DependentUpon>201910081456207_636.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

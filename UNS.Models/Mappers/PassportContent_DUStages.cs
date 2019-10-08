@@ -7,8 +7,8 @@ namespace UNS.Models.Mappers
     {
         public PassportContent_DUStages()
         {
-            CreateMap<IntegraDUStages, PassportContent>();
-            CreateMap<PassportContent, IntegraDUStages>();
+            CreateMap<IntegraDUStages, DUTechnicalCertificate>();
+            CreateMap<DUTechnicalCertificate, IntegraDUStages>();
 
         }
     }

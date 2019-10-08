@@ -2,7 +2,7 @@
 
 namespace UNS.Models.Entities.Fias
 {
-    public class AddressObject1 : AddressBase
+    public class AddressAO : AddressBase
     {
         [StringLength(120)]
         public string FORMALNAME { get; set; }

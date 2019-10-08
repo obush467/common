@@ -14,7 +14,6 @@ namespace UNS.Models
 {
     public class UNSModel : DbContext
     {
-        private SqlConnection sqlConnection;
 
         public UNSModel()
             : base(@"data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")
@@ -24,7 +23,6 @@ namespace UNS.Models
 
         public UNSModel(SqlConnection sqlConnection) : base(sqlConnection, false)
         {
-            this.sqlConnection = sqlConnection;
         }
 
         public virtual DbSet<ActualStatus> ActualStatuses { get; set; }
@@ -67,16 +65,17 @@ namespace UNS.Models
         public virtual DbSet<HouseFullBTI> HouseFullBTIs { get; set; }
         public virtual DbSet<AddressBase> AddressBases { get; set; }
         public virtual DbSet<AddressCode> AddressCodes { get; set; }
-        public virtual DbSet<AddressPrevNext> AddressPrevNexts { get; set; }
-        public virtual DbSet<AddressObject1> AddressObject1s { get; set; }
-        public virtual DbSet<Room1> Room1s { get; set; }
-        public virtual DbSet<Stead1> Stead1s { get; set; }
+        public virtual DbSet<AddressStatus> AddressStatuses { get; set; }
+        public virtual DbSet<AddressAO> AddressAOs { get; set; }
+        public virtual DbSet<AddressStead> AddressSteads { get; set; }
+        public virtual DbSet<AddressRoom> AddressRooms { get; set; }
+        public virtual DbSet<AddressHouse> AddressHouses { get; set; }
         public virtual DbSet<IntegraDU_work> IntegraDU_Works { get; set; }
         public virtual DbSet<IntegraDU_work_Installation> IntegraDU_Work_Installations { get; set; }
-        public virtual DbSet<PassportContent> PassportContents { get; set; }
+        public virtual DbSet<DUTechnicalCertificate> DUTechnicalCertificates { get; set; }
         public virtual DbSet<SimplifiedLetter> SimplifiedLetters { get; set; }
         public virtual DbSet<InstallationPlace> InstallationPlace {get;set;}
-        public virtual DbSet<DU_K_UD> RRR { get; set; }
+        public virtual DbSet<DU_K_UD> Du_K_UD { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
 
@@ -108,7 +107,7 @@ namespace UNS.Models
             modelBuilder.Configurations.Add(new RawAddresConfiguration());
             modelBuilder.Configurations.Add(new OwnerRawAddressConfiguration());
             modelBuilder.Configurations.Add(new DirectorPositionConfiguration());
-            modelBuilder.Entity<AccountantGeneralPosition>().ToTable("AccountantGeneralPositions");
+            modelBuilder.Configurations.Add(new AccountantGeneralPositionConfiguration());
 
             modelBuilder.Configurations.Add(new integraDUConfiguration());
             modelBuilder.Configurations.Add(new integraDUStagesConfiguration());
@@ -120,14 +119,15 @@ namespace UNS.Models
             modelBuilder.Configurations.Add(new RoomConfiguration());
             modelBuilder.Configurations.Add(new AddressCodeConfiguration());
             modelBuilder.Configurations.Add(new AddressBaseConfiguration());
-            modelBuilder.Configurations.Add(new AddressPrevNextConfiguration());
-            modelBuilder.Configurations.Add(new AddressObject1Configuration());
-            modelBuilder.Configurations.Add(new Stead1Configuration());
-            modelBuilder.Configurations.Add(new Room1Configuration());
+            modelBuilder.Configurations.Add(new AddressStatusConfiguration());
+            modelBuilder.Configurations.Add(new AddressAOConfiguration());
+            modelBuilder.Configurations.Add(new AddressSteadConfiguration());
+            modelBuilder.Configurations.Add(new AddressHouseConfiguration());
+            modelBuilder.Configurations.Add(new AddressRoomConfiguration());
             modelBuilder.Configurations.Add(new SimplifiedLetterConfiguration());
             modelBuilder.Configurations.Add(new LocationConfiguration());
 
-            modelBuilder.Entity<PassportContent>().ToTable("PassportContents");
+            modelBuilder.Configurations.Add(new DUTechnicalCertificateConfiguration());
             modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
             modelBuilder.ComplexType<AddressOwnerFind_Result>();
             modelBuilder.Entity<AddressObjectType>()

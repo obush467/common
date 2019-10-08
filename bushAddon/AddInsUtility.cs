@@ -451,15 +451,15 @@ public class AddInUtilities : IAddInUtilities
         {
             var UNIUs = SelectByPattern();
             var passportOperator = new Passport_Word_Operator();
-            var newPassportContents = new List<PassportContent>();
-            var idu = context.IntegraDUStages.Where(w => UNIUs.Contains(w.UNIU)).ToList().Select(s => Mapper.Map<IntegraDUStages, PassportContent>(s));
+            var newPassportContents = new List<DUTechnicalCertificate>();
+            var idu = context.IntegraDUStages.Where(w => UNIUs.Contains(w.UNIU)).ToList().Select(s => Mapper.Map<IntegraDUStages, DUTechnicalCertificate>(s));
             foreach (var UNIU in UNIUs)
             {
                 var newPassportContent = idu.Where(w => w.UNIU == UNIU).FirstOrDefault();
                 newPassportContents.Add(newPassportContent);
             }
             passportOperator.Create(newPassportContents);
-            context.PassportContents.AddRange(newPassportContents);
+            context.DUTechnicalCertificates.AddRange(newPassportContents);
             context.SaveChanges();
         }
     }

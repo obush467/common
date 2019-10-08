@@ -6,7 +6,7 @@ namespace UNS.Common
     public sealed class DUTypesTable_Creator
     {
 
-        public Table Create(Range range, PassportContent integraDUExcelLayout)
+        public Table Create(Range range, DUTechnicalCertificate integraDUExcelLayout)
         { return Create(range, integraDUExcelLayout.DUType); }
         public static Table Create(Range range, string duType = null)
         {

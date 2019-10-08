@@ -10,7 +10,7 @@ using UNS.Models.Entities;
 
 namespace UNS.Common
 {
-    public class Akt_Word_Operator : Word_Operator<PassportContent>, IOutDocument<PassportContent>
+    public class Akt_Word_Operator : Word_Operator<DUTechnicalCertificate>, IOutDocument<DUTechnicalCertificate>
     {
         protected static DirectoryInfo _templateDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
         protected static DirectoryInfo _rootdir = new DirectoryInfo("\\\\NAS-D4\\integra\\DU_Files\\");
@@ -22,15 +22,15 @@ namespace UNS.Common
 
         public Akt_Word_Operator() : this(_templateDir, _rootdir)
         { }
-        public new void Create(IEnumerable<PassportContent> akts)
+        public new void Create(IEnumerable<DUTechnicalCertificate> akts)
         {
-            foreach (PassportContent integraDUExcelLayout in akts)
+            foreach (DUTechnicalCertificate integraDUExcelLayout in akts)
             {
                 Create(integraDUExcelLayout);
             }
         }
 
-        public new void Create(PassportContent integraDUExcelLayout)
+        public new void Create(DUTechnicalCertificate integraDUExcelLayout)
         {
             var flist = new List<FileInfo>();
             Hashtable hashtable = new Hashtable
@@ -98,7 +98,7 @@ namespace UNS.Common
             flist.Add(newWordFileName);
         }
 
-        public void Print(IEnumerable<PassportContent> akts)
+        public void Print(IEnumerable<DUTechnicalCertificate> akts)
         {
             foreach (var akt in akts)
             {
@@ -106,18 +106,18 @@ namespace UNS.Common
             }
         }
 
-        private void Print(PassportContent akt)
+        private void Print(DUTechnicalCertificate akt)
         {
             throw new NotImplementedException();
         }
 
 
-        public new void Print(PassportContent document, PrinterSettings printerSettings)
+        public new void Print(DUTechnicalCertificate document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }
 
-        public new void Print(IEnumerable<PassportContent> document, PrinterSettings printerSettings)
+        public new void Print(IEnumerable<DUTechnicalCertificate> document, PrinterSettings printerSettings)
         {
             throw new NotImplementedException();
         }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UNS.Models;
 using UNS.Models.Entities;
+using UNS.Models.Entities.Fias;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace UnitTestCommon
@@ -55,30 +56,78 @@ namespace UnitTestCommon
             using (var context = new UNSModel())
             {
                 var t = new DU_K_UD();
-                context.RRR.Add(t);
+                context.Du_K_UD.Add(t);
                 context.SaveChanges();
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
         [TestMethod]
-        public void DU_K_UD1()
+        public void InsertPersons()
         {
             using (var context = new UNSModel(@"data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework"))
             {
-               context.Configuration.AutoDetectChangesEnabled = true; //var t = context.AddressBases.FirstOrDefault() ;
-                var y = context.RawAddresses.FirstOrDefault();
-                y.Source=y.Source+y.Source;                
+                var y = new Person() { Family = "dfgdfgd", Patronymic = "sdfsdfsdfsdf ", Name = "sfsdfsdf" };
+                context.Persons.Add(y);
+                context.SaveChanges();
+                context.Persons.Remove(y);
                 context.SaveChanges();
             }
         }
-
         [TestMethod]
-        public void DU_K_UD2()
+        public void InsertDocument()
         {
             using (var context = new UNSModel())
             {
-                /*var t = new InstallationPlace() { Location = new UNS.Models.Entities.Address.Location() { Address = new AddressBase() } };
-                context.InstallationPlace.Add(t);
-                context.SaveChanges();*/
+                var y = new Document() { DocumentName = "sfsdfsdf" };
+                context.Set<Document>().Add(y);
+                context.SaveChanges();
+                context.Set<Document>().Remove(y);
+                context.SaveChanges();
+            }
+        }
+        [TestMethod]
+        public void InsertSimpLetters()
+        {
+            using (var context = new UNSModel())
+            {
+                var y = new SimplifiedLetter() { DocumentName= "sfsdfsdf",OutgoingDate=DateTime.Now,Recipient="ssdfsdf" };
+                context.Set<SimplifiedLetter>().Add(y);
+                context.SaveChanges();
+                context.Set<SimplifiedLetter>().Remove(y);
+                context.SaveChanges();
+            }
+        }
+        [TestMethod]
+        public void InsertAddressBase()
+        {
+            using (var context = new UNSModel())
+            {
+                var y = new AddressBase() { ID=Guid.NewGuid(),GUID= Guid.NewGuid() };
+                var y1 = new AddressBase() { ID = Guid.NewGuid(), GUID = Guid.NewGuid(),PREV=new List<AddressBase>() { y } };
+                context.Set<AddressBase>().Add(y);
+                context.SaveChanges();
+                context.Set<AddressBase>().Remove(y);
+                context.SaveChanges();
+            }
+        }
+        [TestMethod]
+        public void InsertAddressBasePrevNext()
+        {
+            using (var context = new UNSModel())
+            {
+                var prev = new AddressBase { ID = Guid.NewGuid() ,GUID =Guid.NewGuid(),CADNUM="PREV" };
+                var next = new AddressBase { ID = Guid.NewGuid() ,GUID = Guid.NewGuid(), PREV =new List<AddressBase>() { prev } ,CADNUM="NEXT"};
+                context.AddressBases.Add(prev);
+                context.AddressBases.Add(next);
+                context.SaveChanges();
+                var t=prev.NEXT.Contains(next);
+                var t1 = next.PREV.Contains(prev);
+                if (!(t || t1)) throw new Exception("ssfsfsd");
+                context.AddressBases.Remove(prev);
+                context.AddressBases.Remove(next);
+                context.SaveChanges();
             }
         }
 

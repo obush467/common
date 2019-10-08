@@ -42,7 +42,7 @@ namespace UNS.Models.Entities
     [Table("DuS")]
     public class DuS : DuU
     {
-        public new TwoFieldElement U { get; set; }
+        public TwoFieldElement U { get; set; }
     }
     [Table("DU_K_UD")]
     public class DU_K_UD : DuLB_UD
