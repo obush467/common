@@ -14,7 +14,6 @@ namespace UNS.Models
 {
     public class UNSModel : DbContext
     {
-
         public UNSModel()
             : base(@"data source=BUSHMAKIN;initial catalog=UNS;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework")
         { }
@@ -24,7 +23,7 @@ namespace UNS.Models
         public UNSModel(SqlConnection sqlConnection) : base(sqlConnection, false)
         {
         }
-
+        public virtual DbSet<AdmArea> AdmAreas { get; set; }
         public virtual DbSet<ActualStatus> ActualStatuses { get; set; }
         public virtual DbSet<AddressObjectType> AddressObjectTypes { get; set; }
         public virtual DbSet<CenterStatus> CenterStatuses { get; set; }
@@ -70,15 +69,35 @@ namespace UNS.Models
         public virtual DbSet<AddressStead> AddressSteads { get; set; }
         public virtual DbSet<AddressRoom> AddressRooms { get; set; }
         public virtual DbSet<AddressHouse> AddressHouses { get; set; }
+        public virtual DbSet<AddressCached> AddressCacheds { get; set; }
+        public virtual DbSet<AddressCachedObject> AddressCachedObjects { get; set; }
+        public virtual DbSet<AddressCachedObjectBuilding> AddressCachedObjectBuildings { get; set; }
+        public virtual DbSet<AddressCachedObjectStead> AddressCachedObjectSteads { get; set; }
         public virtual DbSet<IntegraDU_work> IntegraDU_Works { get; set; }
         public virtual DbSet<IntegraDU_work_Installation> IntegraDU_Work_Installations { get; set; }
         public virtual DbSet<DUTechnicalCertificate> DUTechnicalCertificates { get; set; }
         public virtual DbSet<SimplifiedLetter> SimplifiedLetters { get; set; }
-        public virtual DbSet<InstallationPlace> InstallationPlace {get;set;}
-        public virtual DbSet<DU_K_UD> Du_K_UD { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
+        public virtual DbSet<InstallationPlace> InstallationPlaces { get; set; }
+        public virtual DbSet<InstallationPlaceBuilding> InstallationPlaceBuildings { get; set; }
+        public virtual DbSet<ConstructionElement> ConstractionElements { get; set; }
+        public virtual DbSet<LightBoxElement> LightBoxElements { get; set; }
+        public virtual DbSet<LightBoxTwoFieldElement> LightBoxTwoFieldElements { get; set; }
+        public virtual DbSet<TwoFieldElement> TwoFieldElements { get; set; }
+        public virtual DbSet<DuU> DuUs { get; set; }
+        public virtual DbSet<DuUD> DuUDs { get; set; }
+        public virtual DbSet<DuS> DuS { get; set; }
+        public virtual DbSet<DuLB_U> DuU { get; set; }
+        public virtual DbSet<DuLB_UD> DuLB_UDs { get; set; }
+        public virtual DbSet<DuLB_S> DuLB_S { get; set; }
+        
+        public virtual DbSet<LocationBase> LocationBases { get; set; }
+        public virtual DbSet<LocationOneAddress> LocationOneAddresses { get; set; }
+        public virtual DbSet<LocationManyAddress> LocationManyAddresses { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
+        public virtual DbSet<TechProject> TechProjects { get; set; }
+        public virtual DbSet<AddressCachedObject_UNOM> UNOMs { get; set; }
 
+        #region DBFUNCTIONS
         /*[DbFunction("UNS.Models.Entities", "BTI2018_UNOM")]
         public virtual IQueryable<BTI2018_UNOM_Result> BTI2018_UNOM(int? uNOM)
         {
@@ -97,42 +116,35 @@ namespace UNS.Models
                 new ObjectParameter("UNOM", typeof(int));
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<AddressOwnerFind_Result>("UNSModel.[AddressOwnerFind](@UNOM)", uNOMParameter);
         }
-
-
+        #endregion
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Configurations.Add(new Class1());
             modelBuilder.Configurations.Add(new OrganizationConfiguration());
-            modelBuilder.Configurations.Add(new PersonPositionConfiguration());
+
             modelBuilder.Configurations.Add(new PersonConfiguration());
             modelBuilder.Configurations.Add(new RawAddresConfiguration());
             modelBuilder.Configurations.Add(new OwnerRawAddressConfiguration());
+
+            #region PositionsTypes CONFIG
+            modelBuilder.Configurations.Add(new PersonPositionConfiguration());
             modelBuilder.Configurations.Add(new DirectorPositionConfiguration());
             modelBuilder.Configurations.Add(new AccountantGeneralPositionConfiguration());
-
+            #endregion
             modelBuilder.Configurations.Add(new integraDUConfiguration());
             modelBuilder.Configurations.Add(new integraDUStagesConfiguration());
             modelBuilder.Configurations.Add(new integraDU_workConfiguration());
-
+            #region FIAS CONGIG
             modelBuilder.Configurations.Add(new SteadConfiguration());
             modelBuilder.Configurations.Add(new HouseConfiguration());
             modelBuilder.Configurations.Add(new Del_HouseConfiguration());
             modelBuilder.Configurations.Add(new RoomConfiguration());
-            modelBuilder.Configurations.Add(new AddressCodeConfiguration());
-            modelBuilder.Configurations.Add(new AddressBaseConfiguration());
-            modelBuilder.Configurations.Add(new AddressStatusConfiguration());
-            modelBuilder.Configurations.Add(new AddressAOConfiguration());
-            modelBuilder.Configurations.Add(new AddressSteadConfiguration());
-            modelBuilder.Configurations.Add(new AddressHouseConfiguration());
-            modelBuilder.Configurations.Add(new AddressRoomConfiguration());
-            modelBuilder.Configurations.Add(new SimplifiedLetterConfiguration());
-            modelBuilder.Configurations.Add(new LocationConfiguration());
+            modelBuilder.Configurations.Add(new NormativeDocumentConfiguration());
+            modelBuilder.Configurations.Add(new Del_NormativeDocumentConfiguration());
 
-            modelBuilder.Configurations.Add(new DUTechnicalCertificateConfiguration());
-            modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
-            modelBuilder.ComplexType<AddressOwnerFind_Result>();
             modelBuilder.Entity<AddressObjectType>()
-                .Property(e => e.KOD_T_ST)
-                .IsUnicode(false);
+            .Property(e => e.KOD_T_ST)
+            .IsUnicode(false);
             modelBuilder.Entity<CenterStatus>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
@@ -163,15 +175,7 @@ namespace UNS.Models
             modelBuilder.Entity<Landmark>()
                 .Property(e => e.OKATO)
                 .IsUnicode(false);
-            modelBuilder.Entity<NormativeDocument>()
-                .Property(e => e.DOCNAME)
-                .IsUnicode(false);
-            modelBuilder.Entity<NormativeDocument>()
-                .Property(e => e.DOCNUM)
-                .IsUnicode(false);
-            modelBuilder.Entity<NormativeDocument>()
-                .HasOptional(e => e.NormativeDocument1)
-                .WithRequired(e => e.NormativeDocument2);
+
             modelBuilder.Entity<NormativeDocumentType>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
@@ -184,6 +188,34 @@ namespace UNS.Models
             modelBuilder.Entity<OperationStatus>()
                 .Property(e => e.NAME)
                 .IsUnicode(false);
+            #endregion
+            #region New FIAS CONFIG
+            modelBuilder.Configurations.Add(new AddressCodeConfiguration());                       
+            modelBuilder.Configurations.Add(new AddressStatusConfiguration());
+            modelBuilder.Configurations.Add(new AddressBaseConfiguration());
+            modelBuilder.Configurations.Add(new AddressAOConfiguration());
+            modelBuilder.Configurations.Add(new AddressSteadConfiguration());
+            modelBuilder.Configurations.Add(new AddressHouseConfiguration());
+            modelBuilder.Configurations.Add(new AddressRoomConfiguration());
+            modelBuilder.Configurations.Add(new SimplifiedLetterConfiguration());
+            modelBuilder.Configurations.Add(new LocationBaseConfiguration());
+            modelBuilder.Configurations.Add(new LocationOneAddressConfiguration());
+            modelBuilder.Configurations.Add(new LocationManyAddressConfiguration());
+            #endregion
+            #region Address CONFIG
+            modelBuilder.Configurations.Add(new AddressCahedConfiguration());
+            modelBuilder.Configurations.Add(new AddressCachedObjectConfiguration());
+            modelBuilder.Configurations.Add(new AddressCachedObjectBuildingConfiguration());
+            modelBuilder.Configurations.Add(new AddressCachedObjectSteadConfiguration());
+            modelBuilder.Configurations.Add(new UNOM_ItemConfiguration());
+            #endregion
+            modelBuilder.Configurations.Add(new DUTechnicalCertificateConfiguration());
+            modelBuilder.Conventions.Add(new FunctionsConvention<UNSModel>("dbo"));
+            modelBuilder.ComplexType<AddressOwnerFind_Result>();
+
+            modelBuilder.Configurations.Add(new InstallationPlaceConfiguration());
+            modelBuilder.Configurations.Add(new InstallationPlaceBuildingConfiguration());
+            modelBuilder.Configurations.Add(new LightingEquipmentConfiguration());
         }
     }
 }

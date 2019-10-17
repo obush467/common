@@ -23,9 +23,9 @@ namespace UNS.Models.Models.Configuration
             m.ToTable("AddressBase_PrevNext", "fias");
             m.MapLeftKey("NEXTID");
             m.MapRightKey("PREVID");
-        });
-            HasOptional(o => o.AddressCode).WithOptionalDependent(o => o.AddressBase);
-            HasOptional(o => o.AddressStatus).WithOptionalDependent(o => o.AddressBase);
+        });           
+            HasOptional(o => o.Code).WithRequired(o=>o.Address).WillCascadeOnDelete();
+            HasOptional(o => o.RootStatus).WithRequired(o => o.Base).WillCascadeOnDelete();
         }
     }
     }

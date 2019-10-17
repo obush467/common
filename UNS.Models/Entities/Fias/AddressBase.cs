@@ -20,9 +20,10 @@ namespace UNS.Models.Entities.Fias
         public string POSTALCODE { get; set; }
         [StringLength(100)]
         public string CADNUM { get; set; }
-        public virtual AddressCode AddressCode { get; set; }
+        public virtual AddressCode Code { get; set; }
         public ICollection<AddressBase> PREV { get; set; }
         public ICollection<AddressBase> NEXT { get; set; }
-        public AddressStatus AddressStatus { get; set; }
+        //public virtual AddressStatus RootStatus { get; set; }
+        public virtual AddressStatus RootStatus { get; set; }
     }
 }

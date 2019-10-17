@@ -27,7 +27,7 @@ public class AddInUtilities : IAddInUtilities
         DateSeparator = "-",
         TimeSeparator = "-+"
     };
-    public IMapper Mapper = new MapperConfiguration(cfg => cfg.AddProfile<PassportContent_DUStages>()).CreateMapper();
+    public IMapper Mapper = new MapperConfiguration(cfg => cfg.AddProfile<DUTechnicalCertificate_DUStages>()).CreateMapper();
     readonly DirectoryInfo rootletters = new DirectoryInfo("\\\\NAS-D4\\integra\\Письма\\");
     readonly DirectoryInfo templatesDir = new DirectoryInfo("\\\\NAS-D4\\integra\\Шаблоны\\");
     private string _lettersTemplate = "Адреса в письмо2.xltx";
@@ -527,7 +527,7 @@ public class AddInUtilities : IAddInUtilities
         }
         return result;
     }
-    public List<UNS.Models.Entities.IntegraDU> ReestrSheet1()
+    public List<IntegraDU> ReestrSheet1()
     {
         Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
         EnableCalculations(false);

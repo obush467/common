@@ -8,7 +8,7 @@ namespace UNS.Models.Entities
 
     public class AddressCode
     {
-        public Guid ID { get; set; }
+        public Guid AddressCodeID { get; set; }
         [StringLength(4)]
         public string IFNSFL { get; set; }
 
@@ -22,6 +22,6 @@ namespace UNS.Models.Entities
         public string OKTMO { get; set; }
 
         public int DIVTYPE { get; set; }
-        public virtual AddressBase AddressBase { get; set; }
+        public virtual AddressBase Address { get; set; }
     }
 }

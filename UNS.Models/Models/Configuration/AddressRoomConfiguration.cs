@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity.ModelConfiguration;
 using UNS.Models.Entities;
+using UNS.Models.Entities.Fias;
 
 namespace UNS.Models.Models.Configuration
 {

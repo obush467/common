@@ -11,7 +11,7 @@ namespace UnitTestCommon
         public void ExportToPDF()
         {
             PPT_Operator pptoperator = new PPT_Operator();
-            var files = (new DirectoryInfo("C:\\Temp\\Заявка №4 для подрядчика")).GetFiles("*дислокация*", SearchOption.AllDirectories);
+            var files = (new DirectoryInfo("C:\\Temp\\1")).GetFiles("*дислокация*", SearchOption.AllDirectories);
             foreach (var file in files) pptoperator.ExportToPDF(file);
         }
     }

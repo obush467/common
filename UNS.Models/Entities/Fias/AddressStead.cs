@@ -13,8 +13,6 @@ namespace UNS.Models.Entities.Fias
             [StringLength(120)]
             public string NUMBER { get; set; }
             public int? COUNTER { get; set; }
-            //public virtual AddressPrevNext PrevNext { get; set; }
-
         }
     }
 

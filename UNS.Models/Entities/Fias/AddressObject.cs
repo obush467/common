@@ -66,7 +66,7 @@ namespace UNS.Models.Entities
         [StringLength(11)]
         public string OKTMO { get; set; }
 
-        [Column(TypeName = "datetime2")]
+        [Column(TypeName = "date")]
         public DateTime? UPDATEDATE { get; set; }
 
         [StringLength(10)]
@@ -96,10 +96,10 @@ namespace UNS.Models.Entities
 
         public int? CURRSTATUS { get; set; }
 
-        [Column(TypeName = "datetime2")]
+        [Column(TypeName = "date")]
         public DateTime? STARTDATE { get; set; }
 
-        [Column(TypeName = "datetime2")]
+        [Column(TypeName = "date")]
         public DateTime? ENDDATE { get; set; }
 
         public Guid? NORMDOC { get; set; }

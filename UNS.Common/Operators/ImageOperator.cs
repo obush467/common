@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace UNS.Common.Operators
 {
@@ -46,40 +47,40 @@ namespace UNS.Common.Operators
             var result = new List<FileInfo>();
             var inputDirUri = inputDir.FullName;
             var outputDirUri = outputDir.FullName;
-            foreach (var number in numbers)
-            {
-                var inputNumberuri = Path.Combine(inputDirUri, number);
-                var outputNumberuri = Path.Combine(outputDirUri, number);
-                foreach (var subdir in inputsubdirs)
-                {
-                    var inputSubdiruri = Path.Combine(inputNumberuri, subdir);
-                    var outputSubdiruri = copyToSubdirs ? Path.Combine(outputNumberuri, subdir) : outputNumberuri;
-                    var findfiles = new DirectoryInfo(inputSubdiruri).GetFiles().Where(w => Extensions.Contains(w.Extension.ToLower()));
-                    if (findfiles != null && findfiles.Any())
-                    {
-                        foreach (var file in findfiles)
-                        {
-                            var md5 = CalculateMD5(file.FullName);
-                            var newFileName = renameBySubdirs
-                                ? renameBySubdirs
-                                    ? Path.Combine(outputSubdiruri, String.Join("_", number, subdir, md5) + file.Extension)
-                                    : Path.Combine(outputSubdiruri, String.Join("_", number, md5) + file.Extension)
-                                : renameBySubdirs
-                                    ? Path.Combine(outputNumberuri, String.Join("_", number, subdir, md5) + file.Extension)
-                                    : Path.Combine(outputNumberuri, String.Join("_", number, md5) + file.Extension);
-                            var wdir = (new FileInfo(newFileName)).Directory;
-                            if (!wdir.Exists)
-                            {
-                                wdir.Create();
-                            };
-                            if (withOverlayText)
-                            { UpdateImage(file, new FileInfo(newFileName), number); }
-                            else { file.CopyTo(newFileName); }
-                            result.Add(new FileInfo(newFileName));
-                        }
-                    }
-                }
-            }
+            Parallel.ForEach(numbers, number =>
+           {
+               var inputNumberuri = Path.Combine(inputDirUri, number);
+               var outputNumberuri = Path.Combine(outputDirUri, number);
+               foreach (var subdir in inputsubdirs)
+               {
+                   var inputSubdiruri = Path.Combine(inputNumberuri, subdir);
+                   var outputSubdiruri = copyToSubdirs ? Path.Combine(outputNumberuri, subdir) : outputNumberuri;
+                   var findfiles = new DirectoryInfo(inputSubdiruri).GetFiles().Where(w => Extensions.Contains(w.Extension.ToLower()));
+                   if (findfiles != null && findfiles.Any())
+                   {
+                       Parallel.ForEach(findfiles, file =>
+                      {
+                          var md5 = CalculateMD5(file.FullName);
+                          var newFileName = renameBySubdirs
+                              ? renameBySubdirs
+                                  ? Path.Combine(outputSubdiruri, String.Join("_", number, subdir, md5) + file.Extension)
+                                  : Path.Combine(outputSubdiruri, String.Join("_", number, md5) + file.Extension)
+                              : renameBySubdirs
+                                  ? Path.Combine(outputNumberuri, String.Join("_", number, subdir, md5) + file.Extension)
+                                  : Path.Combine(outputNumberuri, String.Join("_", number, md5) + file.Extension);
+                          var wdir = (new FileInfo(newFileName)).Directory;
+                          if (!wdir.Exists)
+                          {
+                              wdir.Create();
+                          };
+                          if (withOverlayText)
+                          { UpdateImage(file, new FileInfo(newFileName), number); }
+                          else { file.CopyTo(newFileName); }
+                          result.Add(new FileInfo(newFileName));
+                      });
+                   }
+               }
+           });
             return result;
         }
         public void UpdateImage(FileInfo inputfile, DirectoryInfo outputDir)

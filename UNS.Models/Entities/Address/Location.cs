@@ -9,15 +9,25 @@ using System.Threading.Tasks;
 
 namespace UNS.Models.Entities.Address
 {
-    public class Location
+    public class LocationBase
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid LocationID { get; set; }
+        public Guid LocationBaseID { get; set; }
         public DbGeography WGS84 { get; set; }
+        public DbGeography PZ90 { get; set; }
         public DbGeometry EGKO { get; set; }
         public DbGeometry MGGT { get; set; }
-        //public AdmArea AdmArea { get; set; }
-        //public AddressBase Address { get; set; }
+        public string ClarificationOfLocation { get; set; }
+        public Nullable<Guid> AdmAreaID { get; set; }
+        public virtual AdmArea AdministrativeArea { get; set; }
+        public byte[] TS { get; set; }
+    }
+    public class LocationOneAddress:LocationBase
+    {
+        public Guid AddressID { get; set; }
+        public virtual AddressCached Address { get; set; }
+    }
+    public class LocationManyAddress : LocationBase
+    {
+        public virtual ICollection<AddressCached> Addresses { get; set; }
     }
 }

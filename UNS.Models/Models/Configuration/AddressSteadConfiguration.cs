@@ -9,9 +9,9 @@ namespace UNS.Models.Models.Configuration
     {
         public AddressSteadConfiguration() : base()
         {
-            ToTable("AddressStead", "fias")
-                .HasKey(e => e.ID)
-                .Property(e => e.ID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
+            ToTable("AddressStead", "fias");
+                //.HasKey(e => e.ID)
+                //.Property(e => e.ID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
             //HasOptional(s => s.AddressCode).WithOptionalPrincipal(s=>(Stead1)s.AddressBase);
         }
     }

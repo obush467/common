@@ -9,7 +9,8 @@ namespace UNS.Models.Models.Configuration
         public AddressCodeConfiguration() : base()
         {
             ToTable("AddressCodes", "fias");
-            HasKey(s => s.ID).Property(p => p.ID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            HasKey(s => s.AddressCodeID).Property(p=>p.AddressCodeID);
+            //HasRequired(d => d.Address).WithOptional();
         }
     }
 }
