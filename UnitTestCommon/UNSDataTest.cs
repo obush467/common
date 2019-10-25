@@ -512,14 +512,7 @@ namespace UnitTestCommon
                 context.SaveChanges();
             }
         }
-        [TestMethod]
-        public void aaa()
-        {
-            using (var context = new UNSModel())
-            {
-                var oo=context.AddressOwnerFind(445588);
-            }
-        }
+
         [TestMethod]
         public void ConvertFiasToFIas()
         {

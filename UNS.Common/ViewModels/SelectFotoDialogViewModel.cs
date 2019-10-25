@@ -36,7 +36,7 @@ namespace UNS.Common.ViewModels
         public bool OverlayText { get; set; } = true;
         protected virtual IFolderBrowserDialogService FolderBrowserDialogService { get { return this.GetService<IFolderBrowserDialogService>(); } }
         public virtual ICurrentWindowService WindowService { get { return null; } }
-        public ISplashScreenService splashScreenService { get { return this.GetService<ISplashScreenService>(); } }
+        public ISplashScreenService SplashScreenService { get { return this.GetService<ISplashScreenService>(); } }
         public List<string> UNIUs { get; set; }
         public DirectoryInfo SourceDir { get; private set; }
         #endregion
@@ -67,9 +67,9 @@ namespace UNS.Common.ViewModels
             if (RepairsFolder) dirList.Add("Фото_ремонта");
             if (LightFolder) dirList.Add("Фото_свет");
             WindowService.Hide();
-            splashScreenService.ShowSplashScreen();
+            SplashScreenService.ShowSplashScreen();
             ii.CopyByNumbers(SourceDir, destinationDir, UNIUs, dirList, RenameToSubdirs, CopyToSubdirs, OverlayText);
-            splashScreenService.HideSplashScreen();
+            SplashScreenService.HideSplashScreen();
             WindowService.Close();
         }
         public virtual bool CanCopy() { return !string.IsNullOrEmpty(ResultPath) && (UnInstallationFolder || InstallationFolder || RepairsFolder || LightFolder || ConnectionFolder) ? true : false; }
