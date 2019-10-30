@@ -3,7 +3,7 @@ using Microsoft.Office.Interop.Excel;
 using System;
 using UNS.Models.Entities;
 
-namespace bushAddon
+namespace UNS.Common
 {
     public class IntConverter : IValueConverter<Range, int?>
     {

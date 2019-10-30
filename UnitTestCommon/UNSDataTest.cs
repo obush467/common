@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using bushAddon;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,8 @@ using UNS.Models.Entities.Address;
 using UNS.Models.Entities.Fias;
 using UNS.Models.Mappers;
 using Excel = Microsoft.Office.Interop.Excel;
+using UNS.Common;
+
 
 namespace UnitTestCommon
 {

@@ -15,13 +15,13 @@ namespace UNS.Common.Operators
         readonly List<string> Extensions = new List<string>() { ".bmp", ".emf", "exif", ".gif", ".icon", ".jpg", ".jpeg", ".png", ".tif", ".tiff", ".wmf" };
         static string CalculateMD5(string filename)
         {
-            using var stream = File.OpenRead(filename);
+            var stream = File.OpenRead(filename);
             return CalculateMD5(stream);
         }
 
         static string CalculateMD5(Stream stream)
         {
-            using var md5 = MD5.Create();
+            var md5 = MD5.Create();
             var hash = md5.ComputeHash(stream);
             return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
         }
@@ -132,7 +132,7 @@ namespace UNS.Common.Operators
         public Image OverlayTextOnImage(Image input, string text)
         {
             var image = (Image)input.Clone();
-            using Graphics g = Graphics.FromImage(image);
+            Graphics g = Graphics.FromImage(image);
             RectangleF drawRect = new RectangleF(0, image.Height - image.Height / 10, image.Width, image.Height / 10);
             Font drawFont = new Font("Verdana", image.Height / 30);
             SolidBrush drawBrush = new SolidBrush(Color.White);
@@ -184,7 +184,7 @@ namespace UNS.Common.Operators
                     newWidth,
                     newHeight);
             }
-            using var printDoc = new PrintDocument
+            var printDoc = new PrintDocument
             {
                 DefaultPageSettings = pageSettings
             };

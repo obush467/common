@@ -212,9 +212,7 @@
   -->
   <ItemGroup>
     <Compile Include="AddInsUtility.cs" />
-    <Compile Include="DUExcel_Range_MapProfile.cs" />
     <Compile Include="Entities\integraHouses.cs" />
-    <Compile Include="ExcelLoader.cs" />
     <Compile Include="Interfaces\IAddInUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

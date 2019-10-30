@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
-using bushAddon;
 using Microsoft.Office.Interop.Excel;
 using System.Collections.Generic;
 using System.Linq;
 using UNS.Common.Entities;
 using UNS.Models.Entities;
 
-namespace UNS.Models
+namespace UNS.Common
 {
     public class ExcelLoader
     {
         private IMapper Mapper = (new MapperConfiguration(cfg => { cfg.AddProfile<DUExcel_Range_MapProfile>(); }).CreateMapper());
         public List<IntegraDUExcel> Rows { get; set; } = new List<IntegraDUExcel>();
-        public List<IntegraHouses> Houses { get; set; } = new List<IntegraHouses>();
+        public ICollection<IntegraHouses> Houses { get; set; } = new List<IntegraHouses>();
         protected Application _application { get; set; }
         /// <summary>
         /// 
@@ -51,15 +50,15 @@ namespace UNS.Models
 
         }
 
-        public List<Entities.IntegraDU> MapRows(Worksheet worksheet)
+        public List<IntegraDU> MapRows(Worksheet worksheet)
         {
 
             worksheet.EnableCalculation = false;
             Range wr = worksheet.Range["2:3002"];//.CurrentRegion;
-            var result = new List<Entities.IntegraDU>();
+            var result = new List<IntegraDU>();
             foreach (Range row in wr.Rows)
             {
-                var t = Mapper.Map<Range, Entities.IntegraDU>(row);
+                var t = Mapper.Map<Range, IntegraDU>(row);
                 result.Add(t);
             }
             worksheet.EnableCalculation = true;
@@ -67,7 +66,7 @@ namespace UNS.Models
 
         }
 
-        public void MapRows(List<Entities.IntegraDU> sources, Worksheet destination)
+        public void MapRows(List<IntegraDU> sources, Worksheet destination)
         {
             Range wr = destination.Range["2:3002"];
             destination.EnableCalculation = false;
@@ -80,7 +79,7 @@ namespace UNS.Models
                      select new { l11.UNIU, l11.row, source };
             foreach (var row in l2)
             {
-                var t = this.Mapper.Map<Entities.IntegraDU, Range>(row.source, row.row);
+                var t = this.Mapper.Map<IntegraDU, Range>(row.source, row.row);
             }
             destination.EnableCalculation = true;
         }

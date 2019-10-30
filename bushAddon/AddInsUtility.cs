@@ -278,14 +278,16 @@ public class AddInUtilities : IAddInUtilities
             EnableCalculations(false);
             List<IntegraDUExcel> integraDUs = ReestrSheet();
             integraDUs.Remove(integraDUs[0]);
-            List<IntegraDUExcel> hasUNOMs =
+            var hasUNOMs =
                 (from integraDU in integraDUs
+                 join stage in context.IntegraDUStages
+                 on integraDU.UNIU equals stage.UNIU
                  where integraDU.IntoProductionDate == null
                  //&& integraDU.CoordinationDate == null
                  //&& integraDU.LetterOutNumber == null
                  && integraDU.HouseOwner == null
-                 select integraDU).ToList();
-            foreach (IntegraDUExcel destRow in hasUNOMs)
+                 select new { integraDU, stage.UNOM }).ToList();
+            foreach (var destRow in hasUNOMs)
             {
                 try
                 {
@@ -294,10 +296,10 @@ public class AddInUtilities : IAddInUtilities
                     if (AddressOwners.Any())
                     {
                         AddressOwnerFind_Result AddressOwner = AddressOwners.Single();
-                        if (AddressOwner.ShortName != null) destRow.HouseOwner = AddressOwner.ShortName;
-                        if (AddressOwner.ChiefName != null) destRow.Director = AddressOwner.ChiefName;
-                        if (AddressOwner.ChiefPosition != null) destRow.DirectorPosition = AddressOwner.ChiefPosition;
-                        if (AddressOwner.Contacts != null) destRow.Contacts = AddressOwner.Contacts;
+                        if (AddressOwner.ShortName != null) destRow.integraDU.HouseOwner = AddressOwner.ShortName;
+                        if (AddressOwner.ChiefName != null) destRow.integraDU.Director = AddressOwner.ChiefName;
+                        if (AddressOwner.ChiefPosition != null) destRow.integraDU.DirectorPosition = AddressOwner.ChiefPosition;
+                        if (AddressOwner.Contacts != null) destRow.integraDU.Contacts = AddressOwner.Contacts;
                     }
                 }
                 catch (FormatException)
@@ -420,21 +422,17 @@ public class AddInUtilities : IAddInUtilities
             EnableCalculations(false);
             List<IntegraDUExcel> integraDUs = ReestrSheet();
             integraDUs.Remove(integraDUs[0]);
-            List<IntegraDUExcel> hasUNOMs =
-                (from integraDU in integraDUs
-                 where integraDU.BTIwallType == null
-                 select integraDU).ToList();
-            foreach (IntegraDUExcel destRow in hasUNOMs)
+            var hasUNOMs =
+                    (from integraDU in integraDUs
+                        join stage in context.IntegraDU
+                        on integraDU.UNIU equals stage.UNIU
+                        select new {integraDU, stage }).ToList();
+            foreach (var destRow in hasUNOMs)
             {
                 try
                 {
-                    int unom = int.Parse(destRow.UNOM.ToString());
-                    var query = new List<BTI2018_UNOM_Result>();// (from bti in context.BTI2018_UNOM(unom) select bti).ToList();
-                    if (query.Any())
-                    {
-                        destRow.BTIwallType = query.FirstOrDefault().Material;
-                        destRow.BTIdestination = query.FirstOrDefault().Purpose;
-                    }
+                        destRow.integraDU.BTIwallType =destRow.stage.BTIWallType;
+                        destRow.integraDU.BTIdestination =destRow.stage.BTITarget;
                 }
                 catch (Exception)
                 { }
@@ -476,7 +474,7 @@ public class AddInUtilities : IAddInUtilities
                 orderby row.AddressObject, row.AddressHouse
                 select row).ToList();
     }
-    private List<IntegraHouses> HouseSheet()
+    private List<UNS.Common.Entities.IntegraHouses> HouseSheet()
     {
         Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
         EnableCalculations(false);
