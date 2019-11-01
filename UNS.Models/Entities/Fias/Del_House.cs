@@ -28,7 +28,7 @@ namespace UNS.Models.Entities
         [StringLength(11)]
         public string OKTMO { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime? UPDATEDATE { get; set; }
 
         [StringLength(20)]

@@ -25,7 +25,7 @@ namespace UNS.Models.Entities
         [StringLength(6)]
         public string POSTALCODE { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime UPDATEDATE { get; set; }
 
         public Guid HOUSEGUID { get; set; }
@@ -35,10 +35,10 @@ namespace UNS.Models.Entities
 
         public Guid? NEXTID { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime STARTDATE { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime ENDDATE { get; set; }
 
         public bool LIVESTATUS { get; set; }

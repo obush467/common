@@ -600,6 +600,10 @@
     <Compile Include="Migrations\201910161229369_695.Designer.cs">
       <DependentUpon>201910161229369_695.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201910310837081_696.cs" />
+    <Compile Include="Migrations\201910310837081_696.Designer.cs">
+      <DependentUpon>201910310837081_696.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Configuration\AddressHouseConfiguration.cs" />
     <Compile Include="Models\Configuration\AccountantGeneralPositionConfiguration.cs" />
     <Compile Include="Models\Configuration\integraDUStagesConfiguration.cs" />
@@ -1406,6 +1410,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910161229369_695.resx">
       <DependentUpon>201910161229369_695.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201910310837081_696.resx">
+      <DependentUpon>201910310837081_696.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

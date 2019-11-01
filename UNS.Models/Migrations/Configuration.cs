@@ -8,7 +8,7 @@ namespace UNS.Models.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-
+            CommandTimeout = 100000000;
         }
 
         protected override void Seed(UNSModel context)

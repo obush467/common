@@ -28,7 +28,7 @@ namespace UNS.Models.Entities
         [StringLength(11)]
         public string OKTMO { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime? UPDATEDATE { get; set; }
 
         [StringLength(20)]
@@ -48,10 +48,10 @@ namespace UNS.Models.Entities
 
         public Guid? AOGUID { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime STARTDATE { get; set; }
 
-        [Column(TypeName = "smalldatetime")]
+        [Column(TypeName = "date")]
         public DateTime ENDDATE { get; set; }
 
         public int? STATSTATUS { get; set; }

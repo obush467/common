@@ -11,7 +11,7 @@ namespace UNS.Models.Entities
 
         [StringLength(500)]
         public string DOCNAME { get; set; }
-
+        [Column(TypeName = "date")]
         public DateTime? DOCDATE { get; set; }
 
         [StringLength(20)]
