@@ -17,7 +17,7 @@ namespace UNS.Models.Entities.Address
         public DbGeometry EGKO { get; set; }
         public DbGeometry MGGT { get; set; }
         public string ClarificationOfLocation { get; set; }
-        public Nullable<Guid> AdmAreaID { get; set; }
+        public Guid? AdmAreaID { get; set; }
         public virtual AdmArea AdministrativeArea { get; set; }
         public byte[] TS { get; set; }
     }

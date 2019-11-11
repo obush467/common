@@ -83,6 +83,6 @@ namespace UNS.Models.Entities
         public string EGKO_Y { get; set; }
         public Organization Organization { get; set; }
         public ICollection<IntegraDU_work> IntegraDU_Works { get; set; }
-        public Nullable<DateTime> PaidDate { get; set; }
+        public DateTime? PaidDate { get; set; }
     }
 }

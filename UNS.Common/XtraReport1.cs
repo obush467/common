@@ -6,7 +6,7 @@ using DevExpress.XtraReports.UI;
 
 namespace UNS.Common
 {
-    public partial class XtraReport1 : DevExpress.XtraReports.UI.XtraReport
+    public partial class XtraReport1 : XtraReport
     {
         public XtraReport1()
         {

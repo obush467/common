@@ -46,7 +46,7 @@ namespace UNS.Models.Entities.Address
         public AddressCachedObjectConfiguration()
         {
             ToTable("AddressCachedObject","address");
-            HasOptional<AdmArea>(o => o.AdmArea).WithMany().HasForeignKey(fk => fk.AdmAreaId);
+            HasOptional(o => o.AdmArea).WithMany().HasForeignKey(fk => fk.AdmAreaId);
             Property(p => p.CADNUM).IsOptional().HasMaxLength(50);
             //Property(p => p.UNOM).IsOptional();
         }

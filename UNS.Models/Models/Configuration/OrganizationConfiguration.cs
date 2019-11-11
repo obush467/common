@@ -13,7 +13,7 @@ namespace UNS.Models.Configuration
                 .Property(p => p.Id)
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             HasOptional(p => p.OrganizationType);
-            HasMany<PhoneItem>(m => m.PhoneItems).WithMany()
+            HasMany(m => m.PhoneItems).WithMany()
             .Map(m =>
             {
                 m.ToTable("Organizations_Phones");
@@ -21,14 +21,14 @@ namespace UNS.Models.Configuration
                 m.MapRightKey("PhoneItem_ID");
             });
 
-            HasMany<FaxItem>(m => m.FaxItems).WithMany()
+            HasMany(m => m.FaxItems).WithMany()
                     .Map(m =>
                     {
                         m.ToTable("Organizations_Faxes");
                         m.MapLeftKey("Organization_ID");
                         m.MapRightKey("FaxItem_ID");
                     });
-            HasMany<EmailItem>(m => m.EmailItems).WithMany()
+            HasMany(m => m.EmailItems).WithMany()
                     .Map(m =>
                     {
                         m.ToTable("Organizations_Emails");

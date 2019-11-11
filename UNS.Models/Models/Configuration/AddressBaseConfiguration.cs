@@ -10,14 +10,14 @@ namespace UNS.Models.Models.Configuration
         {
             ToTable("AddressBases", "fias");
             HasKey(h => h.ID).Property(p => p.ID).HasDatabaseGeneratedOption(System.ComponentModel.DataAnnotations.Schema.DatabaseGeneratedOption.None);
-            HasMany<AddressBase>(m => m.NEXT).WithMany()
+            HasMany(m => m.NEXT).WithMany()
         .Map(m =>
         {
             m.ToTable("AddressBase_PrevNext","fias");
             m.MapLeftKey("PREVID");
             m.MapRightKey("NEXTID");
         });
-            HasMany<AddressBase>(m => m.PREV).WithMany(w=>w.NEXT)
+            HasMany(m => m.PREV).WithMany(w=>w.NEXT)
         .Map(m =>
         {
             m.ToTable("AddressBase_PrevNext", "fias");

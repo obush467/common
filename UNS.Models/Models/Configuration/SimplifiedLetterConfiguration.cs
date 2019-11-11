@@ -8,7 +8,7 @@ namespace UNS.Models.Configuration
         public SimplifiedLetterConfiguration() : base()
         {
             ToTable("SimplifiedLetter");
-            HasMany<IntegraDUStages>(m => m.IntegraDUStages).WithMany()
+            HasMany(m => m.IntegraDUStages).WithMany()
                 .Map(m =>
                 {
                     m.ToTable("SimplifiedLetter_IntegraDUStages");

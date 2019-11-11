@@ -9,7 +9,7 @@ namespace UNS.Models.Models.Configuration
         {
             ToTable("OwnerRawAddress");
             //HasKey(p => p.ID).HasRequired(p=>p.RawAddress).WithRequiredDependent(p=>p.OwnerRawAddress);//.WithRequiredDependent().WillCascadeOnDelete();
-            HasRequired<Organization>(r => r.Organization)
+            HasRequired(r => r.Organization)
                 .WithMany(k => k.OwnerRawAddresses)
                 .HasForeignKey(p => p.Organization_Id).WillCascadeOnDelete();
         }

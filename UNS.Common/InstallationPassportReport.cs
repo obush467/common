@@ -6,7 +6,7 @@ using DevExpress.XtraReports.UI;
 
 namespace UNS.Common
 {
-    public partial class InstallationPassportReport : DevExpress.XtraReports.UI.XtraReport
+    public partial class InstallationPassportReport : XtraReport
     {
         public InstallationPassportReport()
         {

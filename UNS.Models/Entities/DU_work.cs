@@ -7,10 +7,10 @@ namespace UNS.Models.Entities
     {
         public Guid integraDU_workID { get; set; }
         public Guid IntegraDU_ID { get; set; }
-        public Nullable<DateTime> DateIssue { get; set; }
-        public Nullable<DateTime> DateСompletion { get; set; }
-        public Nullable<DateTime> DateReceiptFoto { get; set; }
-        public Nullable<DateTime> DateVerificationFoto { get; set; }
+        public DateTime? DateIssue { get; set; }
+        public DateTime? DateСompletion { get; set; }
+        public DateTime? DateReceiptFoto { get; set; }
+        public DateTime? DateVerificationFoto { get; set; }
         public Person Worker { get; set; }
         public Person Checker { get; set; }
         [MaxLength(100)]
@@ -23,8 +23,8 @@ namespace UNS.Models.Entities
     { }
     public class IntegraDU_work_Connection : IntegraDU_work
     {
-        public Nullable<DateTime> DateLightCheck { get; set; }
-        public Nullable<DateTime> DateLightCheckReceiptFoto { get; set; }
-        public Nullable<DateTime> DateLightCheckVerificationFoto { get; set; }
+        public DateTime? DateLightCheck { get; set; }
+        public DateTime? DateLightCheckReceiptFoto { get; set; }
+        public DateTime? DateLightCheckVerificationFoto { get; set; }
     }
 }

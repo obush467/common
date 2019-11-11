@@ -64,6 +64,8 @@
             this.button_PrintProdactionComplects = this.Factory.CreateRibbonButton();
             this.printDialogDUAddon = new System.Windows.Forms.PrintDialog();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.button_UpdateStatus = this.Factory.CreateRibbonButton();
+            this.button_UpdateUNOM = this.Factory.CreateRibbonButton();
             this.tabSogl.SuspendLayout();
             this.group1.SuspendLayout();
             this.buttonGroup1.SuspendLayout();
@@ -137,6 +139,8 @@
             this.group4.Items.Add(this.button4);
             this.group4.Items.Add(this.button6);
             this.group4.Items.Add(this.button_UpdateBTI);
+            this.group4.Items.Add(this.button_UpdateStatus);
+            this.group4.Items.Add(this.button_UpdateUNOM);
             this.group4.Label = "БД";
             this.group4.Name = "group4";
             // 
@@ -264,6 +268,18 @@
             // 
             this.printDialogDUAddon.UseEXDialog = true;
             // 
+            // button_UpdateStatus
+            // 
+            this.button_UpdateStatus.Label = "Перенести статус";
+            this.button_UpdateStatus.Name = "button_UpdateStatus";
+            this.button_UpdateStatus.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_UpdateStatus_Click);
+            // 
+            // button_UpdateUNOM
+            // 
+            this.button_UpdateUNOM.Label = "Перенести UNOM";
+            this.button_UpdateUNOM.Name = "button_UpdateUNOM";
+            this.button_UpdateUNOM.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button_UpdateUNOM_Click);
+            // 
             // Ribbon1
             // 
             this.Name = "Ribbon1";
@@ -324,6 +340,8 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button_InstallationPassport;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group2;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnCopyPhotos;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_UpdateStatus;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton button_UpdateUNOM;
     }
 
     partial class ThisRibbonCollection

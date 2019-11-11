@@ -48,7 +48,7 @@ namespace UNS.Models.Entities
         public string UNIU { get; set; }
 
 
-        public Nullable<DateTime> Annul { get; set; }
+        public DateTime? Annul { get; set; }
         [MaxLength(4000)]
         public string AnnulComment { get; set; }
 

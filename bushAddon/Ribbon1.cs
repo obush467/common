@@ -106,5 +106,15 @@ namespace bushAddon
         {
             Globals.ThisAddIn.utilities.CopyFoto();
         }
+
+        private void button_UpdateStatus_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.utilities.UpdateStatusInstallation();
+        }
+
+        private void button_UpdateUNOM_Click(object sender, RibbonControlEventArgs e)
+        {
+            Globals.ThisAddIn.utilities.UpdateUNOM();
+        }
     }
 }

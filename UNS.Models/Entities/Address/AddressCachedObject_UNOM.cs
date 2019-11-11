@@ -19,7 +19,7 @@ namespace UNS.Models.Entities.Address
         {
             ToTable("AddressCachedObject_UNOM", "address");
             HasKey(k => k.UNOM_ItemID).Property(p => p.UNOM_ItemID).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-            HasOptional<AdmArea>(o => o.AdmArea).WithMany().HasForeignKey(fk => fk.AdmAreaId);
+            HasOptional(o => o.AdmArea).WithMany().HasForeignKey(fk => fk.AdmAreaId);
             Property(p => p.UNOM).IsRequired();
         }
     }

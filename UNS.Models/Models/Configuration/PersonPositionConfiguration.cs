@@ -16,21 +16,21 @@ namespace UNS.Models.Configuration
             //HasOptional(p => p.Phones);
             //HasOptional(p => p.Faxes);
             //HasOptional(p => p.Emails);
-            HasMany<PhoneItem>(m => m.Phones).WithMany()
+            HasMany(m => m.Phones).WithMany()
                 .Map(m =>
                 {
                     m.ToTable("PersonPositions_Phones");
                     m.MapLeftKey("PersonPosition_ID");
                     m.MapRightKey("PhoneItem_ID");
                 });
-            HasMany<FaxItem>(m => m.Faxes).WithMany()
+            HasMany(m => m.Faxes).WithMany()
                 .Map(m =>
                 {
                     m.ToTable("PersonPositions_Faxes");
                     m.MapLeftKey("PersonPosition_ID");
                     m.MapRightKey("FaxItem_ID");
                 });
-            HasMany<EmailItem>(m => m.Emails).WithMany()
+            HasMany(m => m.Emails).WithMany()
                 .Map(m =>
                 {
                     m.ToTable("PersonPositions_EmailItems");

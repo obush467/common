@@ -6,7 +6,7 @@ namespace UNS.Models.Entities
     public class PersonPosition
     {
         public Guid Id { get; set; }
-        public Nullable<Guid> PositionType_Id { get; set; }
+        public Guid? PositionType_Id { get; set; }
         public virtual PersonPositionType PositionType { get; set; }
         public virtual Person Person { get; set; }
         public Guid Person_Id { get; set; }

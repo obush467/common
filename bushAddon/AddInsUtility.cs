@@ -440,6 +440,54 @@ public class AddInUtilities : IAddInUtilities
             EnableCalculations(true);
         }
     }
+    public void UpdateStatusInstallation()
+    {
+        using (UNSModel context = new UNSModel())
+        {
+            EnableCalculations(false);
+            List<IntegraDUExcel> integraDUs = ReestrSheet();
+            integraDUs.Remove(integraDUs[0]);
+            var hasUNOMs =
+                    (from integraDU in integraDUs
+                     join stage in context.IntegraDU
+                     on integraDU.UNIU equals stage.UNIU
+                     select new { integraDU, stage }).ToList();
+            foreach (var destRow in hasUNOMs)
+            {
+                try
+                {
+                    destRow.integraDU.InstallStatus = destRow.stage.InstallationStatus;
+                }
+                catch (Exception)
+                { }
+            }
+            EnableCalculations(true);
+        }
+    }
+    public void UpdateUNOM()
+    {
+        using (UNSModel context = new UNSModel())
+        {
+            EnableCalculations(false);
+            List<IntegraDUExcel> integraDUs = ReestrSheet();
+            integraDUs.Remove(integraDUs[0]);
+            var hasUNOMs =
+                    (from integraDU in integraDUs
+                     join stage in context.IntegraDU
+                     on integraDU.UNIU equals stage.UNIU
+                     select new { integraDU, stage }).ToList();
+            foreach (var destRow in hasUNOMs)
+            {
+                try
+                {
+                    destRow.integraDU.UNOM = destRow.stage.UNOM;
+                }
+                catch (Exception)
+                { }
+            }
+            EnableCalculations(true);
+        }
+    }
     /// <summary>
     /// Создание технических паспортов в основной папке
     /// </summary>
@@ -454,6 +502,8 @@ public class AddInUtilities : IAddInUtilities
             foreach (var UNIU in UNIUs)
             {
                 var newPassportContent = idu.Where(w => w.UNIU == UNIU).FirstOrDefault();
+                newPassportContent.DateManufacture = DateTime.Today;
+                newPassportContent.OutDate = DateTime.Today;
                 newPassportContents.Add(newPassportContent);
             }
             passportOperator.Create(newPassportContents);
@@ -474,7 +524,16 @@ public class AddInUtilities : IAddInUtilities
                 orderby row.AddressObject, row.AddressHouse
                 select row).ToList();
     }
-    private List<UNS.Common.Entities.IntegraHouses> HouseSheet()
+
+    public List<IntegraDU> ReestrSheet1()
+    {
+        Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
+        EnableCalculations(false);
+        Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
+        ExcelLoader _excelLoader = new ExcelLoader(Globals.ThisAddIn.Application);
+        return _excelLoader.MapRows(WSSource);
+    }
+    private List<IntegraHouses> HouseSheet()
     {
         Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Дома"];
         EnableCalculations(false);
@@ -525,15 +584,6 @@ public class AddInUtilities : IAddInUtilities
         }
         return result;
     }
-    public List<IntegraDU> ReestrSheet1()
-    {
-        Excel.Worksheet WSSource = Globals.ThisAddIn.Application.Sheets["Реестр"];
-        EnableCalculations(false);
-        Globals.ThisAddIn.Application.CopyObjectsWithCells = true;
-        ExcelLoader _excelLoader = new ExcelLoader(Globals.ThisAddIn.Application);
-        return _excelLoader.MapRows(WSSource);
-    }
-
 
     public void CopyFoto()
     {

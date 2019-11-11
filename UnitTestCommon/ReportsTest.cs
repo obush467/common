@@ -19,7 +19,7 @@ namespace UnitTestCommon
         [TestMethod]
         public void P()
         {
-            UNS.Common.InstallationPassportReport report = new UNS.Common.InstallationPassportReport
+            InstallationPassportReport report = new InstallationPassportReport
             {
                 DataSource = new InstallationPassportReportViewModel()
                 {

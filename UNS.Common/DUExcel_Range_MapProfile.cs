@@ -180,9 +180,9 @@ namespace UNS.Common
     {
         public DUExcel_Range_MapProfile() : base()
         {
-            CreateMap<Microsoft.Office.Interop.Excel.Range, IntegraDU>()
+            CreateMap<Range, IntegraDU>()
             .ConvertUsing(new ExcelToDUTypeConverter());
-            CreateMap<IntegraDU, Microsoft.Office.Interop.Excel.Range>()
+            CreateMap<IntegraDU, Range>()
             .ConvertUsing(new DUToExcelTypeConverter());
         }
     }
